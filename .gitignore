@@ -9,3 +9,5 @@ src/*.o
 src/*.d
 src/extra
 main
+*.exe
+*.pdb
