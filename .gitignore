@@ -10,4 +10,8 @@ src/*.d
 src/extra
 main
 *.exe
+<<<<<<< HEAD
 *.pdb
+=======
+*.pdb
+>>>>>>> 40de69195d3a6f55b09bf9899ccb0e29ff641ef0
