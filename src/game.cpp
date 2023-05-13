@@ -18,6 +18,8 @@ float angle = 0;
 float mouse_speed = 100.0f;
 FBO* fbo = NULL;
 
+float delta_yaw, delta_pitch;
+
 Game* Game::instance = NULL;
 
 Game::Game(int window_width, int window_height, SDL_Window* window)
@@ -120,6 +122,18 @@ void Game::update(double seconds_elapsed)
 		camera->rotate(Input::mouse_delta.x * 0.005f, Vector3(0.0f,-1.0f,0.0f));
 		camera->rotate(Input::mouse_delta.y * 0.005f, camera->getLocalVector( Vector3(-1.0f,0.0f,0.0f)));
 	}
+
+	// Camera rotation
+	delta_yaw += Input::mouse_delta.y * 0.005f;
+	delta_pitch += Input::mouse_delta.x * 0.005f;
+
+	delta_yaw = clamp(delta_yaw, -M_PI * 0.25, M_PI * 0.25);
+
+	Matrix44 nPitch, nYaw;
+	nPitch.setRotation(delta_pitch, (Vector3(0, -1, 0)));
+	nYaw.setRotation(delta_yaw, (camera->getLocalVector(Vector3(-1, 0, 0))));
+
+	camera->fromRotationMatrix(nPitch * nYaw);
 
 	//async input to move the camera around
 	if(Input::isKeyPressed(SDL_SCANCODE_LSHIFT) ) speed *= 10; //move faster with left shift
