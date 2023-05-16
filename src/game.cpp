@@ -6,6 +6,7 @@
 #include "shader.h"
 #include "input.h"
 #include "animation.h"
+#include "parseScene.cpp"
 
 #include <cmath>
 
@@ -34,7 +35,7 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	frame = 0;
 	time = 0.0f;
 	elapsed_time = 0.0f;
-	mouse_locked = false;
+	mouse_locked = true;
 
 	//OpenGL flags
 	glEnable( GL_CULL_FACE ); //render both sides of every triangle
@@ -51,6 +52,7 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 
 	// example of loading Mesh from Mesh Manager
 	mesh = Mesh::Get("data/box.ASE");
+	parseScene("data/meshes/myscene.scene");
 
 	// example of shader loading using the shaders manager
 	shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
@@ -135,13 +137,56 @@ void Game::update(double seconds_elapsed)
 
 	camera->fromRotationMatrix(nPitch * nYaw);
 
+	//player movement world.cpp
+	/*
+
+	if (!isOnfloor) {
+		player->velocity.y += -2.5;
+	}
+	else {
+		//jump
+		if (Input::isKeyPressed(ESPACIO))
+		{
+			player->velocity.y += 3;
+		}
+	}
+
+	*/
 	//async input to move the camera around
 	if(Input::isKeyPressed(SDL_SCANCODE_LSHIFT) ) speed *= 10; //move faster with left shift
 	if (Input::isKeyPressed(SDL_SCANCODE_W) || Input::isKeyPressed(SDL_SCANCODE_UP)) camera->move(Vector3(0.0f, 0.0f, 1.0f) * speed);
 	if (Input::isKeyPressed(SDL_SCANCODE_S) || Input::isKeyPressed(SDL_SCANCODE_DOWN)) camera->move(Vector3(0.0f, 0.0f,-1.0f) * speed);
 	if (Input::isKeyPressed(SDL_SCANCODE_A) || Input::isKeyPressed(SDL_SCANCODE_LEFT)) camera->move(Vector3(1.0f, 0.0f, 0.0f) * speed);
 	if (Input::isKeyPressed(SDL_SCANCODE_D) || Input::isKeyPressed(SDL_SCANCODE_RIGHT)) camera->move(Vector3(-1.0f,0.0f, 0.0f) * speed);
+	/*
+	player->velocity += move_dir * player->speed;
 
+	// Update player's position
+	position += player->velocity * seconds_elapsed;
+
+	// Decrease velocity when not moving
+	player->velocity.x = player->velocity.x * 0.5f;
+	player->velocity.y = player->velocity.y * 0.5f;
+	
+
+	Wall collisions
+	if (checkPlayerCollisions(position + player->velocity))
+	{
+		for (const sCOllsisionData& collision : collisions) {
+			
+			float up_factor = collicion.colNormal.dot(Vector(0, 1, 0));
+			if (up_dactor > 0.8) {
+				isOnFloor = true;
+			}
+			else {
+				para surfear las paredes en vez de clavarte
+				Vector3 newDir = player->velocity.dot(collision.colNormal) * collision.colNormal;
+				player->velocity.x += newDir.x;
+				player->velocity.y += newDir.y;
+	}
+
+
+	*/
 	//to navigate with the mouse fixed in the middle
 	if (mouse_locked)
 		Input::centerMouse();
