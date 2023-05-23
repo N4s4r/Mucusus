@@ -192,6 +192,40 @@ void Game::update(double seconds_elapsed)
 		Input::centerMouse();
 }
 
+/*
+CHECK AVISTATION
+bool World::checkLineOfSight(const Matrix44 obs, const Matrix44 target)
+{
+	Vector3 front = obs.frontVector();
+	Vector3 toTarget = normalize(target.getTranslation() - obs.getTranslation());
+
+	Vector3 ray_origin = target.getTranslation();
+	Vector3 ray_direction = to_target;
+
+
+
+	if (toTarget.dor(front) > 0.5) 
+	{
+		for (auto Rntity e : root.children)
+		{
+			EntityCollider* ec = dynamic_cast<EntityCollider*>(e);
+			if (!ec) continue;
+
+			if (ec->mesh->testRayCollision(
+				ec->model,
+				ray_origin,
+				ray_direction,
+				Vector3(),
+				Vector3())) return false;
+		}
+		return true;
+	}
+
+	return false;	
+}
+
+*/
+
 //Keyboard event handler (sync input)
 void Game::onKeyDown( SDL_KeyboardEvent event )
 {
