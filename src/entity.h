@@ -40,6 +40,26 @@ public:
     Shader *shader = nullptr;
     Vector4 color;
 
+    // Constructor
+    EntityMesh(Mesh *mesh, Shader *shader, Texture *texture);
+
+    // Overwritten methods
+    void render();
+    void update(float dt);
+};
+
+class InstancedEntityMesh : public Entity
+{
+public:
+    Mesh *mesh = nullptr;
+    Texture *texture = nullptr;
+    Shader *shader = nullptr;
+    Vector4 color;
+    vt<Matrix44> models;
+
+    // Constructor
+    InstancedEntityMesh(Mesh *mesh, Shader *shader, Texture *texture);
+
     // Overwritten methods
     void render();
     void update(float dt);

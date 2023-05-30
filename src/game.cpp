@@ -10,20 +10,20 @@
 
 #include <cmath>
 
-//some globals
-Mesh* mesh = NULL;
-Texture* texture = NULL;
-Shader* shader = NULL;
-Animation* anim = NULL;
+// some globals
+Mesh *mesh = NULL;
+Texture *texture = NULL;
+Shader *shader = NULL;
+Animation *anim = NULL;
 float angle = 0;
 float mouse_speed = 100.0f;
-FBO* fbo = NULL;
+FBO *fbo = NULL;
 
 float delta_yaw, delta_pitch;
 
-Game* Game::instance = NULL;
+Game *Game::instance = NULL;
 
-Game::Game(int window_width, int window_height, SDL_Window* window)
+Game::Game(int window_width, int window_height, SDL_Window *window)
 {
 	this->window_width = window_width;
 	this->window_height = window_height;
@@ -37,18 +37,18 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	elapsed_time = 0.0f;
 	mouse_locked = true;
 
-	//OpenGL flags
-	glEnable( GL_CULL_FACE ); //render both sides of every triangle
-	glEnable( GL_DEPTH_TEST ); //check the occlusions using the Z buffer
+	// OpenGL flags
+	glEnable(GL_CULL_FACE);	 // render both sides of every triangle
+	glEnable(GL_DEPTH_TEST); // check the occlusions using the Z buffer
 
-	//create our camera
+	// create our camera
 	camera = new Camera();
-	camera->lookAt(Vector3(0.f,100.f, 100.f),Vector3(0.f,0.f,0.f), Vector3(0.f,1.f,0.f)); //position the camera and point to 0,0,0
-	camera->setPerspective(70.f,window_width/(float)window_height,0.1f,10000.f); //set the projection, we want to be perspective
+	camera->lookAt(Vector3(0.f, 100.f, 100.f), Vector3(0.f, 0.f, 0.f), Vector3(0.f, 1.f, 0.f)); // position the camera and point to 0,0,0
+	camera->setPerspective(70.f, window_width / (float)window_height, 0.1f, 10000.f);			// set the projection, we want to be perspective
 
-	//load one texture without using the Texture Manager (Texture::Get would use the manager)
+	// load one texture without using the Texture Manager (Texture::Get would use the manager)
 	texture = new Texture();
- 	texture->load("data/texture.tga");
+	texture->load("data/texture.tga");
 
 	// example of loading Mesh from Mesh Manager
 	mesh = Mesh::Get("data/box.ASE");
@@ -57,72 +57,72 @@ Game::Game(int window_width, int window_height, SDL_Window* window)
 	// example of shader loading using the shaders manager
 	shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
 
-	//hide the cursor
-	SDL_ShowCursor(!mouse_locked); //hide or show the mouse
+	// hide the cursor
+	SDL_ShowCursor(!mouse_locked); // hide or show the mouse
 }
 
-//what to do when the image has to be draw
+// what to do when the image has to be draw
 void Game::render(void)
 {
-	//set the clear color (the background color)
+	// set the clear color (the background color)
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 
 	// Clear the window and the depth buffer
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	//set the camera as default
+	// set the camera as default
 	camera->enable();
 
-	//set flags
+	// set flags
 	glDisable(GL_BLEND);
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_CULL_FACE);
-   
-	//create model matrix for cube
-	Matrix44 m;
-	m.rotate(angle*DEG2RAD, Vector3(0, 1, 0));
 
-	if(shader)
+	// create model matrix for cube
+	Matrix44 m;
+	m.rotate(angle * DEG2RAD, Vector3(0, 1, 0));
+
+	if (shader)
 	{
-		//enable shader
+		// enable shader
 		shader->enable();
 
-		//upload uniforms
-		shader->setUniform("u_color", Vector4(1,1,1,1));
-		shader->setUniform("u_viewprojection", camera->viewprojection_matrix );
+		// upload uniforms
+		shader->setUniform("u_color", Vector4(1, 1, 1, 1));
+		shader->setUniform("u_viewprojection", camera->viewprojection_matrix);
 		shader->setUniform("u_texture", texture, 0);
 		shader->setUniform("u_model", m);
 		shader->setUniform("u_time", time);
 
-		//do the draw call
-		mesh->render( GL_TRIANGLES );
+		// do the draw call
+		mesh->render(GL_TRIANGLES);
 
-		//disable shader
+		// disable shader
 		shader->disable();
 	}
 
-	//Draw the floor grid
+	// Draw the floor grid
 	drawGrid();
 
-	//render the FPS, Draw Calls, etc
+	// render the FPS, Draw Calls, etc
 	drawText(2, 2, getGPUStats(), Vector3(1, 1, 1), 2);
 
-	//swap between front buffer and back buffer
+	// swap between front buffer and back buffer
 	SDL_GL_SwapWindow(this->window);
 }
 
 void Game::update(double seconds_elapsed)
 {
-	float speed = seconds_elapsed * mouse_speed; //the speed is defined by the seconds_elapsed so it goes constant
+	float speed = seconds_elapsed * mouse_speed; // the speed is defined by the seconds_elapsed so it goes constant
 
-	//example
+	// example
 	angle += (float)seconds_elapsed * 10.0f;
 
-	//mouse input to rotate the cam
-	if ((Input::mouse_state & SDL_BUTTON_LEFT) || mouse_locked ) //is left button pressed?
+	// mouse input to rotate the cam
+	if ((Input::mouse_state & SDL_BUTTON_LEFT) || mouse_locked) // is left button pressed?
 	{
-		camera->rotate(Input::mouse_delta.x * 0.005f, Vector3(0.0f,-1.0f,0.0f));
-		camera->rotate(Input::mouse_delta.y * 0.005f, camera->getLocalVector( Vector3(-1.0f,0.0f,0.0f)));
+		camera->rotate(Input::mouse_delta.x * 0.005f, Vector3(0.0f, -1.0f, 0.0f));
+		camera->rotate(Input::mouse_delta.y * 0.005f, camera->getLocalVector(Vector3(-1.0f, 0.0f, 0.0f)));
 	}
 
 	// Camera rotation
@@ -137,7 +137,7 @@ void Game::update(double seconds_elapsed)
 
 	camera->fromRotationMatrix(nPitch * nYaw);
 
-	//player movement world.cpp
+	// player movement world.cpp
 	/*
 
 	if (!isOnfloor) {
@@ -152,12 +152,17 @@ void Game::update(double seconds_elapsed)
 	}
 
 	*/
-	//async input to move the camera around
-	if(Input::isKeyPressed(SDL_SCANCODE_LSHIFT) ) speed *= 10; //move faster with left shift
-	if (Input::isKeyPressed(SDL_SCANCODE_W) || Input::isKeyPressed(SDL_SCANCODE_UP)) camera->move(Vector3(0.0f, 0.0f, 1.0f) * speed);
-	if (Input::isKeyPressed(SDL_SCANCODE_S) || Input::isKeyPressed(SDL_SCANCODE_DOWN)) camera->move(Vector3(0.0f, 0.0f,-1.0f) * speed);
-	if (Input::isKeyPressed(SDL_SCANCODE_A) || Input::isKeyPressed(SDL_SCANCODE_LEFT)) camera->move(Vector3(1.0f, 0.0f, 0.0f) * speed);
-	if (Input::isKeyPressed(SDL_SCANCODE_D) || Input::isKeyPressed(SDL_SCANCODE_RIGHT)) camera->move(Vector3(-1.0f,0.0f, 0.0f) * speed);
+	// async input to move the camera around
+	if (Input::isKeyPressed(SDL_SCANCODE_LSHIFT))
+		speed *= 10; // move faster with left shift
+	if (Input::isKeyPressed(SDL_SCANCODE_W) || Input::isKeyPressed(SDL_SCANCODE_UP))
+		camera->move(Vector3(0.0f, 0.0f, 1.0f) * speed);
+	if (Input::isKeyPressed(SDL_SCANCODE_S) || Input::isKeyPressed(SDL_SCANCODE_DOWN))
+		camera->move(Vector3(0.0f, 0.0f, -1.0f) * speed);
+	if (Input::isKeyPressed(SDL_SCANCODE_A) || Input::isKeyPressed(SDL_SCANCODE_LEFT))
+		camera->move(Vector3(1.0f, 0.0f, 0.0f) * speed);
+	if (Input::isKeyPressed(SDL_SCANCODE_D) || Input::isKeyPressed(SDL_SCANCODE_RIGHT))
+		camera->move(Vector3(-1.0f, 0.0f, 0.0f) * speed);
 	/*
 	player->velocity += move_dir * player->speed;
 
@@ -167,13 +172,13 @@ void Game::update(double seconds_elapsed)
 	// Decrease velocity when not moving
 	player->velocity.x = player->velocity.x * 0.5f;
 	player->velocity.y = player->velocity.y * 0.5f;
-	
+
 
 	Wall collisions
 	if (checkPlayerCollisions(position + player->velocity))
 	{
 		for (const sCOllsisionData& collision : collisions) {
-			
+
 			float up_factor = collicion.colNormal.dot(Vector(0, 1, 0));
 			if (up_dactor > 0.8) {
 				isOnFloor = true;
@@ -187,7 +192,7 @@ void Game::update(double seconds_elapsed)
 
 
 	*/
-	//to navigate with the mouse fixed in the middle
+	// to navigate with the mouse fixed in the middle
 	if (mouse_locked)
 		Input::centerMouse();
 }
@@ -204,7 +209,7 @@ bool World::checkLineOfSight(const Matrix44 obs, const Matrix44 target)
 
 
 
-	if (toTarget.dor(front) > 0.5) 
+	if (toTarget.dor(front) > 0.5)
 	{
 		for (auto Rntity e : root.children)
 		{
@@ -221,18 +226,22 @@ bool World::checkLineOfSight(const Matrix44 obs, const Matrix44 target)
 		return true;
 	}
 
-	return false;	
+	return false;
 }
 
 */
 
-//Keyboard event handler (sync input)
-void Game::onKeyDown( SDL_KeyboardEvent event )
+// Keyboard event handler (sync input)
+void Game::onKeyDown(SDL_KeyboardEvent event)
 {
-	switch(event.keysym.sym)
+	switch (event.keysym.sym)
 	{
-		case SDLK_ESCAPE: must_exit = true; break; //ESC key, kill the app
-		case SDLK_F1: Shader::ReloadAll(); break; 
+	case SDLK_ESCAPE:
+		must_exit = true;
+		break; // ESC key, kill the app
+	case SDLK_F1:
+		Shader::ReloadAll();
+		break;
 	}
 }
 
@@ -242,17 +251,15 @@ void Game::onKeyUp(SDL_KeyboardEvent event)
 
 void Game::onGamepadButtonDown(SDL_JoyButtonEvent event)
 {
-
 }
 
 void Game::onGamepadButtonUp(SDL_JoyButtonEvent event)
 {
-
 }
 
-void Game::onMouseButtonDown( SDL_MouseButtonEvent event )
+void Game::onMouseButtonDown(SDL_MouseButtonEvent event)
 {
-	if (event.button == SDL_BUTTON_MIDDLE) //middle mouse
+	if (event.button == SDL_BUTTON_MIDDLE) // middle mouse
 	{
 		mouse_locked = !mouse_locked;
 		SDL_ShowCursor(!mouse_locked);
@@ -270,10 +277,9 @@ void Game::onMouseWheel(SDL_MouseWheelEvent event)
 
 void Game::onResize(int width, int height)
 {
-    std::cout << "window resized: " << width << "," << height << std::endl;
-	glViewport( 0,0, width, height );
-	camera->aspect =  width / (float)height;
+	std::cout << "window resized: " << width << "," << height << std::endl;
+	glViewport(0, 0, width, height);
+	camera->aspect = width / (float)height;
 	window_width = width;
 	window_height = height;
 }
-
