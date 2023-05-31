@@ -12,7 +12,7 @@ class Entity
 public:
     // Constructor and destructor
     Entity();
-    virtual ~Entity();
+    // virtual ~Entity();
 
     // Some attributes
     str name;

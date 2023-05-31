@@ -134,8 +134,9 @@ void Game::update(double seconds_elapsed)
 	Matrix44 nPitch, nYaw;
 	nPitch.setRotation(delta_pitch, (Vector3(0, -1, 0)));
 	nYaw.setRotation(delta_yaw, (camera->getLocalVector(Vector3(-1, 0, 0))));
+	Matrix44 new_matrix = nPitch * nYaw;
 
-	camera->fromRotationMatrix(nPitch * nYaw);
+	camera->fromRotationMatrix(new_matrix);
 
 	// player movement world.cpp
 	/*
