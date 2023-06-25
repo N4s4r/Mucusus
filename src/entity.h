@@ -1,62 +1,28 @@
 #pragma once
 
 #include "defines.h"
+
 #include "framework.h"
 #include "mesh.h"
 #include "texture.h"
-#include "shader.h"
-#include "camera.h"
+#include "animation.h"
 
 class Entity
 {
 public:
-    Entity();
-    virtual ~Entity();
+    Entity(){};
+    virtual ~Entity(){};
 
     str name;
     Matrix44 model;
 
-    virtual void render();
-    virtual void update(float dt);
+    Mesh *mesh;
+    Texture *texture;
 
-    Entity *parent;
+    vt<Animation *> animations;
 
-    vt<Entity *> children;
+    virtual void render(){};
+    virtual void update(float dt){};
 
-    void addChild(Entity *child);
-    void removeChild(Entity *child);
-
-    Matrix44 getGlobalMatrix();
-};
-
-class EntityMesh : public Entity
-{
-public:
-    Mesh *mesh = nullptr;
-    Texture *texture = nullptr;
-    Shader *shader = nullptr;
-    Vector4 color;
-
-    // Constructor
-    EntityMesh(Mesh *mesh, Shader *shader, Texture *texture);
-
-    void render();
-    void update(float dt);
-};
-
-class InstancedEntityMesh : public Entity
-{
-public:
-    Mesh *mesh = nullptr;
-    Texture *texture = nullptr;
-    Shader *shader = nullptr;
-    Vector4 color;
-
-    vt<Matrix44> models;
-
-    // Constructor
-    InstancedEntityMesh(Mesh *mesh, Shader *shader, Texture *texture);
-
-    void render();
-    void update(float dt);
+    Vector3 getPosition() { return model.getTranslation(); };
 };
