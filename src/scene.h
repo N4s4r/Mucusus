@@ -3,9 +3,18 @@
 #include "defines.h"
 #include "entity.h"
 
-// TODO Use singleton pattern
 class Scene
 {
 public:
-    vt<Entity *> entities;
+    static Scene *instance;
+
+    Scene();
+    ~Scene();
+
+    Entity *root;
+
+    void render();
+    void update(float dt);
+
+    void parse();
 };

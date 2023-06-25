@@ -3,12 +3,12 @@
 #include "includes.h"
 #include <iostream>
 
-Camera* Camera::current = NULL;
+Camera *Camera::current = NULL;
 
 Camera::Camera()
 {
-	lookAt( Vector3(0, 0, 0), Vector3(0, 0, -1), Vector3(0, 1, 0) );
-	setOrthographic(-100,100,-100, 100,-100,100);
+	lookAt(Vector3(0, 0, 0), Vector3(0, 0, -1), Vector3(0, 1, 0));
+	setOrthographic(-100, 100, -100, 100, -100, 100);
 }
 
 void Camera::enable()
@@ -18,7 +18,7 @@ void Camera::enable()
 	updateProjectionMatrix();
 	extractFrustum();
 
-	//old...
+	// old...
 	glMatrixMode(GL_PROJECTION);
 	glLoadMatrixf(projection_matrix.m);
 	glMatrixMode(GL_MODELVIEW);
@@ -27,18 +27,18 @@ void Camera::enable()
 
 void Camera::updateViewMatrix()
 {
-	view_matrix.lookAt( eye, center, up );
+	view_matrix.lookAt(eye, center, up);
 	viewprojection_matrix = view_matrix * projection_matrix;
 	extractFrustum();
 }
 
 // ******************************************
 
-//Create a projection matrix
+// Create a projection matrix
 void Camera::updateProjectionMatrix()
 {
 	if (type == ORTHOGRAPHIC)
-		projection_matrix.ortho(left,right,bottom,top,near_plane,far_plane);
+		projection_matrix.ortho(left, right, bottom, top, near_plane, far_plane);
 	else
 		projection_matrix.perspective(fov, aspect, near_plane, far_plane);
 
@@ -47,7 +47,7 @@ void Camera::updateProjectionMatrix()
 	extractFrustum();
 }
 
-Vector3 Camera::getLocalVector(const Vector3& v)
+Vector3 Camera::getLocalVector(const Vector3 &v)
 {
 	Matrix44 iV = view_matrix;
 	if (iV.inverse() == false)
@@ -64,19 +64,24 @@ void Camera::move(Vector3 delta)
 	updateViewMatrix();
 }
 
-void Camera::rotate(float angle, const Vector3& axis)
+void Camera::XZmove(Vector3 delta)
+{
+	Vector3 localDelta = getLocalVector(delta);
+	float norm = localDelta.length();
+	localDelta.y = 0.0f;
+	localDelta.normalize();
+	eye = eye - localDelta * norm;
+	center = center - localDelta * norm;
+	updateViewMatrix();
+}
+
+void Camera::rotate(float angle, const Vector3 &axis)
 {
 	Matrix44 R;
-	R.setRotation(angle,axis);
+	R.setRotation(angle, axis);
 	Vector3 new_front = R * (center - eye);
 	center = eye + new_front;
 	updateViewMatrix();
-
-}
-
-void Camera::fromRotationMatrix(Matrix44& mat)
-{
-	lookAt(eye, eye + mat.frontVector(), up);
 }
 
 void Camera::setOrthographic(float left, float right, float bottom, float top, float near_plane, float far_plane)
@@ -102,11 +107,11 @@ void Camera::setPerspective(float fov, float aspect, float near_plane, float far
 	this->near_plane = near_plane;
 	this->far_plane = far_plane;
 
-	//update projection
+	// update projection
 	updateProjectionMatrix();
 }
 
-void Camera::lookAt(const Vector3& eye, const Vector3& center, const Vector3& up)
+void Camera::lookAt(const Vector3 &eye, const Vector3 &center, const Vector3 &up)
 {
 	this->eye = eye;
 	this->center = center;
@@ -115,24 +120,24 @@ void Camera::lookAt(const Vector3& eye, const Vector3& center, const Vector3& up
 	updateViewMatrix();
 }
 
-void Camera::lookAt(const Matrix44& m)
+void Camera::lookAt(const Matrix44 &m)
 {
 	this->eye = m * Vector3();
-	this->center = m * Vector3(0,0,-1);
+	this->center = m * Vector3(0, 0, -1);
 	this->up = m.rotateVector(Vector3(0, 1, 0));
 }
 
 void Camera::extractFrustum()
 {
-	float   proj[16]; 
-	float   modl[16];
-	float   clip[16];
-	float   t;
+	float proj[16];
+	float modl[16];
+	float clip[16];
+	float t;
 
 	Matrix44 v = view_matrix;
 
-	memcpy( proj, projection_matrix.m, sizeof(Matrix44) );
-	memcpy( modl, v.m, sizeof(Matrix44));
+	memcpy(proj, projection_matrix.m, sizeof(Matrix44));
+	memcpy(modl, v.m, sizeof(Matrix44));
 
 	/* Combine the two matrices (multiply projection by modelview) */
 	clip[0] = modl[0] * proj[0] + modl[1] * proj[4] + modl[2] * proj[8] + modl[3] * proj[12];
@@ -234,7 +239,7 @@ void Camera::extractFrustum()
 	frustum[5][3] /= t;
 }
 
-bool Camera::testPointInFrustum( Vector3 v )
+bool Camera::testPointInFrustum(Vector3 v)
 {
 	for (int p = 0; p < 6; p++)
 		if (frustum[p][0] * v.x + frustum[p][1] * v.y + frustum[p][2] * v.z + frustum[p][3] <= 0)
@@ -242,9 +247,9 @@ bool Camera::testPointInFrustum( Vector3 v )
 	return true;
 }
 
-Vector3 Camera::project( Vector3 pos3d, float window_width, float window_height)
+Vector3 Camera::project(Vector3 pos3d, float window_width, float window_height)
 {
-	Vector3 norm = viewprojection_matrix.project(pos3d); //returns from 0 to 1
+	Vector3 norm = viewprojection_matrix.project(pos3d); // returns from 0 to 1
 	norm.x *= window_width;
 	norm.y *= window_height;
 	return norm;
@@ -257,24 +262,24 @@ Vector3 Camera::unproject(Vector3 coord2d, float window_width, float window_heig
 	coord2d.z = 2.0f * coord2d.z - 1.0f;
 	Matrix44 inv_vp = viewprojection_matrix;
 	inv_vp.inverse();
-	Vector4 r = inv_vp * Vector4(coord2d, 1.0f );
-	return Vector3(r.x / r.w, r.y / r.w, r.z / r.w );
+	Vector4 r = inv_vp * Vector4(coord2d, 1.0f);
+	return Vector3(r.x / r.w, r.y / r.w, r.z / r.w);
 }
 
-Vector3 Camera::getRayDirection( int mouse_x, int mouse_y, float window_width, float window_height )
+Vector3 Camera::getRayDirection(int mouse_x, int mouse_y, float window_width, float window_height)
 {
-	Vector3 mouse_pos( (float)mouse_x, window_height - mouse_y, 1.0f);
+	Vector3 mouse_pos((float)mouse_x, window_height - mouse_y, 1.0f);
 	Vector3 p = unproject(mouse_pos, window_width, window_height);
 	return (p - eye).normalize();
 }
 
-float Camera::getProjectedScale(Vector3 pos3D, float radius) {
+float Camera::getProjectedScale(Vector3 pos3D, float radius)
+{
 	float dist = eye.distance(pos3D);
-	return ((float)sin(fov*DEG2RAD) / dist) * radius * 200.0f; //100 is to compensate width in pixels
+	return ((float)sin(fov * DEG2RAD) / dist) * radius * 200.0f; // 100 is to compensate width in pixels
 }
 
-
-char Camera::testSphereInFrustum( const Vector3& v, float radius)
+char Camera::testSphereInFrustum(const Vector3 &v, float radius)
 {
 	int p;
 
@@ -287,34 +292,33 @@ char Camera::testSphereInFrustum( const Vector3& v, float radius)
 	return CLIP_INSIDE;
 }
 
-char Camera::testBoxInFrustum(const Vector3& center, const Vector3& halfsize)
+char Camera::testBoxInFrustum(const Vector3 &center, const Vector3 &halfsize)
 {
 	int flag = 0, o = 0;
 
-	flag = planeBoxOverlap( (Vector4&)frustum[0], center,halfsize );
+	flag = planeBoxOverlap((Vector4 &)frustum[0], center, halfsize);
 	if (flag == CLIP_OUTSIDE)
 		return CLIP_OUTSIDE;
 	o += flag;
-	flag = planeBoxOverlap((Vector4&)frustum[1], center, halfsize);
+	flag = planeBoxOverlap((Vector4 &)frustum[1], center, halfsize);
 	if (flag == CLIP_OUTSIDE)
 		return CLIP_OUTSIDE;
 	o += flag;
-	flag = planeBoxOverlap((Vector4&)frustum[2], center, halfsize);
+	flag = planeBoxOverlap((Vector4 &)frustum[2], center, halfsize);
 	if (flag == CLIP_OUTSIDE)
 		return CLIP_OUTSIDE;
 	o += flag;
-	flag = planeBoxOverlap((Vector4&)frustum[3], center, halfsize);
+	flag = planeBoxOverlap((Vector4 &)frustum[3], center, halfsize);
 	if (flag == CLIP_OUTSIDE)
 		return CLIP_OUTSIDE;
 	o += flag;
-	flag = planeBoxOverlap((Vector4&)frustum[4], center, halfsize);
+	flag = planeBoxOverlap((Vector4 &)frustum[4], center, halfsize);
 	if (flag == CLIP_OUTSIDE)
 		return CLIP_OUTSIDE;
 	o += flag;
-	flag = planeBoxOverlap((Vector4&)frustum[5], center, halfsize);
+	flag = planeBoxOverlap((Vector4 &)frustum[5], center, halfsize);
 	if (flag == CLIP_OUTSIDE)
 		return CLIP_OUTSIDE;
 	o += flag;
 	return o == 0 ? CLIP_INSIDE : CLIP_OVERLAP;
 }
-

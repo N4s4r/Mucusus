@@ -1,12 +1,10 @@
 #pragma once
 
-// Useful for data structures that require a lot of includes
 #include <bits/stdc++.h>
-// BlackRed tree
-#include <bits/extc++.h>
+// #include <bits/extc++.h>
 
 using namespace std;
-using namespace __gnu_pbds;
+// using namespace __gnu_pbds;
 
 #define LSOne(S) ((S) & -(S))
 
@@ -32,11 +30,9 @@ using namespace __gnu_pbds;
 #define SORT(A) sort(A.begin(), A.end())
 #define RSORT(A) sort(A.rbegin(), A.rend())
 
-// BlackRed tree
-#define ordered_set tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_update>
-#define ordered_multiset tree<int, null_type, less_equal<int>, rb_tree_tag, tree_order_statistics_node_update>
+// #define ordered_set tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_update>
+// #define ordered_multiset tree<int, null_type, less_equal<int>, rb_tree_tag, tree_order_statistics_node_update>
 
-#define PI acos(-1)
 #define INF 1e9
 #define EPS 1e-9
 #define MOD 1e9 + 7

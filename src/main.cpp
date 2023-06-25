@@ -50,12 +50,7 @@ SDL_Window *createWindow(const char *caption, int width, int height, bool fullsc
 	SDL_InitSubSystem(SDL_INIT_JOYSTICK);
 
 	// create the window
-	SDL_Window *window = SDL_CreateWindow(caption, SDL_WINDOWPOS_CENTERED,
-										  SDL_WINDOWPOS_CENTERED, width, height,
-										  SDL_WINDOW_OPENGL |
-											  SDL_WINDOW_RESIZABLE |
-											  (retina ? SDL_WINDOW_ALLOW_HIGHDPI : 0) |
-											  (fullscreen ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0));
+	SDL_Window *window = SDL_CreateWindow(caption, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | (retina ? SDL_WINDOW_ALLOW_HIGHDPI : 0) | (fullscreen ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0));
 	if (!window)
 	{
 		fprintf(stderr, "Window creation error: %s\n", SDL_GetError());

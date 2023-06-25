@@ -2,55 +2,61 @@
 
 #include "includes.h"
 #include <cassert>
-#include <cmath> //for sqrt (square root) function
+#include <cmath>  //for sqrt (square root) function
 #include <math.h> //atan2
 
 #ifndef M_PI_2
-    #define M_PI_2 1.57079632679489661923
+#define M_PI_2 1.57079632679489661923
 #endif
 
 //**************************************
-float Vector2::distance(const Vector2& v)
+float Vector2::distance(const Vector2 &v)
 {
 	return (float)(v - *this).length();
 }
 
-float Vector2::dot( const Vector2& v )
+float Vector2::dot(const Vector2 &v)
 {
 	return x * v.x + y * v.y;
 }
 
-float Vector2::perpdot( const Vector2& v )
+float Vector2::perpdot(const Vector2 &v)
 {
 	return y * v.x + -x * v.y;
 }
 
 void Vector2::random(float range)
 {
-	//rand returns a value between 0 and RAND_MAX
-	x = (float)(rand() / (double)RAND_MAX) * 2 * range - range; //value between -range and range
-	y = (float)(rand() / (double)RAND_MAX) * 2 * range - range; //value between -range and range
+	// rand returns a value between 0 and RAND_MAX
+	x = (float)(rand() / (double)RAND_MAX) * 2 * range - range; // value between -range and range
+	y = (float)(rand() / (double)RAND_MAX) * 2 * range - range; // value between -range and range
 }
 
-void Vector2::parseFromText(const char* text)
+void Vector2::parseFromText(const char *text)
 {
 	int pos = 0;
 	char num[255];
-	const char* start = text;
-	const char* current = text;
+	const char *start = text;
+	const char *current = text;
 
-	while(1)
+	while (1)
 	{
-		if (*current == ',' || (*current == '\0' && current != text) )
+		if (*current == ',' || (*current == '\0' && current != text))
 		{
 			strncpy(num, start, current - start);
 			num[current - start] = '\0';
 			start = current + 1;
-			switch(pos)
+			switch (pos)
 			{
-				case 0: x = (float)atof(num); break;
-				case 1: y = (float)atof(num); break;
-				default: return; break;
+			case 0:
+				x = (float)atof(num);
+				break;
+			case 1:
+				y = (float)atof(num);
+				break;
+			default:
+				return;
+				break;
 			}
 			++pos;
 			if (*current == '\0')
@@ -61,25 +67,23 @@ void Vector2::parseFromText(const char* text)
 	}
 }
 
-
-Vector2 operator * (const Vector2& a, float v) { return Vector2(a.x * v, a.y * v); }
-Vector2 operator + (const Vector2& a, const Vector2& b) { return Vector2(a.x + b.x, a.y + b.y); }
-Vector2 operator - (const Vector2& a, const Vector2& b) { return Vector2(a.x - b.x, a.y - b.y); }
-
+Vector2 operator*(const Vector2 &a, float v) { return Vector2(a.x * v, a.y * v); }
+Vector2 operator+(const Vector2 &a, const Vector2 &b) { return Vector2(a.x + b.x, a.y + b.y); }
+Vector2 operator-(const Vector2 &a, const Vector2 &b) { return Vector2(a.x - b.x, a.y - b.y); }
 
 // **************************************
 
-double Vector3::length() 
+double Vector3::length()
 {
-	return sqrt(x*x + y*y + z*z);
+	return sqrt(x * x + y * y + z * z);
 }
 
 double Vector3::length() const
 {
-	return sqrt(x*x + y*y + z*z);
+	return sqrt(x * x + y * y + z * z);
 }
 
-Vector3& Vector3::normalize()
+Vector3 &Vector3::normalize()
 {
 	double len = length();
 	assert(len > 0.00000000001 && "Cannot normalize a vector with module 0");
@@ -89,72 +93,86 @@ Vector3& Vector3::normalize()
 	return *this;
 }
 
-float Vector3::distance(const Vector3& v) const
+float Vector3::distance(const Vector3 &v) const
 {
 	return (float)(v - *this).length();
 }
 
-Vector3 Vector3::cross( const Vector3& b ) const
+Vector3 Vector3::cross(const Vector3 &b) const
 {
-	return Vector3(y*b.z - z*b.y, z*b.x - x*b.z, x*b.y - y*b.x);
+	return Vector3(y * b.z - z * b.y, z * b.x - x * b.z, x * b.y - y * b.x);
 }
 
-float Vector3::dot( const Vector3& v ) const
+float Vector3::dot(const Vector3 &v) const
 {
-	return x*v.x + y*v.y + z*v.z;
+	return x * v.x + y * v.y + z * v.z;
 }
 
 void Vector3::random(float range)
 {
-	//rand returns a value between 0 and RAND_MAX
-	x = (float)((rand() / (double)RAND_MAX) * 2 * range - range); //value between -range and range
-	y = (float)((rand() / (double)RAND_MAX) * 2 * range - range); //value between -range and range
-	z = (float)((rand() / (double)RAND_MAX) * 2 * range - range); //value between -range and range
+	// rand returns a value between 0 and RAND_MAX
+	x = (float)((rand() / (double)RAND_MAX) * 2 * range - range); // value between -range and range
+	y = (float)((rand() / (double)RAND_MAX) * 2 * range - range); // value between -range and range
+	z = (float)((rand() / (double)RAND_MAX) * 2 * range - range); // value between -range and range
 }
 
 void Vector3::random(Vector3 range)
 {
-	//rand returns a value between 0 and RAND_MAX
-	x = (float)((rand() / (double)RAND_MAX) * 2 * range.x - range.x); //value between -range and range
-	y = (float)((rand() / (double)RAND_MAX) * 2 * range.y - range.y); //value between -range and range
-	z = (float)((rand() / (double)RAND_MAX) * 2 * range.z - range.z); //value between -range and range
+	// rand returns a value between 0 and RAND_MAX
+	x = (float)((rand() / (double)RAND_MAX) * 2 * range.x - range.x); // value between -range and range
+	y = (float)((rand() / (double)RAND_MAX) * 2 * range.y - range.y); // value between -range and range
+	z = (float)((rand() / (double)RAND_MAX) * 2 * range.z - range.z); // value between -range and range
 }
 
-void Vector3::setMin(const Vector3 & v)
+void Vector3::setMin(const Vector3 &v)
 {
-	if (v.x < x) x = v.x;
-	if (v.y < y) y = v.y;
-	if (v.z < z) z = v.z;
+	if (v.x < x)
+		x = v.x;
+	if (v.y < y)
+		y = v.y;
+	if (v.z < z)
+		z = v.z;
 }
 
-void Vector3::setMax(const Vector3 & v)
+void Vector3::setMax(const Vector3 &v)
 {
-	if (v.x > x) x = v.x;
-	if (v.y > y) y = v.y;
-	if (v.z > z) z = v.z;
+	if (v.x > x)
+		x = v.x;
+	if (v.y > y)
+		y = v.y;
+	if (v.z > z)
+		z = v.z;
 }
 
-void Vector3::parseFromText(const char* text, const char separator)
+void Vector3::parseFromText(const char *text, const char separator)
 {
 	int pos = 0;
 	char num[255];
-	const char* start = text;
-	const char* current = text;
+	const char *start = text;
+	const char *current = text;
 
-	while(1)
+	while (1)
 	{
-		if (*current == separator || (*current == '\0' && current != text) )
+		if (*current == separator || (*current == '\0' && current != text))
 		{
 			strncpy(num, start, current - start);
 			num[current - start] = '\0';
 			start = current + 1;
-			if (num[0] != 'x') //¿?
-				switch(pos)
+			if (num[0] != 'x') // ï¿½?
+				switch (pos)
 				{
-					case 0: x = (float)atof(num); break;
-					case 1: y = (float)atof(num); break;
-					case 2: z = (float)atof(num); break;
-					default: return; break;
+				case 0:
+					x = (float)atof(num);
+					break;
+				case 1:
+					y = (float)atof(num);
+					break;
+				case 2:
+					z = (float)atof(num);
+					break;
+				default:
+					return;
+					break;
 				}
 
 			++pos;
@@ -166,16 +184,24 @@ void Vector3::parseFromText(const char* text, const char separator)
 	}
 };
 
-float dot(const Vector3& a, const Vector3& b)
+float dot(const Vector3 &a, const Vector3 &b)
 {
-	return a.x*b.x + a.y*b.y + a.z*b.z;
+	return a.x * b.x + a.y * b.y + a.z * b.z;
 }
 
-Vector3 cross(const Vector3& a, const Vector3& b)
+Vector3 cross(const Vector3 &a, const Vector3 &b)
 {
-	return Vector3(a.y*b.z - a.z*b.y, a.z*b.x - a.x*b.z, a.x*b.y - a.y*b.x);
+	return Vector3(a.y * b.z - a.z * b.y, a.z * b.x - a.x * b.z, a.x * b.y - a.y * b.x);
 }
 
+Vector3 lerp(const Vector3 &a, const Vector3 &b, float v)
+{
+	Vector3 r;
+	r.x = lerp(a.x, b.x, v);
+	r.y = lerp(a.y, b.y, v);
+	r.z = lerp(a.z, b.z, v);
+	return r;
+}
 
 //*********************************
 const Matrix44 Matrix44::IDENTITY;
@@ -185,45 +211,61 @@ Matrix44::Matrix44()
 	setIdentity();
 }
 
-Matrix44::Matrix44(const float* v)
+Matrix44::Matrix44(const float *v)
 {
-	memcpy( (void*)m, (void*)v, sizeof(float) * 16);
+	memcpy((void *)m, (void *)v, sizeof(float) * 16);
 }
 
 void Matrix44::set()
 {
-	glMatrixMode( GL_MODELVIEW );
+	glMatrixMode(GL_MODELVIEW);
 	glMultMatrixf(m);
 }
 
 void Matrix44::load()
 {
-	glMatrixMode( GL_MODELVIEW );
+	glMatrixMode(GL_MODELVIEW);
 	glLoadMatrixf(m);
 }
 
 void Matrix44::clear()
 {
-	memset(m, 0, 16*sizeof(float));
+	memset(m, 0, 16 * sizeof(float));
 }
 
 void Matrix44::setIdentity()
 {
-	m[0]=1; m[4]=0; m[8]=0; m[12]=0;
-	m[1]=0; m[5]=1; m[9]=0; m[13]=0;
-	m[2]=0; m[6]=0; m[10]=1; m[14]=0;
-	m[3]=0; m[7]=0; m[11]=0; m[15]=1;
+	m[0] = 1;
+	m[4] = 0;
+	m[8] = 0;
+	m[12] = 0;
+	m[1] = 0;
+	m[5] = 1;
+	m[9] = 0;
+	m[13] = 0;
+	m[2] = 0;
+	m[6] = 0;
+	m[10] = 1;
+	m[14] = 0;
+	m[3] = 0;
+	m[7] = 0;
+	m[11] = 0;
+	m[15] = 1;
 }
 
 void Matrix44::transpose()
 {
-   std::swap(m[1],m[4]); std::swap(m[2],m[8]); std::swap(m[3],m[12]);
-   std::swap(m[6],m[9]); std::swap(m[7],m[13]); std::swap(m[11],m[14]);
+	std::swap(m[1], m[4]);
+	std::swap(m[2], m[8]);
+	std::swap(m[3], m[12]);
+	std::swap(m[6], m[9]);
+	std::swap(m[7], m[13]);
+	std::swap(m[11], m[14]);
 }
 
-Vector3 Matrix44::rotateVector(const Vector3& v) const
+Vector3 Matrix44::rotateVector(const Vector3 &v) const
 {
-	return (*this * Vector4(v,0.0)).sV4Data.xyz;
+	return (*this * Vector4(v, 0.0)).sV4Data.xyz;
 }
 
 void Matrix44::translateGlobal(float x, float y, float z)
@@ -233,7 +275,7 @@ void Matrix44::translateGlobal(float x, float y, float z)
 	*this = *this * T;
 }
 
-void Matrix44::rotateGlobal( float angle_in_rad, const Vector3& axis )
+void Matrix44::rotateGlobal(float angle_in_rad, const Vector3 &axis)
 {
 	Matrix44 R;
 	R.setRotation(angle_in_rad, axis);
@@ -247,13 +289,12 @@ void Matrix44::translate(float x, float y, float z)
 	*this = T * *this;
 }
 
-void Matrix44::rotate( float angle_in_rad, const Vector3& axis )
+void Matrix44::rotate(float angle_in_rad, const Vector3 &axis)
 {
 	Matrix44 R;
 	R.setRotation(angle_in_rad, axis);
 	*this = R * *this;
 }
-
 
 void Matrix44::scale(float x, float y, float z)
 {
@@ -270,7 +311,7 @@ void Matrix44::setScale(float x, float y, float z)
 	m[10] = z;
 }
 
-//To create a traslation matrix
+// To create a traslation matrix
 void Matrix44::setTranslation(float x, float y, float z)
 {
 	setIdentity();
@@ -281,18 +322,18 @@ void Matrix44::setTranslation(float x, float y, float z)
 
 Vector3 Matrix44::getTranslation()
 {
-	return Vector3(m[12],m[13],m[14]);
+	return Vector3(m[12], m[13], m[14]);
 }
 
-//To create a rotation matrix
-void Matrix44::setRotation( float angle_in_rad, const Vector3& axis  )
+// To create a rotation matrix
+void Matrix44::setRotation(float angle_in_rad, const Vector3 &axis)
 {
 	clear();
 	Vector3 axis_n = axis;
 	axis_n.normalize();
 
-	float c = cos( angle_in_rad );
-	float s = sin( angle_in_rad );
+	float c = cos(angle_in_rad);
+	float s = sin(angle_in_rad);
 	float t = 1 - c;
 
 	M[0][0] = t * axis_n.x * axis_n.x + c;
@@ -321,52 +362,61 @@ Matrix44 Matrix44::getRotationOnly()
 	return trans * inv;
 }
 
-bool Matrix44::getXYZ(float* euler) const
+bool Matrix44::getXYZ(float *euler) const
 {
-// Code adapted from www.geometrictools.com
-//	Matrix3<Real>::EulerResult Matrix3<Real>::ToEulerAnglesXYZ 
-    // +-           -+   +-                                        -+
-    // | r00 r01 r02 |   |  cy*cz           -cy*sz            sy    |
-    // | r10 r11 r12 | = |  cz*sx*sy+cx*sz   cx*cz-sx*sy*sz  -cy*sx |
-    // | r20 r21 r22 |   | -cx*cz*sy+sx*sz   cz*sx+cx*sy*sz   cx*cy |
-    // +-           -+   +-                                        -+
-    if (_13 < 1.0f)
-    {
-        if (_13 > - 1.0f)
-        {
-            // y_angle = asin(r02)
-            // x_angle = atan2(-r12,r22)
-            // z_angle = atan2(-r01,r00)
-            euler[1] = asinf(_13);
-            euler[0] = atan2f(-_23,_33);
-            euler[2] = atan2f(-_12,_11);
-            return true;
-        }
-        else
-        {
-            // y_angle = -pi/2
-            // z_angle - x_angle = atan2(r10,r11)
-            // WARNING.  The solution is not unique.  Choosing z_angle = 0.
-            euler[1] = (float)-M_PI_2;
-            euler[0] = -atan2f(_21,_22);
-            euler[2] = 0.0f;
-            return false;
-        }
-    }
-    else
-    {
-        // y_angle = +pi/2
-        // z_angle + x_angle = atan2(r10,r11)
-        // WARNING.  The solutions is not unique.  Choosing z_angle = 0.
-        euler[1] = (float)M_PI_2;
-        euler[0] = atan2f(_21,_22);
-        euler[2] = 0.0f;
-    }
+	// Code adapted from www.geometrictools.com
+	//	Matrix3<Real>::EulerResult Matrix3<Real>::ToEulerAnglesXYZ
+	// +-           -+   +-                                        -+
+	// | r00 r01 r02 |   |  cy*cz           -cy*sz            sy    |
+	// | r10 r11 r12 | = |  cz*sx*sy+cx*sz   cx*cz-sx*sy*sz  -cy*sx |
+	// | r20 r21 r22 |   | -cx*cz*sy+sx*sz   cz*sx+cx*sy*sz   cx*cy |
+	// +-           -+   +-                                        -+
+	if (_13 < 1.0f)
+	{
+		if (_13 > -1.0f)
+		{
+			// y_angle = asin(r02)
+			// x_angle = atan2(-r12,r22)
+			// z_angle = atan2(-r01,r00)
+			euler[1] = asinf(_13);
+			euler[0] = atan2f(-_23, _33);
+			euler[2] = atan2f(-_12, _11);
+			return true;
+		}
+		else
+		{
+			// y_angle = -pi/2
+			// z_angle - x_angle = atan2(r10,r11)
+			// WARNING.  The solution is not unique.  Choosing z_angle = 0.
+			euler[1] = (float)-M_PI_2;
+			euler[0] = -atan2f(_21, _22);
+			euler[2] = 0.0f;
+			return false;
+		}
+	}
+	else
+	{
+		// y_angle = +pi/2
+		// z_angle + x_angle = atan2(r10,r11)
+		// WARNING.  The solutions is not unique.  Choosing z_angle = 0.
+		euler[1] = (float)M_PI_2;
+		euler[0] = atan2f(_21, _22);
+		euler[2] = 0.0f;
+	}
 	return false;
 }
 
+float Matrix44::getYawRotationToAimTo(const Vector3 &position)
+{
+	Vector3 dir = position - getTranslation();
+	float dx = frontVector().dot(dir);
+	float dy = -rightVector().dot(dir);
+	// float angle = std::atan2f(dy, dx);
+	float angle = atan2f(dy, dx);
+	return angle;
+}
 
-void Matrix44::lookAt(Vector3& eye, Vector3& center, Vector3& up)
+void Matrix44::lookAt(Vector3 &eye, Vector3 &center, Vector3 &up)
 {
 	Vector3 front = (center - eye);
 	front.normalize();
@@ -377,14 +427,20 @@ void Matrix44::lookAt(Vector3& eye, Vector3& center, Vector3& up)
 
 	setIdentity();
 
-	M[0][0] = right.x; M[0][1] = top.x; M[0][2] = -front.x;
-	M[1][0] = right.y; M[1][1] = top.y; M[1][2] = -front.y;
-	M[2][0] = right.z; M[2][1] = top.z; M[2][2] = -front.z;
+	M[0][0] = right.x;
+	M[0][1] = top.x;
+	M[0][2] = -front.x;
+	M[1][0] = right.y;
+	M[1][1] = top.y;
+	M[1][2] = -front.y;
+	M[2][0] = right.z;
+	M[2][1] = top.z;
+	M[2][2] = -front.z;
 
 	translate(-eye.x, -eye.y, -eye.z);
 }
 
-//double check this functions
+// double check this functions
 void Matrix44::perspective(float fov, float aspect, float near_plane, float far_plane)
 {
 	setIdentity();
@@ -411,8 +467,8 @@ void Matrix44::ortho(float left, float right, float bottom, float top, float nea
 	M[3][3] = 1.0f;
 }
 
-//applies matrix projection to vector (returns in normalized coordinates)
-Vector3 Matrix44::project(const Vector3& v)
+// applies matrix projection to vector (returns in normalized coordinates)
+Vector3 Matrix44::project(const Vector3 &v)
 {
 	float x = m[0] * v.x + m[4] * v.y + m[8] * v.z + m[12];
 	float y = m[1] * v.x + m[5] * v.y + m[9] * v.z + m[13];
@@ -422,19 +478,18 @@ Vector3 Matrix44::project(const Vector3& v)
 	return Vector3((x / w + 1.0f) / 2.0f, (y / w + 1.0f) / 2.0f, (z / w + 1.0f) / 2.0f);
 }
 
-
-//Multiply a matrix by another and returns the result
-Matrix44 Matrix44::operator*(const Matrix44& matrix) const
+// Multiply a matrix by another and returns the result
+Matrix44 Matrix44::operator*(const Matrix44 &matrix) const
 {
 	Matrix44 ret;
 
-	unsigned int i,j,k;
-	for (i=0;i<4;i++) 	
+	unsigned int i, j, k;
+	for (i = 0; i < 4; i++)
 	{
-		for (j=0;j<4;j++) 
+		for (j = 0; j < 4; j++)
 		{
-			ret.M[i][j]=0.0;
-			for (k=0;k<4;k++) 
+			ret.M[i][j] = 0.0;
+			for (k = 0; k < 4; k++)
 				ret.M[i][j] += M[i][k] * matrix.M[k][j];
 		}
 	}
@@ -442,17 +497,17 @@ Matrix44 Matrix44::operator*(const Matrix44& matrix) const
 	return ret;
 }
 
-//Multiplies a vector by a matrix and returns the new vector
-Vector3 operator * (const Matrix44& matrix, const Vector3& v) 
-{   
-   float x = matrix.m[0] * v.x + matrix.m[4] * v.y + matrix.m[8] * v.z + matrix.m[12]; 
-   float y = matrix.m[1] * v.x + matrix.m[5] * v.y + matrix.m[9] * v.z + matrix.m[13]; 
-   float z = matrix.m[2] * v.x + matrix.m[6] * v.y + matrix.m[10] * v.z + matrix.m[14];
-   return Vector3(x,y,z);
+// Multiplies a vector by a matrix and returns the new vector
+Vector3 operator*(const Matrix44 &matrix, const Vector3 &v)
+{
+	float x = matrix.m[0] * v.x + matrix.m[4] * v.y + matrix.m[8] * v.z + matrix.m[12];
+	float y = matrix.m[1] * v.x + matrix.m[5] * v.y + matrix.m[9] * v.z + matrix.m[13];
+	float z = matrix.m[2] * v.x + matrix.m[6] * v.y + matrix.m[10] * v.z + matrix.m[14];
+	return Vector3(x, y, z);
 }
 
-//Multiplies a vector by a matrix and returns the new vector
-Vector4 operator * (const Matrix44& matrix, const Vector4& v)
+// Multiplies a vector by a matrix and returns the new vector
+Vector4 operator*(const Matrix44 &matrix, const Vector4 &v)
 {
 	float x = matrix.m[0] * v.x + matrix.m[4] * v.y + matrix.m[8] * v.z + v.w * matrix.m[12];
 	float y = matrix.m[1] * v.x + matrix.m[5] * v.y + matrix.m[9] * v.z + v.w * matrix.m[13];
@@ -465,24 +520,24 @@ void Matrix44::setUpAndOrthonormalize(Vector3 up)
 {
 	up.normalize();
 
-	//put the up vector in the matrix
+	// put the up vector in the matrix
 	m[4] = up.x;
 	m[5] = up.y;
 	m[6] = up.z;
 
-	//orthonormalize
-	Vector3 right,front;
+	// orthonormalize
+	Vector3 right, front;
 	right = rightVector();
 
-	if ( abs(right.dot( up )) < 0.99998 )
+	if (abs(right.dot(up)) < 0.99998)
 	{
-		right = up.cross( frontVector() );
-		front = right.cross( up );
+		right = up.cross(frontVector());
+		front = right.cross(up);
 	}
 	else
 	{
-		front = Vector3(right).cross( up );
-		right = up.cross( front );
+		front = Vector3(right).cross(up);
+		right = up.cross(front);
 	}
 
 	right.normalize();
@@ -501,24 +556,24 @@ void Matrix44::setFrontAndOrthonormalize(Vector3 front)
 {
 	front.normalize();
 
-	//put the up vector in the matrix
+	// put the up vector in the matrix
 	m[8] = front.x;
 	m[9] = front.y;
 	m[10] = front.z;
 
-	//orthonormalize
-	Vector3 right,up;
+	// orthonormalize
+	Vector3 right, up;
 	right = rightVector();
 
-	if ( abs(right.dot( front )) < 0.99998 )
+	if (abs(right.dot(front)) < 0.99998)
 	{
-		right = topVector().cross( front  );
-		up = front.cross( right );
+		right = topVector().cross(front);
+		up = front.cross(right);
 	}
 	else
 	{
-		up = front.cross( right );
-		right = up.cross( front );
+		up = front.cross(right);
+		right = up.cross(front);
 	}
 
 	right.normalize();
@@ -531,80 +586,78 @@ void Matrix44::setFrontAndOrthonormalize(Vector3 front)
 	m[0] = right.x;
 	m[1] = right.y;
 	m[2] = right.z;
-	
 }
 
 bool Matrix44::inverse()
 {
-   unsigned int i, j, k, swap;
-   float t;
-   Matrix44 temp, final;
-   final.setIdentity();
+	unsigned int i, j, k, swap;
+	float t;
+	Matrix44 temp, final;
+	final.setIdentity();
 
-   temp = (*this);
+	temp = (*this);
 
-   unsigned int m,n;
-   m = n = 4;
-	
-   for (i = 0; i < m; i++)
-   {
-      // Look for largest element in column
+	unsigned int m, n;
+	m = n = 4;
 
-      swap = i;
-      for (j = i + 1; j < m; j++)// m or n
-	  {
-		 if ( fabs(temp.M[j][i]) > fabs( temp.M[swap][i]) )
-            swap = j;
-	  }
-   
-      if (swap != i)
-      {
-         // Swap rows.
-         for (k = 0; k < n; k++)
-         {
-			 std::swap( temp.M[i][k],temp.M[swap][k]);
-			 std::swap( final.M[i][k], final.M[swap][k]);
-         }
-      }
+	for (i = 0; i < m; i++)
+	{
+		// Look for largest element in column
 
-      // No non-zero pivot.  The CMatrix is singular, which shouldn't
-      // happen.  This means the user gave us a bad CMatrix.
+		swap = i;
+		for (j = i + 1; j < m; j++) // m or n
+		{
+			if (fabs(temp.M[j][i]) > fabs(temp.M[swap][i]))
+				swap = j;
+		}
 
+		if (swap != i)
+		{
+			// Swap rows.
+			for (k = 0; k < n; k++)
+			{
+				std::swap(temp.M[i][k], temp.M[swap][k]);
+				std::swap(final.M[i][k], final.M[swap][k]);
+			}
+		}
 
-#define MATRIX_SINGULAR_THRESHOLD 0.00001 //change this if you experience problems with matrices
+		// No non-zero pivot.  The CMatrix is singular, which shouldn't
+		// happen.  This means the user gave us a bad CMatrix.
 
-      if ( fabsf(temp.M[i][i]) <= MATRIX_SINGULAR_THRESHOLD)
-	  {
-		  final.setIdentity();
-         return false;
-	  }
+#define MATRIX_SINGULAR_THRESHOLD 0.00001 // change this if you experience problems with matrices
+
+		if (fabsf(temp.M[i][i]) <= MATRIX_SINGULAR_THRESHOLD)
+		{
+			final.setIdentity();
+			return false;
+		}
 #undef MATRIX_SINGULAR_THRESHOLD
 
-      t = 1.0f/temp.M[i][i];
+		t = 1.0f / temp.M[i][i];
 
-      for (k = 0; k < n; k++)//m or n
-      {
-         temp.M[i][k] *= t;
-         final.M[i][k] *= t;
-      }
+		for (k = 0; k < n; k++) // m or n
+		{
+			temp.M[i][k] *= t;
+			final.M[i][k] *= t;
+		}
 
-      for (j = 0; j < m; j++) // m or n
-      {
-         if (j != i)
-         {
-            t = temp.M[j][i];
-            for (k = 0; k < n; k++)//m or n
-            {
-               temp.M[j][k] -= (temp.M[i][k] * t);
-               final.M[j][k] -= (final.M[i][k] * t);
-            }
-         }
-      }
-   }
+		for (j = 0; j < m; j++) // m or n
+		{
+			if (j != i)
+			{
+				t = temp.M[j][i];
+				for (k = 0; k < n; k++) // m or n
+				{
+					temp.M[j][k] -= (temp.M[i][k] * t);
+					final.M[j][k] -= (final.M[i][k] * t);
+				}
+			}
+		}
+	}
 
-   *this = final;
+	*this = final;
 
-   return true;
+	return true;
 }
 
 void Matrix44::multGL()
@@ -617,13 +670,11 @@ void Matrix44::loadGL()
 	glLoadMatrixf(m);
 }
 
-
-
 Quaternion::Quaternion()
 {
 }
 
-Quaternion::Quaternion(const Quaternion& q) : x(q.x), y(q.y), z(q.z), w(q.w)
+Quaternion::Quaternion(const Quaternion &q) : x(q.x), y(q.y), z(q.z), w(q.w)
 {
 }
 
@@ -643,10 +694,13 @@ Quaternion Quaternion::conjugate() const
 
 void Quaternion::set(const float X, const float Y, const float Z, const float W)
 {
-	x = X;  y = Y; z = Z; w = W;
+	x = X;
+	y = Y;
+	z = Z;
+	w = W;
 }
 
-Quaternion::Quaternion(const float* q)
+Quaternion::Quaternion(const float *q)
 {
 	x = q[0];
 	y = q[1];
@@ -656,31 +710,32 @@ Quaternion::Quaternion(const float* q)
 
 void Quaternion::identity()
 {
-	x = y = z = 0.0f; w = 1.0f;
+	x = y = z = 0.0f;
+	w = 1.0f;
 }
 
-void Quaternion::slerp(const Quaternion& b, float t)
+void Quaternion::slerp(const Quaternion &b, float t)
 {
-	//quaternion a(*this);
+	// quaternion a(*this);
 	*this = Qslerp(*this, b, t);
 }
 
-void Quaternion::slerp(const Quaternion& q2, float t, Quaternion &q3) const
+void Quaternion::slerp(const Quaternion &q2, float t, Quaternion &q3) const
 {
 	q3 = Qslerp(*this, q2, t);
 }
 
-void Quaternion::lerp(const Quaternion& b, float t)
+void Quaternion::lerp(const Quaternion &b, float t)
 {
 	*this = Qlerp(*this, b, t);
 }
 
-void Quaternion::lerp(const Quaternion& q2, float t, Quaternion &q3) const
+void Quaternion::lerp(const Quaternion &q2, float t, Quaternion &q3) const
 {
 	q3 = Qlerp(*this, q2, t);
 }
 
-void Quaternion::setAxisAngle(const Vector3& axis, const float angle)
+void Quaternion::setAxisAngle(const Vector3 &axis, const float angle)
 {
 	float s;
 	s = sinf(angle * 0.5f);
@@ -691,23 +746,23 @@ void Quaternion::setAxisAngle(const Vector3& axis, const float angle)
 	w = cosf(angle * 0.5f);
 }
 
-Quaternion::Quaternion(const Vector3& axis, float angle)
+Quaternion::Quaternion(const Vector3 &axis, float angle)
 {
 	setAxisAngle(axis, angle);
 }
 
-void Quaternion::operator *= (const Quaternion &q)
+void Quaternion::operator*=(const Quaternion &q)
 {
 	Quaternion quaternion = *this * q;
 	*this = quaternion;
 }
 
-void Quaternion::operator*=(const Vector3& v)
+void Quaternion::operator*=(const Vector3 &v)
 {
-	*this = *this*v;
+	*this = *this * v;
 }
 
-void Quaternion::operator += (const Quaternion &q)
+void Quaternion::operator+=(const Quaternion &q)
 {
 	x += q.x;
 	y += q.y;
@@ -715,14 +770,14 @@ void Quaternion::operator += (const Quaternion &q)
 	w += q.w;
 }
 
-Quaternion operator * (const Quaternion& q1, const Quaternion& q2)
+Quaternion operator*(const Quaternion &q1, const Quaternion &q2)
 {
 	Quaternion q;
 
-	q.x = q1.y*q2.z - q1.z*q2.y + q1.w*q2.x + q1.x*q2.w;
-	q.y = q1.z*q2.x - q1.x*q2.z + q1.w*q2.y + q1.y*q2.w;
-	q.z = q1.x*q2.y - q1.y*q2.x + q1.w*q2.z + q1.z*q2.w;
-	q.w = q1.w*q2.w - q1.x*q2.x - q1.y*q2.y - q1.z*q2.z;
+	q.x = q1.y * q2.z - q1.z * q2.y + q1.w * q2.x + q1.x * q2.w;
+	q.y = q1.z * q2.x - q1.x * q2.z + q1.w * q2.y + q1.y * q2.w;
+	q.z = q1.x * q2.y - q1.y * q2.x + q1.w * q2.z + q1.z * q2.w;
+	q.w = q1.w * q2.w - q1.x * q2.x - q1.y * q2.y - q1.z * q2.z;
 	return q;
 }
 
@@ -738,18 +793,16 @@ p.w*q.w - p.x*q.x - p.y*q.y - p.z*q.z);
 }
 */
 
-Quaternion operator * (const Quaternion &q, const Vector3& v)
+Quaternion operator*(const Quaternion &q, const Vector3 &v)
 {
-	return Quaternion
-	(
-		q.w*v.x + q.y*v.z - q.z*v.y,
-		q.w*v.y + q.z*v.x - q.x*v.z,
-		q.w*v.z + q.x*v.y - q.y*v.x,
-		-(q.x*v.x + q.y*v.y + q.z*v.z)
-	);
+	return Quaternion(
+		q.w * v.x + q.y * v.z - q.z * v.y,
+		q.w * v.y + q.z * v.x - q.x * v.z,
+		q.w * v.z + q.x * v.y - q.y * v.x,
+		-(q.x * v.x + q.y * v.y + q.z * v.z));
 }
 
-void Quaternion::operator *= (float f)
+void Quaternion::operator*=(float f)
 {
 	x *= f;
 	y *= f;
@@ -757,23 +810,23 @@ void Quaternion::operator *= (float f)
 	w *= f;
 }
 
-Quaternion operator * (const Quaternion &q, float f)
+Quaternion operator*(const Quaternion &q, float f)
 {
 	Quaternion q1;
-	q1.x = q.x*f;
-	q1.y = q.y*f;
-	q1.z = q.z*f;
-	q1.w = q.w*f;
+	q1.x = q.x * f;
+	q1.y = q.y * f;
+	q1.z = q.z * f;
+	q1.w = q.w * f;
 	return q1;
 }
 
-Quaternion operator * (float f, const Quaternion &q)
+Quaternion operator*(float f, const Quaternion &q)
 {
 	Quaternion q1;
-	q1.x = q.x*f;
-	q1.y = q.y*f;
-	q1.z = q.z*f;
-	q1.w = q.w*f;
+	q1.x = q.x * f;
+	q1.y = q.y * f;
+	q1.z = q.z * f;
+	q1.w = q.w * f;
 	return q1;
 }
 
@@ -788,11 +841,11 @@ void Quaternion::normalize()
 	w *= len;
 }
 
-void Quaternion::computeMinimumRotation(const Vector3& rotateFrom, const Vector3& rotateTo)
+void Quaternion::computeMinimumRotation(const Vector3 &rotateFrom, const Vector3 &rotateTo)
 {
 	// Check if the vectors are valid.
-	//rotateFrom.GetLength()==0.0f
-	//rotateTo.GetLength()==0.0f
+	// rotateFrom.GetLength()==0.0f
+	// rotateTo.GetLength()==0.0f
 
 	Vector3 from(rotateFrom);
 	from.normalize();
@@ -840,7 +893,7 @@ void Quaternion::computeMinimumRotation(const Vector3& rotateFrom, const Vector3
 		x = crossvec[0];
 		y = crossvec[1];
 		z = crossvec[2],
-			w = (float)sqrt(0.5 * fabs(1.0 + _dot));
+		w = (float)sqrt(0.5 * fabs(1.0 + _dot));
 	}
 }
 
@@ -848,15 +901,15 @@ Quaternion SimpleRotation(const Vector3 &a, const Vector3 &b)
 {
 	Vector3 axis = cross(a, b);
 	float _dot = dot(a, b);
-	if (_dot < -1.0f + /*DOT_EPSILON*/0.001f) return Quaternion(0, 1, 0, 0);
+	if (_dot < -1.0f + /*DOT_EPSILON*/ 0.001f)
+		return Quaternion(0, 1, 0, 0);
 
 	Quaternion result(axis.x * 0.5f, axis.y * 0.5f, axis.z * 0.5f, (_dot + 1.0f) * 0.5f);
 	result.normalize();
-	//fast_normalize(&result);
+	// fast_normalize(&result);
 
 	return result;
 }
-
 
 float Quaternion::length() const
 {
@@ -868,14 +921,14 @@ float Quaternion::squaredLength() const
 	return w * w + x * x + y * y + z * z;
 }
 
-void Quaternion::toMatrix(Matrix44& matrix) const
+void Quaternion::toMatrix(Matrix44 &matrix) const
 {
 	/*
 	If q is guaranteed to be a unit quaternion, s will always
 	be 2.  In that case, this calculation can be optimized out.
 	*/
-	//const float	norm = x*x + y*y + z*z + w*w;
-	//const float s = (norm > 0) ? 2/norm : 0;
+	// const float	norm = x*x + y*y + z*z + w*w;
+	// const float s = (norm > 0) ? 2/norm : 0;
 
 	const float s = 2;
 
@@ -901,8 +954,8 @@ void Quaternion::toMatrix(Matrix44& matrix) const
 	*/
 	// >>
 	matrix.M[0][0] = 1.0f - (yy + zz);
-	//matrix.M[0][0] = x*x-y*y-z*z+w*w;
-	// <<
+	// matrix.M[0][0] = x*x-y*y-z*z+w*w;
+	//  <<
 	matrix.M[1][0] = xy + wz;
 	matrix.M[2][0] = xz - wy;
 
@@ -912,8 +965,8 @@ void Quaternion::toMatrix(Matrix44& matrix) const
 	matrix.M[0][1] = xy - wz;
 	// >>
 	matrix.M[1][1] = 1.0f - (xx + zz);
-	//matrix.M[1][1] = -x*x+y*y-z*z+w*w;
-	// <<
+	// matrix.M[1][1] = -x*x+y*y-z*z+w*w;
+	//  <<
 	matrix.M[2][1] = yz + wx;
 
 	/*
@@ -928,21 +981,21 @@ void Quaternion::toMatrix(Matrix44& matrix) const
 	matrix._44 = 1;
 }
 
-float DotProduct(const Quaternion& q1, const Quaternion& q2)
+float DotProduct(const Quaternion &q1, const Quaternion &q2)
 {
 	return q1.x * q2.x + q1.y * q2.y + q1.z * q2.z + q1.w * q2.w;
 }
 
-bool operator==(const Quaternion& q1, const Quaternion& q2)
+bool operator==(const Quaternion &q1, const Quaternion &q2)
 {
 	return ((q1.x == q2.x) && (q1.y == q2.y) &&
-		(q1.z == q2.z) && (q1.w == q2.w));
+			(q1.z == q2.z) && (q1.w == q2.w));
 }
 
-bool operator!=(const Quaternion& q1, const Quaternion& q2)
+bool operator!=(const Quaternion &q1, const Quaternion &q2)
 {
 	return ((q1.x != q2.x) || (q1.y != q2.y) ||
-		(q1.z != q2.z) || (q1.w != q2.w));
+			(q1.z != q2.z) || (q1.w != q2.w));
 }
 
 /*
@@ -957,9 +1010,9 @@ Quaternion Qlog(const Quaternion &q)
 	ret.w = 0;
 	if (sina > 0)
 	{
-		ret.x = a*q.x / sina;
-		ret.y = a*q.y / sina;
-		ret.z = a*q.z / sina;
+		ret.x = a * q.x / sina;
+		ret.y = a * q.y / sina;
+		ret.z = a * q.z / sina;
 	}
 	else
 	{
@@ -974,7 +1027,7 @@ Qexp(v*a) = [cos(a),vsin(a)]
 */
 Quaternion Qexp(const Quaternion &q)
 {
-	float a = static_cast<float>(sqrt(q.x*q.x + q.y*q.y + q.z*q.z));
+	float a = static_cast<float>(sqrt(q.x * q.x + q.y * q.y + q.z * q.z));
 	float sina = static_cast<float>(sin(a));
 	float cosa = static_cast<float>(cos(a));
 	Quaternion ret;
@@ -994,7 +1047,7 @@ Quaternion Qexp(const Quaternion &q)
 	return ret;
 }
 
-Quaternion operator + (const Quaternion &q1, const Quaternion& q2)
+Quaternion operator+(const Quaternion &q1, const Quaternion &q2)
 {
 	return Quaternion(q1.x + q2.x, q1.y + q2.y, q1.z + q2.z, q1.w + q2.w);
 }
@@ -1005,14 +1058,15 @@ Linear interpolation between two quaternions
 Quaternion Qlerp(const Quaternion &q1, const Quaternion &q2, float t)
 {
 	Quaternion ret;
-	//ret = q1 + t*(q2-q1);
+	// ret = q1 + t*(q2-q1);
 
 	Quaternion b;
-	if (DotProduct(q1, q2)< 0.0f)
+	if (DotProduct(q1, q2) < 0.0f)
 		b.set(-q2.x, -q2.y, -q2.z, -q2.w);
-	else b = q2;
+	else
+		b = q2;
 
-	ret = q1*(1 - t) + b*t;
+	ret = q1 * (1 - t) + b * t;
 
 	ret.normalize();
 	return ret;
@@ -1023,9 +1077,9 @@ Quaternion Qslerp(const Quaternion &q1, const Quaternion &q2, float t)
 	Quaternion q3;
 	float dot = DotProduct(q1, q2);
 
-	//dot = cos(theta)
-	//if (dot < 0), q1 and q2 are more than 90 degrees apart,
-	//so we can invert one to reduce spinning
+	// dot = cos(theta)
+	// if (dot < 0), q1 and q2 are more than 90 degrees apart,
+	// so we can invert one to reduce spinning
 
 	if (dot < 0)
 	{
@@ -1042,19 +1096,17 @@ Quaternion Qslerp(const Quaternion &q1, const Quaternion &q2, float t)
 		float angle = static_cast<float>(acosf(dot));
 		float sina, sinat, sinaomt;
 		sina = sinf(angle);
-		sinat = sinf(angle*t);
-		sinaomt = sinf(angle*(1 - t));
-		return (q1*sinaomt + q3*sinat) * (1.0f / sina);
+		sinat = sinf(angle * t);
+		sinaomt = sinf(angle * (1 - t));
+		return (q1 * sinaomt + q3 * sinat) * (1.0f / sina);
 	}
 
-	//if the angle is small, use linear interpolation
+	// if the angle is small, use linear interpolation
 
 	else
 	{
 		return Qlerp(q1, q3, t);
 	}
-
-
 
 	/*
 	float fCos = DotProduct(q1,q2);
@@ -1075,12 +1127,11 @@ Quaternion Qslerp(const Quaternion &q1, const Quaternion &q2, float t)
 	*/
 }
 
-
 /*
 Given 3 quaternions, qn-1,qn and qn+1, calculate a control point to be used in spline interpolation
 */
 
-Quaternion& Quaternion::operator -()
+Quaternion &Quaternion::operator-()
 {
 	x = -x;
 	y = -y;
@@ -1093,13 +1144,13 @@ Quaternion& Quaternion::operator -()
 void Quaternion::getAxisAngle(Vector3 &v, float &angle) const
 {
 	angle = 2.0f * acosf(w);
-	float factor = 1.0f / sqrtf(1 - w*w);
+	float factor = 1.0f / sqrtf(1 - w * w);
 	v.x = x * factor;
 	v.y = y * factor;
 	v.z = z * factor;
 }
 
-Vector3 Quaternion::rotate(const Vector3& v) const
+Vector3 Quaternion::rotate(const Vector3 &v) const
 {
 	Vector3 ret;
 	Quaternion temp(-x, -y, -z, w);
@@ -1121,7 +1172,7 @@ void Quaternion::toEulerAngles(Vector3 &euler) const
 	float cy, sy;
 	float cz, sz;
 
-	const float y2 = y*y;
+	const float y2 = y * y;
 	///////////////////////////////////////////////////////////////////////////////
 	// CONVERT QUATERNION TO MATRIX - I DON'T REALLY NEED ALL OF IT
 	matrix[0][0] = 1.0f - (2.0f * y2) - (2.0f * z * z);
@@ -1137,20 +1188,20 @@ void Quaternion::toEulerAngles(Vector3 &euler) const
 	sy = -matrix[2][0];
 	cy = sqrtf(1 - (sy * sy));
 	euler.y = atan2f(sy, cy);
-	//euler->y = (yr * 180.0f) / (float)M_PI;
+	// euler->y = (yr * 180.0f) / (float)M_PI;
 
-	// AVOID DIVIDE BY ZERO ERROR ONLY WHERE Y= +-90 or +-270 
+	// AVOID DIVIDE BY ZERO ERROR ONLY WHERE Y= +-90 or +-270
 	// NOT CHECKING cy BECAUSE OF PRECISION ERRORS
 	if (sy != 1.0f && sy != -1.0f)
 	{
 		cx = matrix[2][2] / cy;
 		sx = matrix[2][1] / cy;
-		//euler->x = ((float)atan2(sx,cx) * 180.0f) / (float)M_PI;	// RAD TO DEG
+		// euler->x = ((float)atan2(sx,cx) * 180.0f) / (float)M_PI;	// RAD TO DEG
 		euler.x = atan2f(sx, cx);
 
 		cz = matrix[0][0] / cy;
 		sz = matrix[1][0] / cy;
-		//euler->z = ((float)atan2(sz,cz) * 180.0f) / (float)M_PI;	// RAD TO DEG
+		// euler->z = ((float)atan2(sz,cz) * 180.0f) / (float)M_PI;	// RAD TO DEG
 		euler.z = atan2f(sz, cz);
 	}
 	else
@@ -1162,16 +1213,15 @@ void Quaternion::toEulerAngles(Vector3 &euler) const
 		matrix[1][2] = (2.0f * y * z) - (2.0f * w * x);
 		cx = matrix[1][1];
 		sx = -matrix[1][2];
-		//euler->x = ((float)atan2(sx,cx) * 180.0f) / (float)M_PI;	// RAD TO DEG
+		// euler->x = ((float)atan2(sx,cx) * 180.0f) / (float)M_PI;	// RAD TO DEG
 		euler.x = atan2f(sx, cx);
 
 		cz = 1.0f;
 		sz = 0.0f;
-		//euler->z = ((float)atan2(sz,cz) * 180.0f) / (float)M_PI;	// RAD TO DEG
+		// euler->z = ((float)atan2(sz,cz) * 180.0f) / (float)M_PI;	// RAD TO DEG
 		euler.z = atan2f(sz, cz);
 	}
 }
-
 
 void Quaternion::setAxisAngle(float ax, float ay, float az, float angle)
 {
@@ -1182,7 +1232,6 @@ void Quaternion::setAxisAngle(float ax, float ay, float az, float angle)
 	x = ax * s;
 	y = ay * s;
 	z = az * s;
-
 }
 
 float ComputeSignedAngle(Vector2 a, Vector2 b)
@@ -1192,7 +1241,7 @@ float ComputeSignedAngle(Vector2 a, Vector2 b)
 	return atan2(a.perpdot(b), a.dot(b));
 }
 
-Vector3 RayPlaneCollision(const Vector3& plane_pos, const Vector3& plane_normal, const Vector3& ray_origin, const Vector3& ray_dir)
+Vector3 RayPlaneCollision(const Vector3 &plane_pos, const Vector3 &plane_normal, const Vector3 &ray_origin, const Vector3 &ray_dir)
 {
 	double D = plane_pos.dot(plane_normal);
 	double numer = plane_normal.dot(ray_origin) + D;
@@ -1201,25 +1250,25 @@ Vector3 RayPlaneCollision(const Vector3& plane_pos, const Vector3& plane_normal,
 	return ray_origin + ray_dir * t;
 }
 
-bool RaySphereCollision(const Vector3& center, const float& radius, const Vector3& ray_origin, const Vector3& ray_dir, Vector3& coll)
+bool RaySphereCollision(const Vector3 &center, const float &radius, const Vector3 &ray_origin, const Vector3 &ray_dir, Vector3 &coll)
 {
 	Vector3 m = ray_origin - center;
 	float b = dot(m, ray_dir);
 	float c = dot(m, m) - radius * radius;
 
-	// Exit if r’s origin outside s (c > 0) and r pointing away from s (b > 0) 
+	// Exit if rï¿½s origin outside s (c > 0) and r pointing away from s (b > 0)
 	if (c > 0.0f && b > 0.0f)
 		return false;
 	float discr = b * b - c;
 
-	// A negative discriminant corresponds to ray missing sphere 
+	// A negative discriminant corresponds to ray missing sphere
 	if (discr < 0.0f)
 		return false;
 
 	// Ray now found to intersect sphere, compute smallest t value of intersection
 	float t = -b - sqrt(discr);
 
-	// If t is negative, ray started inside sphere so clamp t to zero 
+	// If t is negative, ray started inside sphere so clamp t to zero
 	if (t < 0.0f)
 		t = 0.0f;
 	coll = ray_origin + t * ray_dir;
@@ -1232,7 +1281,7 @@ Vector3 normalize(Vector3 n)
 	return n.normalize();
 }
 
-int planeBoxOverlap( const Vector4& plane, const Vector3& center, const Vector3& halfsize )
+int planeBoxOverlap(const Vector4 &plane, const Vector3 &center, const Vector3 &halfsize)
 {
 	Vector3 n = plane.sV4Data.xyz;
 	float d = plane.w;
@@ -1245,16 +1294,16 @@ int planeBoxOverlap( const Vector4& plane, const Vector3& center, const Vector3&
 	return CLIP_INSIDE;
 }
 
-float signedDistanceToPlane( const Vector4& plane, const Vector3& point )
+float signedDistanceToPlane(const Vector4 &plane, const Vector3 &point)
 {
 	return dot(plane.sV4Data.xyz, point) + plane.w;
 }
 
-const Vector3 corners[] = { {1,1,1},  {1,1,-1},  {1,-1,1},  {1,-1,-1},  {-1,1,1},  {-1,1,-1},  {-1,-1,1},  {-1,-1,-1} };
+const Vector3 corners[] = {{1, 1, 1}, {1, 1, -1}, {1, -1, 1}, {1, -1, -1}, {-1, 1, 1}, {-1, 1, -1}, {-1, -1, 1}, {-1, -1, -1}};
 
-BoundingBox transformBoundingBox(const Matrix44 m, const BoundingBox& box)
+BoundingBox transformBoundingBox(const Matrix44 m, const BoundingBox &box)
 {
-	Vector3 box_min(10000000.0f,1000000.0f, 1000000.0f);
+	Vector3 box_min(10000000.0f, 1000000.0f, 1000000.0f);
 	Vector3 box_max(-10000000.0f, -1000000.0f, -1000000.0f);
 
 	for (int i = 0; i < 8; ++i)
@@ -1268,5 +1317,5 @@ BoundingBox transformBoundingBox(const Matrix44 m, const BoundingBox& box)
 	}
 
 	Vector3 halfsize = (box_max - box_min) * 0.5;
-	return BoundingBox(box_max - halfsize, halfsize );
+	return BoundingBox(box_max - halfsize, halfsize);
 }

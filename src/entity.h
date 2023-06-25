@@ -10,26 +10,23 @@
 class Entity
 {
 public:
-    // Constructor and destructor
     Entity();
-    // virtual ~Entity();
+    virtual ~Entity();
 
-    // Some attributes
     str name;
     Matrix44 model;
 
-    // Methods hat should be overwritten
     virtual void render();
     virtual void update(float dt);
 
-    Matrix44 getGlobalMatrix();
+    Entity *parent;
 
-    Entity *parent = nullptr;
-
-    // Children
     vt<Entity *> children;
-    void addChild(Entity *entity);
-    void removeChild(Entity *entity);
+
+    void addChild(Entity *child);
+    void removeChild(Entity *child);
+
+    Matrix44 getGlobalMatrix();
 };
 
 class EntityMesh : public Entity
@@ -43,7 +40,6 @@ public:
     // Constructor
     EntityMesh(Mesh *mesh, Shader *shader, Texture *texture);
 
-    // Overwritten methods
     void render();
     void update(float dt);
 };
@@ -55,12 +51,12 @@ public:
     Texture *texture = nullptr;
     Shader *shader = nullptr;
     Vector4 color;
+
     vt<Matrix44> models;
 
     // Constructor
     InstancedEntityMesh(Mesh *mesh, Shader *shader, Texture *texture);
 
-    // Overwritten methods
     void render();
     void update(float dt);
 };
