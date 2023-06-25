@@ -7,18 +7,21 @@
 #include "shader.h"
 #include "input.h"
 #include "animation.h"
+#include "entity.h"
+#include "entityMesh.h"
 
 #include <cmath>
 
 // Game params
 float camera_rotation_speed = 5.0f;
-float camera_move_speed = 50.0f;
+float camera_move_speed = 5.0f;
 float camera_jump_speed = 10.0f;
 
 // some globals
 // Mesh *mesh = NULL;
 // Texture *texture = NULL;
 // Shader *shader = NULL;
+EntityMesh *em = NULL;
 Animation *anim = NULL;
 float angle = 0;
 float mouse_speed = 100.0f;
@@ -46,9 +49,17 @@ Game::Game(int window_width, int window_height, SDL_Window *window)
 
 	// create our camera
 	camera = new Camera();
-	camera->lookAt(Vector3(0.f, 100.f, 100.f), Vector3(0.f, 0.f, 0.f), Vector3(0.f, 1.f, 0.f)); // position the camera and point to 0,0,0
-	camera->setPerspective(70.f, window_width / (float)window_height, 0.1f, 10000.f);			// set the projection, we want to be perspective
+	camera->lookAt(Vector3(0.f, 1.f, 0.001f), Vector3(0.f, 0.f, 0.f), Vector3(0.f, 1.f, 0.f)); // position the camera and point to 0,0,0
+	camera->setPerspective(70.f, window_width / (float)window_height, 0.1f, 10000.f);		   // set the projection, we want to be perspective
 	shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
+
+	// Load the EntityMesh cube
+	Mesh *mesh = Mesh::Get("data/meshes/Plane.obj");
+	// Rotate the mesh 90 degrees
+	Texture *texture = Texture::Get("data/textures/box.tga");
+	Matrix44 model = Matrix44::IDENTITY;
+	model.rotate(90 * DEG2RAD, Vector3(1, 0, 0));
+	em = new EntityMesh(mesh, texture, model);
 
 	// hide the cursor
 	SDL_ShowCursor(!mouse_locked); // hide or show the mouse
@@ -94,6 +105,7 @@ void Game::render(void)
 		shader->disable();
 	}
 	*/
+	em->render();
 
 	// Draw the floor grid
 	drawGrid();
