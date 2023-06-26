@@ -5,6 +5,7 @@
 #ifndef GAME_H
 #define GAME_H
 
+#include "entityMeshRoom.h"
 #include "includes.h"
 #include "camera.h"
 #include "utils.h"

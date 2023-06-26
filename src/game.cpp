@@ -10,6 +10,7 @@
 #include "entity.h"
 #include "entityMesh.h"
 #include "entityMeshRoom.h"
+#include "entityPlayer.h"
 
 #include <cmath>
 
@@ -22,7 +23,8 @@ float camera_jump_speed = 10.0f;
 // Mesh *mesh = NULL;
 // Texture *texture = NULL;
 // Shader *shader = NULL;
-EntityMeshRoom *emr = NULL;
+EntityPlayer *player = NULL;
+EntityMeshRoom *room = NULL;
 Animation *anim = NULL;
 float angle = 0;
 float mouse_speed = 100.0f;
@@ -52,12 +54,15 @@ Game::Game(int window_width, int window_height, SDL_Window *window)
 	camera = new Camera();
 	camera->lookAt(Vector3(0.f, 1.f, 0.001f), Vector3(0.f, 0.f, 0.f), Vector3(0.f, 1.f, 0.f)); // position the camera and point to 0,0,0
 	camera->setPerspective(70.f, window_width / (float)window_height, 0.1f, 10000.f);		   // set the projection, we want to be perspective
+	player = new EntityPlayer();
+
 	shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
 
-	// Create the emr
+	// Create the room
 	wall_texture = Texture::Get("data/textures/wall.tga");
 	floor_texture = Texture::Get("data/textures/box.tga");
-	emr = new EntityMeshRoom();
+	room = new EntityMeshRoom();
+	room->parseScene("room0");
 
 	// hide the cursor
 	SDL_ShowCursor(!mouse_locked); // hide or show the mouse
@@ -104,7 +109,7 @@ void Game::render(void)
 	}
 	*/
 
-	emr->render();
+	room->render();
 
 	// Draw the floor grid
 	drawGrid();
@@ -126,29 +131,29 @@ void Game::update(double seconds_elapsed)
 	// mouse input to rotate the cam
 	if ((Input::mouse_state & SDL_BUTTON_LEFT) || mouse_locked) // is left button pressed?
 	{
-		camera->rotate(Input::mouse_delta.x * 0.001f * camera_rotation_speed, Vector3(0.0f, -1.0f, 0.0f));
-		camera->rotate(Input::mouse_delta.y * 0.001f * camera_rotation_speed, camera->getLocalVector(Vector3(-1.0f, 0.0f, 0.0f)));
+		player->rotatePlayer(Input::mouse_delta.x * 0.001f * camera_rotation_speed, Vector3(0.0f, -1.0f, 0.0f));
+		player->rotatePlayer(Input::mouse_delta.y * 0.001f * camera_rotation_speed, camera->getLocalVector(Vector3(-1.0f, 0.0f, 0.0f)));
 	}
 
 	// WASD to move the camera around
 	if (Input::isKeyPressed(SDL_SCANCODE_W))
 	{
-		camera->XZmove(Vector3(0.0f, 0.0f, 1.0f) * camera_move_speed * seconds_elapsed);
+		player->movePlayer(Vector3(0.0f, 0.0f, 1.0f) * camera_move_speed * seconds_elapsed);
 	}
 	if (Input::isKeyPressed(SDL_SCANCODE_S))
 	{
-		camera->XZmove(Vector3(0.0f, 0.0f, -1.0f) * camera_move_speed * seconds_elapsed);
+		player->movePlayer(Vector3(0.0f, 0.0f, -1.0f) * camera_move_speed * seconds_elapsed);
 	}
 	if (Input::isKeyPressed(SDL_SCANCODE_A))
 	{
-		camera->XZmove(Vector3(1.0f, 0.0f, 0.0f) * camera_move_speed * seconds_elapsed);
+		player->movePlayer(Vector3(1.0f, 0.0f, 0.0f) * camera_move_speed * seconds_elapsed);
 	}
 	if (Input::isKeyPressed(SDL_SCANCODE_D))
 	{
-		camera->XZmove(Vector3(-1.0f, 0.0f, 0.0f) * camera_move_speed * seconds_elapsed);
+		player->movePlayer(Vector3(-1.0f, 0.0f, 0.0f) * camera_move_speed * seconds_elapsed);
 	}
 
-	emr->update(seconds_elapsed);
+	room->update(seconds_elapsed);
 
 	// if (Input::isKeyPressed(SDL_SCANCODE_LSHIFT))
 	// 	speed *= 10; // move faster with left shift

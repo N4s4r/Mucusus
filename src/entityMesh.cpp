@@ -7,21 +7,17 @@ EntityMesh::EntityMesh()
 {
 }
 
-EntityMesh::EntityMesh(Mesh *mesh, Texture *texture, Matrix44 model)
+EntityMesh::EntityMesh(Mesh *mesh, Shader *shader, Texture *texture)
 {
     this->name = "MyEntityMesh";
     this->mesh = mesh;
     this->texture = texture;
-    this->model = model;
+    this->shader = shader;
 }
 
 void EntityMesh::render()
 {
     float time = Game::instance->time;
-
-    // Select chader
-    Shader *shader;
-    shader = Game::instance->shader;
 
     if (!shader)
         return;
@@ -31,7 +27,10 @@ void EntityMesh::render()
     Camera *cam = Game::instance->camera;
     shader->setUniform("u_color", Vector4(1, 1, 1, 1));
     shader->setUniform("u_viewprojection", cam->viewprojection_matrix);
-    shader->setUniform("u_texture", texture, 0);
+    if (texture)
+        shader->setUniform("u_texture", texture, 0);
+    else glBindTexture(GL_TEXTURE_2D, 0);
+
     shader->setUniform("u_time", time);
 
     shader->setUniform("u_model", model);

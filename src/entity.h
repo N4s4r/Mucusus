@@ -3,7 +3,6 @@
 #include "defines.h"
 
 #include "framework.h"
-#include "mesh.h"
 #include "texture.h"
 #include "animation.h"
 
@@ -16,14 +15,23 @@ public:
     str name;
     Matrix44 model;
 
-    Mesh *mesh;
-    Texture *texture;
-
     vt<Animation *> animations;
 
-    virtual void render(){};
+    // Pointer to parent
+    Entity* parent;
+
+    // Pointers to children
+    vt<Entity*> children;
+
+    void addChild(Entity* child);
+    void removeChild(Entity* child);
+
+    // Get transform in world coordinates
+    Matrix44 getGlobalMatrix();
+
+    virtual void render();
     virtual void render(Matrix44 extra_model){};
-    virtual void update(float dt){};
+    virtual void update(float dt);
 
     Vector3 getPosition() { return model.getTranslation(); };
 };

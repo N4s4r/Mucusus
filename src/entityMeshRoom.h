@@ -1,23 +1,23 @@
 #pragma once
-
 #include "defines.h"
 #include "entityMesh.h"
 #include "game.h"
+#include "entity.h"
 
-class EntityMeshRoom
+class EntityMeshRoom : public Entity
 {
-    EntityMesh *N_wall;
-    EntityMesh *S_wall;
-    EntityMesh *E_wall;
-    EntityMesh *W_wall;
-    EntityMesh *floor;
-    EntityMesh *ceiling;
+    struct sRenderData {
+        Texture* texture = nullptr;
+        Shader* shader = nullptr;
+        std::vector<Matrix44> models;
+    };
+
+    std::map<std::string, sRenderData> meshes_to_load;
 
 public:
     Matrix44 room_model;
 
     EntityMeshRoom();
 
-    void render();
-    void update(float dt);
+    bool parseScene(const char* filename);
 };
