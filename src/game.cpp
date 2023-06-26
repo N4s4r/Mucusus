@@ -54,8 +54,9 @@ Game::Game(int window_width, int window_height, SDL_Window *window)
 	camera->setPerspective(70.f, window_width / (float)window_height, 0.1f, 10000.f);		   // set the projection, we want to be perspective
 	shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
 
-	// load a mesh and a texture
+	// Create the emr
 	wall_texture = Texture::Get("data/textures/wall.tga");
+	floor_texture = Texture::Get("data/textures/box.tga");
 	emr = new EntityMeshRoom();
 
 	// hide the cursor
@@ -146,6 +147,8 @@ void Game::update(double seconds_elapsed)
 	{
 		camera->XZmove(Vector3(-1.0f, 0.0f, 0.0f) * camera_move_speed * seconds_elapsed);
 	}
+
+	emr->update(seconds_elapsed);
 
 	// if (Input::isKeyPressed(SDL_SCANCODE_LSHIFT))
 	// 	speed *= 10; // move faster with left shift

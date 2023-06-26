@@ -6,16 +6,15 @@
 
 class EntityMeshRoom
 {
-
-public:
-    Matrix44 N_wall_model;
-    Matrix44 S_wall_model;
-    Matrix44 E_wall_model;
-    Matrix44 W_wall_model;
     EntityMesh *N_wall;
     EntityMesh *S_wall;
     EntityMesh *E_wall;
     EntityMesh *W_wall;
+    EntityMesh *floor;
+    EntityMesh *ceiling;
+
+public:
+    Matrix44 room_model;
 
     EntityMeshRoom();
 

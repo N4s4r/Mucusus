@@ -60,7 +60,7 @@ void EntityMesh::render(Matrix44 extra_model)
     shader->setUniform("u_texture", texture, 0);
     shader->setUniform("u_time", time);
 
-    Matrix44 new_model = extra_model * model;
+    Matrix44 new_model = model * extra_model;
 
     shader->setUniform("u_model", new_model);
 

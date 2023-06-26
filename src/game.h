@@ -35,7 +35,9 @@ public:
 	// Some public meshes
 	Mesh *X_wall_mesh = Mesh::Get("data/meshes/X_wall.obj");
 	Mesh *Z_wall_mesh = Mesh::Get("data/meshes/Z_wall.obj");
+	Mesh *floor_mesh = Mesh::Get("data/meshes/floor.obj");
 	Texture *wall_texture = NULL;
+	Texture *floor_texture = NULL;
 
 	bool mouse_locked; // tells if the mouse is locked (not seen)
 
