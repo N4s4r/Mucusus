@@ -123,36 +123,8 @@ void Game::render(void)
 
 void Game::update(double seconds_elapsed)
 {
-	float speed = seconds_elapsed * mouse_speed; // the speed is defined by the seconds_elapsed so it goes constant
 
-	// example
-	angle += (float)seconds_elapsed * 10.0f;
-
-	// mouse input to rotate the cam
-	if ((Input::mouse_state & SDL_BUTTON_LEFT) || mouse_locked) // is left button pressed?
-	{
-		player->rotatePlayer(Input::mouse_delta.x * 0.001f * camera_rotation_speed, Vector3(0.0f, -1.0f, 0.0f));
-		player->rotatePlayer(Input::mouse_delta.y * 0.001f * camera_rotation_speed, camera->getLocalVector(Vector3(-1.0f, 0.0f, 0.0f)));
-	}
-
-	// WASD to move the camera around
-	if (Input::isKeyPressed(SDL_SCANCODE_W))
-	{
-		player->movePlayer(Vector3(0.0f, 0.0f, 1.0f) * camera_move_speed * seconds_elapsed);
-	}
-	if (Input::isKeyPressed(SDL_SCANCODE_S))
-	{
-		player->movePlayer(Vector3(0.0f, 0.0f, -1.0f) * camera_move_speed * seconds_elapsed);
-	}
-	if (Input::isKeyPressed(SDL_SCANCODE_A))
-	{
-		player->movePlayer(Vector3(1.0f, 0.0f, 0.0f) * camera_move_speed * seconds_elapsed);
-	}
-	if (Input::isKeyPressed(SDL_SCANCODE_D))
-	{
-		player->movePlayer(Vector3(-1.0f, 0.0f, 0.0f) * camera_move_speed * seconds_elapsed);
-	}
-
+	player->update(seconds_elapsed);
 	room->update(seconds_elapsed);
 
 	// if (Input::isKeyPressed(SDL_SCANCODE_LSHIFT))
