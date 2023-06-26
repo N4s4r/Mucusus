@@ -58,23 +58,23 @@ void EntityPlayer::update(float dt, EntityMeshRoom* room)
 		//movePlayer(Vector3(-1.0f, 0.0f, 0.0f) * player_speed * dt);
 	}
 
-	Vector3 to_pos = camera->eye + (velocity);
-	Vector3 char_center = to_pos + Vector3(0, 1, 0);
-
+	Vector3 movement_vec = velocity;
 	//collisions
 	//std::vector<EntityMesh*> entities = Game::instance->room;
 	//EntityMeshRoom * currentRoom = Game::instance->room;
 	
 	vt<EntityMesh*> roomEntities = room->staticEntities;
 	Vector3 current_pos = camera->eye;
-	checkCollisionEntities(roomEntities, char_center, dt, to_pos, current_pos);
-
+	Vector3 to_pos = current_pos + movement_vec;
+	Vector3 char_center = to_pos + Vector3(0, 1, 0);
+	checkCollisionEntities(roomEntities, char_center, dt, movement_vec, current_pos);
 
 	velocity = velocity - (velocity * 10.0f * dt);
-	movePlayer(velocity);
+	
+	movePlayer(movement_vec);
 }
 //Collisions
-void EntityPlayer::checkCollisionEntities(vt<EntityMesh*>& roomEntities, Vector3& character_center, float dt, Vector3& to_pos, Vector3& playerPos)
+void EntityPlayer::checkCollisionEntities(vt<EntityMesh*>& roomEntities, Vector3& character_center, float dt, Vector3& movement_vec, Vector3& playerPos)
 {
 	for (size_t i = 0; i < roomEntities.size(); i++) {
 		EntityMesh* checkEntity = roomEntities[i];
@@ -84,12 +84,12 @@ void EntityPlayer::checkCollisionEntities(vt<EntityMesh*>& roomEntities, Vector3
 			continue;
 		std::cout << "Collision" << std::endl;
 		//std::cout << "Positionat" << playerPos << std::endl;
-		Vector3 pushDirection = normalize(coll - character_center);
-		Vector3 push_away = pushDirection * dt * 2;
-		//camera->lookAt(Vector3(0.f, 1.f, 0.001f), Vector3(0.f, 1.f, 0.f), Vector3(0.f, 1.f, 0.f));
-		to_pos = playerPos - push_away;
-		to_pos.y = 0;
+		float alpha = movement_vec.dot(movement_vec) / collnorm.length();
+		movement_vec = movement_vec - alpha * collnorm;
+		
+		//Vector3 pushDirection = normalize(collnorm);
+		////pushDirection.y = 0.0f;
+		//movement_vec = pushDirection;
+		//std::cout << pushDirection.x << pushDirection.y << pushDirection.z << std::endl;
 	}
 }
-
-
