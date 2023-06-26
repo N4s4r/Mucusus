@@ -2,10 +2,7 @@
 	This class encapsulates the game, is in charge of creating the game, getting the user input, process the update and render.
 */
 
-#ifndef GAME_H
-#define GAME_H
-
-#include "entityMeshRoom.h"
+#pragma once
 #include "includes.h"
 #include "camera.h"
 #include "utils.h"
@@ -32,6 +29,7 @@ public:
 	// some vars
 	Camera *camera; // our global camera
 	Shader *shader; // our global shader
+	//EntityMeshRoom* room;
 
 	// Some public meshes
 	Mesh *X_wall_mesh = Mesh::Get("data/meshes/X_wall.obj");
@@ -58,5 +56,3 @@ public:
 	void onGamepadButtonUp(SDL_JoyButtonEvent event);
 	void onResize(int width, int height);
 };
-
-#endif

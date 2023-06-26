@@ -124,7 +124,7 @@ void Game::render(void)
 void Game::update(double seconds_elapsed)
 {
 
-	player->update(seconds_elapsed);
+	player->update(seconds_elapsed, room);
 	room->update(seconds_elapsed);
 
 	// if (Input::isKeyPressed(SDL_SCANCODE_LSHIFT))

@@ -1,8 +1,6 @@
 #pragma once
 #include "defines.h"
 #include "entityMesh.h"
-#include "game.h"
-#include "entity.h"
 
 class EntityMeshRoom : public Entity
 {
@@ -16,8 +14,10 @@ class EntityMeshRoom : public Entity
 
 public:
     Matrix44 room_model;
+    vt<EntityMesh*> staticEntities;
 
     EntityMeshRoom();
 
     bool parseScene(const char* filename);
+    void addStaticEntity(EntityMesh* entity);
 };
