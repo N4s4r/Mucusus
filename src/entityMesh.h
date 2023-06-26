@@ -15,5 +15,6 @@ public:
     EntityMesh(Mesh *mesh, Texture *texture, Matrix44 model);
 
     virtual void render() override;
+    virtual void render(Matrix44 extra_model) override;
     virtual void update(float dt) override;
 };

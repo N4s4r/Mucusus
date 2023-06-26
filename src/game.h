@@ -9,6 +9,7 @@
 #include "camera.h"
 #include "utils.h"
 #include "shader.h"
+#include "mesh.h"
 
 class Game
 {
@@ -28,8 +29,14 @@ public:
 	bool must_exit;
 
 	// some vars
-	Camera *camera;	   // our global camera
-	Shader *shader;	   // our global shader
+	Camera *camera; // our global camera
+	Shader *shader; // our global shader
+
+	// Some public meshes
+	Mesh *X_wall_mesh = Mesh::Get("data/meshes/X_wall.obj");
+	// Mesh *Z_wall_mesh = Mesh::Get("data/meshes/Z_wall.obj");
+	Texture *wall_texture = NULL;
+
 	bool mouse_locked; // tells if the mouse is locked (not seen)
 
 	Game(int window_width, int window_height, SDL_Window *window);

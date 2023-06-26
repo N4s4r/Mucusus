@@ -22,6 +22,7 @@ public:
     vt<Animation *> animations;
 
     virtual void render(){};
+    virtual void render(Matrix44 extra_model){};
     virtual void update(float dt){};
 
     Vector3 getPosition() { return model.getTranslation(); };
