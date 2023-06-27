@@ -10,6 +10,7 @@
 #include "mesh.h"
 
 class EntityMeshRoom;
+class EntityPlayer;
 
 class Game
 {
@@ -32,6 +33,7 @@ public:
 	Camera *camera; // our global camera
 	Shader *shader; // our global shader
 	EntityMeshRoom* room = NULL;
+	EntityPlayer* player = NULL;
 
 	//EntityMeshRoom* room;
 

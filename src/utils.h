@@ -10,6 +10,7 @@
 
 #include "includes.h"
 #include "framework.h"
+#include "defines.h"
 
 //General functions **************
 long getTime();
@@ -46,5 +47,33 @@ char* fetchBufferVec2(char* data, std::vector<Vector2>& vector);
 char* fetchBufferVec3u(char* data, std::vector<Vector3u>& vector);
 char* fetchBufferVec4ub(char* data, std::vector<Vector4ub>& vector);
 char* fetchBufferVec4(char* data, std::vector<Vector4>& vector);
+
+
+class EntityMeshRoom;
+
+//struct sCollisionData
+//{
+//	Vector3 colPoint;
+//	Vector3 colNormal;
+//};
+//
+//bool checkPlayerCollisions(const Vector3& target_pos, vt<sCollisionData>& collisions, EntityMeshRoom* room)
+//{
+//	Vector3 center = target_pos + Vector3(0.f, 1.25f, 0.f);
+//	float sphereRadius = 0.75f;
+//	Vector3 colPoint, colNormal;
+//
+//	EACH(e, room->staticEntities)
+//	{
+//		Mesh* mesh = e->mesh;
+//		if (mesh->testSphereCollision(e->model, center, sphereRadius, colPoint, colNormal))
+//		{
+//			collisions.push_back({ colPoint, colNormal.normalize() });
+//		}
+//	}
+//
+//	return !collisions.empty();
+//}
+
 
 #endif

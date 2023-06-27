@@ -32,16 +32,20 @@ bool EntityMeshRoom::parseScene(const char* roomName)
 	// You could fill the map manually to add shader and texture for each mesh
 	// If the mesh is not in the map, you can use the MTL file to render its colors
 	
-	meshes_to_load["meshes/Ceiling.obj"] = { Texture::Get("data/textures/wall.tga"), Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs") };
+	meshes_to_load["meshes/Ceiling.obj"] = { Texture::Get("data/textures/ceiling.tga"), Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs") };
 	meshes_to_load["meshes/Floor.obj"] = { Texture::Get("data/textures/floor.tga"), Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs") };
-	meshes_to_load["meshes/frameEast.obj"] = { Texture::Get("data/textures/column.tga"), Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs") };
-	meshes_to_load["meshes/frameWest.obj"] = { Texture::Get("data/textures/column.tga"), Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs") };
-	meshes_to_load["meshes/frameSouth.obj"] = { Texture::Get("data/textures/column.tga"), Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs") };
-	meshes_to_load["meshes/frameNorth.obj"] = { Texture::Get("data/textures/column.tga"), Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs") };
-	meshes_to_load["meshes/wallEast.obj"] = { Texture::Get("data/textures/wall.tga"), Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs") };
-	meshes_to_load["meshes/wallWest.obj"] = { Texture::Get("data/textures/wall.tga"), Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs") };
-	meshes_to_load["meshes/wallSouth.obj"] = { Texture::Get("data/textures/wall.tga"), Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs") };
-	meshes_to_load["meshes/wallNorth.obj"] = { Texture::Get("data/textures/wall.tga"), Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs") };
+	meshes_to_load["meshes/frameEast.obj"] = { Texture::Get("data/textures/pilar.tga"), Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs") };
+	meshes_to_load["meshes/frameWest.obj"] = { Texture::Get("data/textures/pilar.tga"), Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs") };
+	meshes_to_load["meshes/frameSouth.obj"] = { Texture::Get("data/textures/pilar.tga"), Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs") };
+	meshes_to_load["meshes/frameNorth.obj"] = { Texture::Get("data/textures/pilar.tga"), Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs") };
+	meshes_to_load["meshes/bigaEast.obj"] = { Texture::Get("data/textures/biga.tga"), Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs") };
+	meshes_to_load["meshes/bigaWest.obj"] = { Texture::Get("data/textures/biga.tga"), Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs") };
+	meshes_to_load["meshes/bigaSouth.obj"] = { Texture::Get("data/textures/biga.tga"), Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs") };
+	meshes_to_load["meshes/bigaNorth.obj"] = { Texture::Get("data/textures/biga.tga"), Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs") };
+	meshes_to_load["meshes/wallEast.obj"] = { Texture::Get("data/textures/wall2.tga"), Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs") };
+	meshes_to_load["meshes/wallWest.obj"] = { Texture::Get("data/textures/wall2.tga"), Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs") };
+	meshes_to_load["meshes/wallSouth.obj"] = { Texture::Get("data/textures/wall2.tga"), Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs") };
+	meshes_to_load["meshes/wallNorth.obj"] = { Texture::Get("data/textures/wall2.tga"), Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs") };
 
 	//vt<str> paths = { "meshes/Ceiling.obj", "meshes/Floor.obj", "meshes/frameEast.obj", "meshes/frameWest.obj", "meshes/frameSouth.obj", "meshes/frameNorth.obj", "meshes/wallEast.obj", "meshes/wallWest.obj", "meshes/wallSouth.obj", "meshes/wallNorth.obj" };
 	//EACH(path, paths)

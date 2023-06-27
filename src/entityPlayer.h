@@ -24,6 +24,6 @@ public:
 	void rotatePlayer(float angle, const Vector3& axis);
 
 	//collisions
-	void update(float dt, EntityMeshRoom* room);
+	void update(float dt);
 	void checkCollisionEntities(vt<EntityMesh*>& roomEntities, Vector3& character_center, float dt, Vector3& to_pos, Vector3& playerPos);
 };

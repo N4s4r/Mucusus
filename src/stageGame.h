@@ -8,6 +8,6 @@
 class StageGame : public Stage {
 public:
     StageGame();
-    virtual void render(EntityMeshRoom* room); //empty body
-    virtual void update(double seconds_elapsed, EntityPlayer* player);//empty body
+    virtual void render(); //empty body
+    virtual void update(double seconds_elapsed);//empty body
 };

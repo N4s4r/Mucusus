@@ -13,6 +13,6 @@ class Stage
 {
 public:
     Stage() {};
-    virtual void render(EntityMeshRoom* room) {};
-    virtual void update(double seconds_elapsed, EntityPlayer* player) {};
+    virtual void render() {};
+    virtual void update(double seconds_elapsed) {};
 };

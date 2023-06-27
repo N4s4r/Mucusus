@@ -4,8 +4,9 @@ StageGame::StageGame()
 {
 }
 
-void StageGame::render(EntityMeshRoom *room)
+void StageGame::render()
 {
+	EntityMeshRoom* room = Game::instance->room;
 	// set the clear color (the background color)
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 
@@ -58,10 +59,11 @@ void StageGame::render(EntityMeshRoom *room)
 	SDL_GL_SwapWindow(window);
 }
 
-void StageGame::update(double seconds_elapsed, EntityPlayer* player)
+void StageGame::update(double seconds_elapsed)
 {
+	EntityPlayer* player = Game::instance->player;
 	EntityMeshRoom* room = Game::instance->room;
-	player->update(seconds_elapsed, room);
+	player->update(seconds_elapsed);
 	room->update(seconds_elapsed);
 
 

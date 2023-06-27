@@ -25,7 +25,6 @@ float camera_jump_speed = 10.0f;
 // Mesh *mesh = NULL;
 // Texture *texture = NULL;
 // Shader *shader = NULL;
-EntityPlayer *player = NULL;
 Animation *anim = NULL;
 float angle = 0;
 float mouse_speed = 100.0f;
@@ -98,12 +97,12 @@ Game::Game(int window_width, int window_height, SDL_Window *window)
 // what to do when the image has to be draw
 void Game::render(void)
 {
-	getCurrentStage()->render(room);
+	getCurrentStage()->render();
 }
 
 void Game::update(double seconds_elapsed)
 {
-	getCurrentStage()->update(seconds_elapsed, player);
+	getCurrentStage()->update(seconds_elapsed);
 }
 
 // Keyboard event handler (sync input)
