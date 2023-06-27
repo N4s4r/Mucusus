@@ -32,6 +32,7 @@ void EntityMesh::render()
     else glBindTexture(GL_TEXTURE_2D, 0);
 
     shader->setUniform("u_time", time);
+    shader->setUniform("u_tiles", 10.0f);
 
     shader->setUniform("u_model", model);
 

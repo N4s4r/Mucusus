@@ -80,12 +80,12 @@ void EntityPlayer::checkCollisionEntities(vt<EntityMesh*>& roomEntities, Vector3
 		EntityMesh* checkEntity = roomEntities[i];
 		Vector3 coll;
 		Vector3 collnorm;
-		if (!checkEntity->mesh->testSphereCollision(checkEntity->model, character_center, 1.0f, coll, collnorm))
+		if (!checkEntity->mesh->testSphereCollision(checkEntity->model, character_center, .5f, coll, collnorm))
 			continue;
 		std::cout << "Collision" << std::endl;
 		//std::cout << "Positionat" << playerPos << std::endl;
 		float alpha = movement_vec.dot(movement_vec) / collnorm.length();
-		movement_vec = movement_vec - alpha * collnorm;
+		movement_vec = (movement_vec - alpha * collnorm) * movement_vec;
 		
 		//Vector3 pushDirection = normalize(collnorm);
 		////pushDirection.y = 0.0f;

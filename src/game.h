@@ -9,6 +9,8 @@
 #include "shader.h"
 #include "mesh.h"
 
+class EntityMeshRoom;
+
 class Game
 {
 public:
@@ -29,6 +31,8 @@ public:
 	// some vars
 	Camera *camera; // our global camera
 	Shader *shader; // our global shader
+	EntityMeshRoom* room = NULL;
+
 	//EntityMeshRoom* room;
 
 	// Some public meshes

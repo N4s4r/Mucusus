@@ -11,7 +11,9 @@
 #include "entityMesh.h"
 #include "entityMeshRoom.h"
 #include "entityPlayer.h"
-
+#include "stage.h"
+#include "stageGame.h"
+#include "stageIntro.h"
 #include <cmath>
 
 // Game params
@@ -24,13 +26,36 @@ float camera_jump_speed = 10.0f;
 // Texture *texture = NULL;
 // Shader *shader = NULL;
 EntityPlayer *player = NULL;
-EntityMeshRoom *room = NULL;
 Animation *anim = NULL;
 float angle = 0;
 float mouse_speed = 100.0f;
 FBO *fbo = NULL;
+STAGE_ID currentStage;
+vt<Stage*> stages;
 
 Game *Game::instance = NULL;
+
+Stage* getStage(STAGE_ID id)
+{
+	return stages[(int)id];
+}
+
+Stage* getCurrentStage()
+{
+	return getStage(currentStage);
+}
+
+void setStage(STAGE_ID id)
+{
+	currentStage = id;
+}
+
+void initStages()
+{
+	stages.reserve(1);
+	stages.push_back(new StageIntro());
+	stages.push_back(new StageGame());
+}
 
 Game::Game(int window_width, int window_height, SDL_Window *window)
 {
@@ -56,6 +81,8 @@ Game::Game(int window_width, int window_height, SDL_Window *window)
 	camera->setPerspective(70.f, window_width / (float)window_height, 0.1f, 10000.f);		   // set the projection, we want to be perspective
 	player = new EntityPlayer();
 
+	initStages();
+	setStage(STAGE_ID::PLAY);
 	shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
 
 	// Create the room
@@ -71,76 +98,12 @@ Game::Game(int window_width, int window_height, SDL_Window *window)
 // what to do when the image has to be draw
 void Game::render(void)
 {
-	// set the clear color (the background color)
-	glClearColor(0.0, 0.0, 0.0, 1.0);
-
-	// Clear the window and the depth buffer
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	// set the camera as default
-	camera->enable();
-
-	// set flags
-	glDisable(GL_BLEND);
-	glEnable(GL_DEPTH_TEST);
-	glDisable(GL_CULL_FACE);
-	/*
-	// create model matrix for cube
-	Matrix44 m;
-	m.rotate(angle * DEG2RAD, Vector3(0, 1, 0));
-
-	if (shader)
-	{9
-		// enable shader
-		shader->enable();
-
-		// upload uniforms
-		shader->setUniform("u_color", Vector4(1, 1, 1, 1));
-		shader->setUniform("u_viewprojection", camera->viewprojection_matrix);
-		shader->setUniform("u_texture", texture, 0);
-		shader->setUniform("u_model", m);
-		shader->setUniform("u_time", time);
-
-		// do the draw call
-		mesh->render(GL_TRIANGLES);
-
-		// disable shader
-		shader->disable();
-	}
-	*/
-
-	room->render();
-
-	// Draw the floor grid
-	drawGrid();
-
-	// render the FPS, Draw Calls, etc
-	drawText(2, 2, getGPUStats(), Vector3(1, 1, 1), 2);
-
-	// swap between front buffer and back buffer
-	SDL_GL_SwapWindow(this->window);
+	getCurrentStage()->render(room);
 }
 
 void Game::update(double seconds_elapsed)
 {
-
-	player->update(seconds_elapsed, room);
-	room->update(seconds_elapsed);
-
-	// if (Input::isKeyPressed(SDL_SCANCODE_LSHIFT))
-	// 	speed *= 10; // move faster with left shift
-	// if (Input::isKeyPressed(SDL_SCANCODE_W))
-	// 	camera->move(Vector3(0.0f, 0.0f, 1.0f) * camera_move_speed);
-	// if (Input::isKeyPressed(SDL_SCANCODE_S))
-	// 	camera->move(Vector3(0.0f, 0.0f, -1.0f) * camera_move_speed);
-	// if (Input::isKeyPressed(SDL_SCANCODE_A))
-	// 	camera->move(Vector3(1.0f, 0.0f, 0.0f) * camera_move_speed);
-	// if (Input::isKeyPressed(SDL_SCANCODE_D))
-	// 	camera->move(Vector3(-1.0f, 0.0f, 0.0f) * camera_move_speed);
-
-	// to navigate with the mouse fixed in the middle
-	if (mouse_locked)
-		Input::centerMouse();
+	getCurrentStage()->update(seconds_elapsed, player);
 }
 
 // Keyboard event handler (sync input)
