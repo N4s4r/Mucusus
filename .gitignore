@@ -1,13 +1,8 @@
 .vscode
-glew32.dll
-Makefile
-Makefile.inc
-SDL2.dll
 xcode
 visualstudio
 src/*.o
 src/*.d
-src/extra
 main
 *.exe
 <<<<<<< HEAD
