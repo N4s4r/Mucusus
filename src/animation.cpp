@@ -87,7 +87,7 @@ void blendSkeleton(Skeleton* a, Skeleton* b, float w, Skeleton* result, uint8 la
 		Skeleton::Bone& boneB = b->bones[i];
 		if ( layer != 0xFF && !(bone.layer & layer) ) //not in the same layer
 			continue;
-		#pragma omp for  
+		// TODO: fix "#pragma omp for" nested loops error
 		for (int j = 0; j < 16; ++j)
 			bone.model.m[j] = lerp( boneA.model.m[j], boneB.model.m[j], w);
 	}
@@ -102,7 +102,7 @@ void Skeleton::renderSkeleton(Camera* camera, Matrix44 model, Vector4 color, boo
 		Bone& bone = bones[i];
 		Vector3 v1;
 		Vector3 v2;
-		Matrix44 parent_global_matrix = global_bone_matrices[ bone.parent ];
+		Matrix44 parent_global_matrix = global_bone_matrices[ (unsigned char)bone.parent ];
 		Matrix44 global_matrix = global_bone_matrices[i];
 		v1 = global_matrix * v1;
 		v2 = parent_global_matrix * v2;
@@ -142,7 +142,7 @@ void Skeleton::updateGlobalMatrices()
 	for (int i = 1; i < num_bones; ++i)
 	{
 		Skeleton::Bone& bone = bones[i];
-		global_bone_matrices[i] = bone.model * global_bone_matrices[ bone.parent ];
+		global_bone_matrices[i] = bone.model * global_bone_matrices[ (unsigned char)bone.parent ];
 	}
 }
 
@@ -156,7 +156,7 @@ void Skeleton::assignLayer( Bone* bone, uint8 layer )
 		bone->layer = 0;
 	for (int i = 0; i < bone->num_children; ++i)
 	{
-		Bone* child = &bones[bone->children[i]];
+		Bone* child = &bones[(unsigned char)bone->children[i]];
 		assignLayer(child, layer);
 	}
 }
@@ -215,6 +215,7 @@ void Animation::assignTime(float t, bool loop, bool interpolate, uint8 layers)
 
 void Animation::operator = (Animation* anim)
 {
+	// Ignore waring of memcpy
 	memcpy(this, anim, sizeof(Animation));
 	this->keyframes = NULL;
 }
@@ -418,7 +419,7 @@ bool Animation::loadSKANIM(const char* filename)
 			bone.parent = parent_index;
 			if (bone.parent != -1)
 			{
-				Skeleton::Bone& parent_bone = skeleton.bones[bone.parent];
+				Skeleton::Bone& parent_bone = skeleton.bones[(unsigned char)bone.parent];
 				assert(parent_bone.num_children < 16);
 				parent_bone.children[parent_bone.num_children++] = index;
 			}

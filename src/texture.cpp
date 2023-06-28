@@ -709,8 +709,10 @@ void Image::flipY()
 	assert(data);
 	int row_size = 4 * width;
 	uint8* temp_row = new uint8[row_size];
+	// Fix to solve the predictable error for paralelize in LINUX
+	unsigned int half_height = half_height*0.5;
 #pragma omp simd
-	for (int y = 0; y < height*0.5; y += 1)
+	for (int y = 0; y < half_height; y += 1)
 	{
 		uint8* pos = data + y*row_size;
 		memcpy(temp_row, pos, row_size);

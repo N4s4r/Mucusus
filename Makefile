@@ -5,7 +5,7 @@ include Makefile.inc
 C_SOURCES = src/extra/coldet/*.c
 SOURCES = src/*.cpp src/extra/*.cpp src/extra/coldet/*.cpp
 
-OBJECTS = $(patsubst %.cpp, %.o, $(wildcard $(SOURCES))) $(patsubst %.c, %.o, $(wildcard $(C_SOURCES)))
+OBJECTS = $(patsubst %.cpp, %.o, $(wildcard $(SOURCES)))
 DEPENDS = $(patsubst %.cpp, %.d, $(wildcard $(SOURCES)))
 
 SDL_LIB = -lSDL2 
