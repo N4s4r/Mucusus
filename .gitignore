@@ -3,6 +3,10 @@ xcode
 visualstudio
 src/*.o
 src/*.d
+src/*/*.o
+src/*/*.d
+src/*/*/*.o
+src/*/*/*.d
 main
 *.exe
 <<<<<<< HEAD
