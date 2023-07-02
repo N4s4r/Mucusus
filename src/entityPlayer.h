@@ -9,6 +9,7 @@ class EntityPlayer :public Entity
 {
 public:
 	EntityPlayer();
+	Vector3 crosshair;
 	Camera* camera;
 	Mesh* mesh;
 
