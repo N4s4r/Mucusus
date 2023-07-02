@@ -15,6 +15,7 @@
 #include "stageGame.h"
 #include "stageIntro.h"
 #include <cmath>
+#include "enemyManager.h"
 
 // Game params
 float camera_rotation_speed = 5.0f;
@@ -30,16 +31,19 @@ float angle = 0;
 float mouse_speed = 100.0f;
 FBO *fbo = NULL;
 STAGE_ID currentStage;
-vt<Stage*> stages;
+vt<Stage *> stages;
+
+// Enemies
+EnemyManager *enemy_manager;
 
 Game *Game::instance = NULL;
 
-Stage* getStage(STAGE_ID id)
+Stage *getStage(STAGE_ID id)
 {
 	return stages[(int)id];
 }
 
-Stage* getCurrentStage()
+Stage *getCurrentStage()
 {
 	return getStage(currentStage);
 }
@@ -90,6 +94,9 @@ Game::Game(int window_width, int window_height, SDL_Window *window)
 	room = new EntityMeshRoom();
 	room->parseScene("room0");
 
+	enemy_manager = new EnemyManager();
+	enemy_manager->addNormalEnemy(Vector3(0, 1, 0));
+
 	// hide the cursor
 	SDL_ShowCursor(!mouse_locked); // hide or show the mouse
 }
@@ -98,11 +105,13 @@ Game::Game(int window_width, int window_height, SDL_Window *window)
 void Game::render(void)
 {
 	getCurrentStage()->render();
+	enemy_manager->render();
 }
 
 void Game::update(double seconds_elapsed)
 {
 	getCurrentStage()->update(seconds_elapsed);
+	enemy_manager->update(seconds_elapsed);
 }
 
 // Keyboard event handler (sync input)
