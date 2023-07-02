@@ -12,6 +12,7 @@ EntityPlayer::EntityPlayer()
 
 void EntityPlayer::movePlayer(Vector3 delta)
 {
+	model.setTranslation(delta.x, delta.y, delta.z);
 	camera->XZmove(delta);
 }
 

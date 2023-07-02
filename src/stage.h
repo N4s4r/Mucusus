@@ -6,7 +6,7 @@
 
 enum STAGE_ID {
     INTRO = 0,
-    PLAY = 1,
+    GAME = 1,
 };
 
 class Stage

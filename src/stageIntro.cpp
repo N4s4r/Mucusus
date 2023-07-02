@@ -1,79 +1,152 @@
 #include "stageIntro.h"
+#include "input.h"
+
+#define MENU_OPTIONS 4
+
+void StageIntro::changeSelector()
+{
+	int wWidth = Game::instance->window_width;
+	int wHeight = Game::instance->window_height;
+
+	menuOption option = this->selectedOption;
+	float boxW = wWidth / 1.5;
+	float boxH = wHeight / 8;
+	float boxX = wWidth / 2;
+	float yScreenMargin = wHeight * 0.2;
+	float boxSpacing = (wHeight - yScreenMargin) / MENU_OPTIONS;
+
+	float selX = boxX - boxW / 2 - 50;
+	float y = boxSpacing * this->selectedOption + yScreenMargin;;
+	float w = 50;
+	float h = 50;
+
+	// create selector visuals
+	this->menuSelectorMesh.vertices.clear();
+	this->menuSelectorMesh.createQuad(selX, y, w, h, true);
+}
 
 StageIntro::StageIntro() 
 {
+	// Windows size
+	int wWidth = Game::instance->window_width;
+	int wHeight = Game::instance->window_height;
+	float boxW = wWidth / 1.5;
+	float boxH = wHeight / 8;
+	float boxX = wWidth / 2;
+	float yScreenMargin = wHeight * 0.2;
+	float boxSpacing = (wHeight - yScreenMargin) / MENU_OPTIONS;
+
+	this->cam2d.view_matrix = Matrix44();
+	this->cam2d.setOrthographic(0, wWidth, wHeight, 0, -1, 1);
+
+	this->quadTexture = Texture::Get("data/textures/ceiling.tga");
+	this->menuSelectorTexture = Texture::Get("data/textures/wall.tga");
+	char* options[MENU_OPTIONS] = { "Start Game", "Controls", "Exit", "xd"};
+
+	for (int i = 0; i < MENU_OPTIONS; i++)
+	{	
+		float y = boxSpacing * i + yScreenMargin;
+
+		Mesh quad;
+		quad.createQuad(boxX, y, boxW, boxH, true);
+		this->quads.push_back(quad);
+
+		//TEXT
+		menuText text;
+		text.text = options[i];
+		text.scale = wWidth / 400;
+		text.position = Vector2(boxX - strlen(text.text) * (3 + text.scale), y - 10);
+		this->labels.push_back(text);
+	}
+	// Menu selector
+	float selX = boxX - boxW/2 - 50;
+	float y = boxSpacing * this->selectedOption + yScreenMargin;;
+	float w = 50;
+	float h = 50;
+	this->menuSelectorMesh.createQuad(selX, y, w, h, true);
 }
 
 void StageIntro::render() 
 {
-//#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
-//	std::string PATH1 = "data/";
-//#else
-//	std::string PATH1 = "/Users/alexialozano/Documents/GitHub/JocsElectronicsClasse/data/";
-//#endif
-//	std::string a;
-//	Camera* camera = Game::instance->camera;
-//	bool cameraLocked = Game::instance->cameraLocked;
-//	SDL_Window* window = Game::instance->window;
-//	//set the clear color (the background color)
-//	glClearColor(0.0, 0.0, 0.0, 1.0);
-//
-//	// Clear the window and the depth buffer
-//	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-//
-//	//set the camera as default
-//
-//	//set flags
-//	glDisable(GL_BLEND);
-//	glEnable(GL_DEPTH_TEST);
-//	glDisable(GL_CULL_FACE);
-//
-//	//drawGrid();
-//
-//	//GUI
-//	glDisable(GL_DEPTH_TEST);
-//	glDisable(GL_CULL_FACE);
-//	glEnable(GL_BLEND);
-//	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-//	Texture* tex = Texture::Get((PATH1 + a.assign("fondo.png")).c_str());
-//	Mesh quad;
-//	quad.createQuad(Game::instance->window_width * 0.5, Game::instance->window_height * 0.5, Game::instance->window_width, Game::instance->window_height, false);
-//	RenderGUI(quad, tex, Vector4(1, 1, 1, 1));
-//	tex = Texture::Get((PATH1 + a.assign("dragonIcon.png")).c_str());
-//	if (RenderButton(200, 140, 312, 143, tex, wasLeftPressed)) {
-//		Game::instance->world->playStage = true;
-//
-//	}
-//	tex = Texture::Get((PATH1 + a.assign("tutorial.png")).c_str());
-//	if (RenderButton(200, 290, 312, 143, tex, wasLeftPressed)) {
-//		Game::instance->world->tutorialStage = true;
-//	}
-//	tex = Texture::Get((PATH1 + a.assign("exitDoor.png")).c_str());
-//	if (RenderButton(200, 440, 312, 143, tex, wasLeftPressed)) {
-//		Game::instance->must_exit = true;
-//	}
-//
-//
-//
-//	glEnable(GL_DEPTH_TEST);
-//	glEnable(GL_CULL_FACE);
-//	glDisable(GL_BLEND);
-//	wasLeftPressed = false;
-//	EntityMesh* Hiccup = new EntityMesh();
-//	Hiccup->texture = Texture::Get((PATH1 + a.assign("Hiccup/HiccupTeen.png")).c_str());
-//	Hiccup->mesh = Mesh::Get((PATH1 + a.assign("Hiccup/HiccupIntro2.mesh")).c_str());
-//	Hiccup->animations.push_back(Animation::Get((PATH1 + a.assign("Hiccup/HiccupIntro2.skanim")).c_str()));
-//	Hiccup->model = Matrix44();
-//	Hiccup->model.setTranslation(45, 0, 50);
-//	Hiccup->model.scale(35, 35, 35);
-//	Hiccup->model.rotate(40 * DEG2RAD, Vector3(1, 0, 0));
-//	Hiccup->model.rotate(35 * DEG2RAD, Vector3(0, 1, 0));
-//	Hiccup->render();
-//
-//	drawText(2, 2, getGPUStats(), Vector3(1, 1, 1), 2);
-//	SDL_GL_SwapWindow(window);
+	SDL_Window* window = Game::instance->window;
+	// set the clear color (the background color)
+	glClearColor(1.0, 0.0, 1.0, 1.0);
+
+	// Clear the window and the depth buffer
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	// Set the flags
+	glDisable(GL_DEPTH_TEST);
+	glDisable(GL_CULL_FACE);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	cam2d.enable();
+
+	//Render Quads
+	Texture* texture = this->quadTexture;
+	for (int i = 0; i < this->quads.size(); i++)
+	{
+		Mesh quad = this->quads[i];
+		renderQuad(quad, texture);
+	}
+	//Render selector
+	Mesh selector = this->menuSelectorMesh;
+	texture = this->menuSelectorTexture;
+	renderQuad(selector, texture);
+	// Render text
+	for (int i = 0; i < this->labels.size(); i++)
+	{
+		menuText curr = this->labels[i];
+		drawText(curr.position.x, curr.position.y, curr.text, Vector3(1, 1, 1), curr.scale);
+	}
+
+
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
+	glDisable(GL_BLEND);
+	SDL_GL_SwapWindow(window);
 };
 
-void StageIntro::update(double seconds_elapsed) {
+void StageIntro::update(double seconds_elapsed) 
+{
+	if (Input::wasKeyPressed(SDL_SCANCODE_S)) {
+		this->selectedOption = static_cast<menuOption>((this->selectedOption + 1) % MENU_OPTIONS);
+		changeSelector();
+	}
 
-};
+	if (Input::wasKeyPressed(SDL_SCANCODE_W)) {
+		int to_option = (this->selectedOption - 1) % MENU_OPTIONS;
+		if (to_option < 0) to_option = MENU_OPTIONS - 1;
+		this->selectedOption = static_cast<menuOption>(to_option);
+
+		changeSelector();
+	}
+}
+
+void StageIntro::renderQuad(Mesh quad, Texture* texture)
+{
+	Shader* qShader = Shader::Get("data/shaders/basic.vs", "data/shaders/gui.fs");
+
+	if (!qShader) return;
+
+	qShader->enable();
+
+	qShader->setUniform("u_color", Vector4(1, 1, 1, 1));
+	qShader->setUniform("u_viewprojection", cam2d.viewprojection_matrix);
+	if (texture != NULL) {
+		qShader->setUniform("u_texture", texture, 0);
+	}
+	qShader->setUniform("u_time", Game::instance->time);
+	qShader->setUniform("u_tex_tiling", 1.0f);
+	qShader->setUniform("u_tex_range", Vector4(0, 0, 1, 1));
+	qShader->setUniform("u_model", Matrix44());
+	quad.render(GL_TRIANGLES);
+
+	qShader->disable();
+}
+
+void StageIntro::movePointer()
+{
+}
+;

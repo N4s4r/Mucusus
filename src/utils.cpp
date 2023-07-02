@@ -439,3 +439,33 @@ char* fetchBufferVec4(char* data, std::vector<Vector4>& vector)
 	memcpy(&vector[0], &floats[0], sizeof(float)*floats.size());
 	return data;
 }
+
+void RenderGUI(Mesh quad, Texture* tex, Vector4 color = Vector4(1, 1, 1, 1))
+{
+	//int windowWidth = Game::instance->window_width;
+	//int windowHeight = Game::instance->window_height;
+
+	//Camera cam2D;
+	//cam2D.setOrthographic(0, windowWidth, windowHeight, 0, -1, 1);
+
+	//Shader* shader = Shader::Get((PATH1 + a.assign("shaders/basic.vs")).c_str(), (PATH1 + a.assign("shaders/gui.fs")).c_str());
+	//if (!shader) return;
+
+	////enable shader
+	//shader->enable();
+
+	////upload uniforms
+	//shader->setUniform("u_color", color);
+	//shader->setUniform("u_viewprojection", cam2D.viewprojection_matrix);
+	//shader->setUniform("u_texture", tex, 0);
+	//shader->setUniform("u_tex_tiling", 1.0f);
+	//shader->setUniform("u_time", time);
+	//shader->setUniform("u_tex_range", Vector4(0, 0, 1, 1));
+
+	//shader->setUniform("u_model", Matrix44());
+	//quad.render(GL_TRIANGLES);
+
+
+	////disable shader
+	//shader->disable();
+}
