@@ -14,6 +14,7 @@
 #include "stage.h"
 #include "stageGame.h"
 #include "stageIntro.h"
+#include "audio.h"
 #include <cmath>
 #include "enemyManager.h"
 
@@ -26,6 +27,7 @@ float camera_jump_speed = 10.0f;
 // Mesh *mesh = NULL;
 // Texture *texture = NULL;
 // Shader *shader = NULL;
+HCHANNEL channel;
 Animation *anim = NULL;
 float angle = 0;
 float mouse_speed = 100.0f;
@@ -86,7 +88,7 @@ Game::Game(int window_width, int window_height, SDL_Window *window)
 	player->model.setTranslation(.0f, .0f, .0f);
 
 	initStages();
-	setStage(STAGE_ID::INTRO);
+	setStage(STAGE_ID::GAME);
 	shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
 
 	// Create the room
@@ -97,6 +99,12 @@ Game::Game(int window_width, int window_height, SDL_Window *window)
 
 	enemy_manager = new EnemyManager();
 	enemy_manager->addNormalEnemy(Vector3(0, 1, 0));
+
+	// Audio
+	if (BASS_Init(-1, 44100, 0, 0, NULL) == false) {
+		// Error with sound device
+	}
+	channel = Audio::Play("data/audios/test.wav", BASS_SAMPLE_LOOP);
 
 	// hide the cursor
 	SDL_ShowCursor(!mouse_locked); // hide or show the mouse
