@@ -119,6 +119,13 @@ void Game::render(void)
 
 void Game::update(double seconds_elapsed)
 {
+	if ((Input::mouse_state & SDL_BUTTON_LEFT) || mouse_locked) // is left button pressed?
+	{
+		camera_yaw += Input::mouse_delta.x * camera_rotation_speed * seconds_elapsed;
+		camera_pitch += Input::mouse_delta.y * camera_rotation_speed * seconds_elapsed;
+
+		camera_pitch = clamp(camera_pitch, -M_PI * 0.25, M_PI * 0.25);
+	}
 
 	getCurrentStage()->update(seconds_elapsed);
 	enemy_manager->update(seconds_elapsed);

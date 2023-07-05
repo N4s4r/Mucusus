@@ -13,13 +13,13 @@ EntityPlayer::EntityPlayer()
 void EntityPlayer::movePlayer(Vector3 delta)
 {
 	model.setTranslation(delta.x, delta.y, delta.z);
-	camera->XZmove(delta);
+	//camera->XZmove(delta);
 }
 
 void EntityPlayer::rotatePlayer(float angle, const Vector3& axis)
 {
-	camera->rotate(angle, axis);
-	camera->rotate(angle, axis);
+	//camera->rotate(angle, axis);
+	//camera->rotate(angle, axis);
 }
 
 struct sCollisionData
@@ -52,14 +52,21 @@ void EntityPlayer::update(float dt)
 	bool mouse_locked = Game::instance->mouse_locked;
 	float speed = dt * mouse_speed; // the speed is defined by the seconds_elapsed so it goes constant
 
+	Vector3 position = model.getTranslation();
+
 	// example
 	angle += (float)dt * 10.0f;
 
 	// mouse input to rotate the cam
 	if ((Input::mouse_state & SDL_BUTTON_LEFT) || mouse_locked) // is left button pressed?
 	{
+		
+	/*	yaw += Input::mouse_delta.x * 0.001f * camera_rotation_speed;
+
+
+
 		rotatePlayer(Input::mouse_delta.x * 0.001f * camera_rotation_speed, Vector3(0.0f, -1.0f, 0.0f));
-		rotatePlayer(Input::mouse_delta.y * 0.001f * camera_rotation_speed, camera->getLocalVector(Vector3(-1.0f, 0.0f, 0.0f)));
+		rotatePlayer(Input::mouse_delta.y * 0.001f * camera_rotation_speed, camera->getLocalVector(Vector3(-1.0f, 0.0f, 0.0f)));*/
 	}
 
 	// WASD to move the player around
@@ -105,10 +112,12 @@ void EntityPlayer::update(float dt)
 			velocity.z -= newDir.z;
 		}
 	}
+
+	position = position + velocity * dt;
 	std::cout << "X:" << velocity.x << "Y:" << velocity.y << "Z:" << velocity.z << std::endl;
 	velocity = velocity - (velocity * 10.0f * dt);
 	
-	movePlayer(velocity);
+	model.setTranslation(position.x, position.y, position.z);
 }
 
 //Collisions

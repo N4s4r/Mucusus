@@ -18,6 +18,7 @@ public:
 	float player_speed = 0.5f;
 	float camera_rotation_speed = 5.0f;
 	float angle = 0;
+	float yaw;
 	Vector3 velocity;
 
 

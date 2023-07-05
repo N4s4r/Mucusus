@@ -4,6 +4,7 @@
 
 World::World()
 {
+
 }
 
 void World::loadRooms()
@@ -22,6 +23,4 @@ void World::randomizeMap()
 	std::srand(std::time(0));
 	// Generate a random number between 1 and 100
 	int randomNumber = std::rand() % 100 + 1;
-
-	
 }

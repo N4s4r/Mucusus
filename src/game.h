@@ -31,6 +31,9 @@ public:
 
 	// some vars
 	Camera *camera; // our global camera
+	float camera_yaw = 0;
+	float camera_pitch = 0;
+
 	Shader *shader; // our global shader
 	EntityMeshRoom* room = NULL;
 	EntityPlayer* player = NULL;

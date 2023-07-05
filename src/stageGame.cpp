@@ -18,6 +18,17 @@ void StageGame::render()
 	SDL_Window *window = Game::instance->window;
 	camera->enable();
 
+	//Update camera
+	Matrix44 nPitch, nYaw;
+	nPitch.setRotation(Game::instance->camera_pitch, (Vector3(1, 0, 0)));
+	nYaw.setRotation(Game::instance->camera_yaw, Vector3(0, -1, 0));
+	Matrix44 new_matrix = nPitch * nYaw;
+
+	EntityPlayer* player = Game::instance->player;
+	Vector3 eye = player->model.getTranslation() + Vector3(0, 1, 0);
+
+	camera->lookAt(eye, eye + new_matrix.frontVector().normalize(), Vector3(0, 1, 0));
+
 	// set flags
 	glDisable(GL_BLEND);
 	glEnable(GL_DEPTH_TEST);
