@@ -18,14 +18,10 @@ Audio::~Audio()
 }
 HCHANNEL Audio::play(float volume, DWORD flags)
 {
-	//El handler para un canal
 	HCHANNEL hSampleChannel;
-	//Creamos un canal para el sample
 
 	hSampleChannel = BASS_SampleGetChannel(hSample, flags);
 
-
-	//Lanzamos un sample
 	BASS_ChannelPlay(hSampleChannel, false);
 	return hSampleChannel;
 }
@@ -46,12 +42,6 @@ HCHANNEL Audio::Play(const char* filename, DWORD flags)
 HSAMPLE Audio::LoadSample(const char* filename)
 {
 	std::string str2 = filename;
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
-	str2.erase(0, 5);
-#else
-	str2.erase(0, 64);
-#endif
-
 
 	//El handler para un canal
 	HCHANNEL hSampleChannel;
@@ -80,7 +70,6 @@ void Audio::setName(const char* name)
 
 BOOL Audio::Stop(HCHANNEL channel)
 {
-	//BASS_ChannelPause(channel);
 	return BASS_ChannelStop(channel);
 }
 

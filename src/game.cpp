@@ -95,7 +95,7 @@ Game::Game(int window_width, int window_height, SDL_Window *window)
 	wall_texture = Texture::Get("data/textures/wall.tga");
 	floor_texture = Texture::Get("data/textures/box.tga");
 	room = new EntityMeshRoom();
-	room->parseScene("room0");
+	room->parseScene("roomDiamond");
 
 	enemy_manager = new EnemyManager();
 	enemy_manager->addNormalEnemy(Vector3(0, 1, 0));

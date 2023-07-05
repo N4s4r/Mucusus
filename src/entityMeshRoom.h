@@ -20,4 +20,6 @@ public:
 
     bool parseScene(const char* filename);
     void addStaticEntity(EntityMesh* entity);
+
+    bool isCleared = false;
 };
