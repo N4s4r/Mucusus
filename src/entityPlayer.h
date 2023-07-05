@@ -15,10 +15,13 @@ public:
 
 	//Movement
 	float mouse_speed = 100.0f;
-	float player_speed = 0.5f;
+	float player_speed = 100.0f;
 	float camera_rotation_speed = 5.0f;
 	float angle = 0;
 	float yaw;
+	float gravity_speed = 30.0f;
+	float on_ground = 0.2f;
+	float jump_cooldown = 0.0f;
 	Vector3 velocity;
 
 
@@ -27,5 +30,4 @@ public:
 
 	//collisions
 	void update(float dt);
-	void checkCollisionEntities(vt<EntityMesh*>& roomEntities, Vector3& character_center, float dt, Vector3& to_pos, Vector3& playerPos);
 };

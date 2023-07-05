@@ -24,3 +24,14 @@ void World::randomizeMap()
 	// Generate a random number between 1 and 100
 	int randomNumber = std::rand() % 100 + 1;
 }
+
+void World::setTestRooms()
+{
+	for (int i = 0; i < ROOMTYPES; i++)
+	{
+		Vector3 roomPosition = Vector3(0.0f, .0f, i * 50.0f);
+		EntityMeshRoom* room = roomTypes[i];
+		room->model.setTranslation(roomPosition.x, roomPosition.y, roomPosition.z);
+		mapGrid.push_back(room);
+	}
+}

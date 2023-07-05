@@ -2,6 +2,7 @@
 #include "stage.h"
 #include "input.h"
 #include "game.h"
+#include "world.h"
 #include "entityMeshRoom.h"
 #include "entityPlayer.h"
 

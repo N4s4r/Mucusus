@@ -2,9 +2,7 @@
 
 #include "defines.h"
 
-#include "entityMesh.h"
 #include "entityMeshRoom.h"
-#include "entity.h"
 #include "includes.h"
 #include "camera.h"
 #include "utils.h"
@@ -16,9 +14,6 @@
 #define MAX_BULLETS 50
 #define ROOMTYPES 3
 
-class EntityMesh;
-class Entity;
-
 class World
 {
 public:
@@ -27,8 +22,9 @@ public:
     char* roomTypeNames[ROOMTYPES] = { "room0", "roomDiamond", "roomSquare" };
 
     vt<EntityMeshRoom *> roomTypes;
-    vt<EntityMesh *> mapGrid;
+    vt<EntityMeshRoom *> mapGrid;
 
     void loadRooms();
     void randomizeMap();
+    void setTestRooms();
 };

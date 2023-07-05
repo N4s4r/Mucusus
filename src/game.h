@@ -11,6 +11,7 @@
 
 class EntityMeshRoom;
 class EntityPlayer;
+class World;
 
 class Game
 {
@@ -37,6 +38,7 @@ public:
 	Shader *shader; // our global shader
 	EntityMeshRoom* room = NULL;
 	EntityPlayer* player = NULL;
+	World* world = NULL;
 
 	//EntityMeshRoom* room;
 

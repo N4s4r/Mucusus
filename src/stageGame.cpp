@@ -6,7 +6,7 @@ StageGame::StageGame()
 
 void StageGame::render()
 {
-	EntityMeshRoom* room = Game::instance->room;
+	//EntityMeshRoom* room = Game::instance->room;
 	// set the clear color (the background color)
 	glClearColor(0.0, 0.0, 1.0, 1.0);
 
@@ -58,7 +58,10 @@ void StageGame::render()
 	}
 	*/
 
-	room->render();
+	EACH(room, Game::instance->world->mapGrid)
+	{
+		room->render();
+	}
 
 	// Draw the floor grid
 	drawGrid();

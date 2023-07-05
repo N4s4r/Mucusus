@@ -15,6 +15,7 @@
 #include "stageGame.h"
 #include "stageIntro.h"
 #include "audio.h"
+#include "world.h"
 #include <cmath>
 #include "enemyManager.h"
 
@@ -85,7 +86,7 @@ Game::Game(int window_width, int window_height, SDL_Window *window)
 	camera->lookAt(Vector3(0.f, 1.f, 0.001f), Vector3(0.f, 0.f, 0.f), Vector3(0.f, 1.f, 0.f)); // position the camera and point to 0,0,0
 	camera->setPerspective(70.f, window_width / (float)window_height, 0.1f, 10000.f);		   // set the projection, we want to be perspective
 	player = new EntityPlayer();
-	player->model.setTranslation(.0f, .0f, .0f);
+	player->model.setTranslation(.0f, .5f, .0f);
 
 	initStages();
 	setStage(STAGE_ID::GAME);
@@ -96,6 +97,11 @@ Game::Game(int window_width, int window_height, SDL_Window *window)
 	floor_texture = Texture::Get("data/textures/box.tga");
 	room = new EntityMeshRoom();
 	room->parseScene("roomDiamond");
+
+	// Load the world
+	world = new World();
+	world->loadRooms();
+	world->setTestRooms();
 
 	enemy_manager = new EnemyManager();
 	enemy_manager->addNormalEnemy(Vector3(0, 1, 0));

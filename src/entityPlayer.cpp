@@ -16,12 +16,6 @@ void EntityPlayer::movePlayer(Vector3 delta)
 	//camera->XZmove(delta);
 }
 
-void EntityPlayer::rotatePlayer(float angle, const Vector3& axis)
-{
-	//camera->rotate(angle, axis);
-	//camera->rotate(angle, axis);
-}
-
 struct sCollisionData
 {
 	Vector3 colPoint;
@@ -30,16 +24,32 @@ struct sCollisionData
 
 bool checkPlayerCollisions(const Vector3& target_pos, vt<sCollisionData>& collisions, EntityMeshRoom* room)
 {
-	Vector3 center = target_pos;
 	float sphereRadius = 0.5f;
 	Vector3 colPoint, colNormal;
 
 	EACH(e, room->staticEntities)
 	{
 		Mesh* mesh = e->mesh;
-		if (mesh->testSphereCollision(e->model, center, sphereRadius, colPoint, colNormal))
+		if (mesh->testSphereCollision(e->model, target_pos, sphereRadius, colPoint, colNormal))
 		{
 			collisions.push_back({ colPoint, colNormal.normalize() });
+		}
+	}
+
+	return !collisions.empty();
+}
+
+bool checkPlayerOnGround(const Vector3& position, vt<sCollisionData>& collisions, EntityMeshRoom* room)
+{
+	float sphereRadius = 0.5f;
+	Vector3 colPoint, colNormal;
+
+	EACH(e, room->staticEntities)
+	{
+		Mesh* mesh = e->mesh;
+		if (mesh->testRayCollision(e->model, position, Vector3(0, -1, 0), colPoint, colNormal, 1.0f))
+		{
+			return true;
 		}
 	}
 
@@ -54,89 +64,73 @@ void EntityPlayer::update(float dt)
 
 	Vector3 position = model.getTranslation();
 
-	// example
-	angle += (float)dt * 10.0f;
-
 	// mouse input to rotate the cam
-	if ((Input::mouse_state & SDL_BUTTON_LEFT) || mouse_locked) // is left button pressed?
+		//Update camera
+	Matrix44 nYaw;
+	nYaw.setRotation(Game::instance->camera_yaw, Vector3(0, -1, 0));
+	Vector3 forward = nYaw.frontVector();
+	Vector3 right = nYaw.rightVector();
+	
+	// Update on_ground
+	vt<sCollisionData> ground_collisions;
+	if (checkPlayerOnGround(position, ground_collisions, room))
 	{
-		
-	/*	yaw += Input::mouse_delta.x * 0.001f * camera_rotation_speed;
-
-
-
-		rotatePlayer(Input::mouse_delta.x * 0.001f * camera_rotation_speed, Vector3(0.0f, -1.0f, 0.0f));
-		rotatePlayer(Input::mouse_delta.y * 0.001f * camera_rotation_speed, camera->getLocalVector(Vector3(-1.0f, 0.0f, 0.0f)));*/
+		on_ground = 0.2f;
 	}
 
 	// WASD to move the player around
 	if (Input::isKeyPressed(SDL_SCANCODE_W))
 	{
-		velocity = velocity + (Vector3(0.0f, 0.0f, 1.0f) * player_speed * dt);
-		//movePlayer(Vector3(0.0f, 0.0f, 1.0f) * player_speed * dt);
+		velocity = velocity + (forward.normalize() * player_speed * dt);
 	}
 	if (Input::isKeyPressed(SDL_SCANCODE_S))
 	{
-		velocity = velocity + (Vector3(0.0f, 0.0f, -1.0f) * player_speed * dt);
-		//movePlayer(Vector3(0.0f, 0.0f, -1.0f) * player_speed * dt);
+		velocity = velocity - (forward.normalize() * player_speed * dt);
 	}
 	if (Input::isKeyPressed(SDL_SCANCODE_A))
 	{
-		velocity = velocity + (Vector3(1.0f, 0.0f, 0.0f) * player_speed * dt);
-		//movePlayer(Vector3(1.0f, 0.0f, 0.0f) * player_speed * dt);
+		velocity = velocity + (right.normalize() * player_speed * dt);
 	}
 	if (Input::isKeyPressed(SDL_SCANCODE_D))
 	{
-		velocity = velocity + (Vector3(-1.0f, 0.0f, 0.0f) * player_speed * dt);
-		//movePlayer(Vector3(-1.0f, 0.0f, 0.0f) * player_speed * dt);
+		velocity = velocity - (right.normalize() * player_speed * dt);
 	}
+	if (on_ground > 0 && Input::isKeyPressed(SDL_SCANCODE_SPACE) && jump_cooldown == 0.0f)
+	{
+		velocity.y = 10.0f;
+		jump_cooldown = 0.1f;
+	}
+	// Gravity
+	velocity.y = clamp(velocity.y - gravity_speed * dt, -100.0f, 10000.0f);
 
-	Vector3 movement_vec = velocity;
-	//collisions
-	//std::vector<EntityMesh*> entities = Game::instance->room;
-	//EntityMeshRoom * currentRoom = Game::instance->room;
-	
-	Vector3 current_pos = camera->eye;
-	Vector3 to_pos = current_pos + movement_vec;
-	Vector3 char_center = to_pos + Vector3(0, 1, 0);
-	//checkCollisionEntities(roomEntities, char_center, dt, movement_vec, current_pos);
+	Vector3 to_pos = position + velocity * dt;
 	vt<sCollisionData> collisions;
-	if (checkPlayerCollisions(camera->eye, collisions, room))
+	if (checkPlayerCollisions(to_pos, collisions, room))
 	{
 		EACH(collision, collisions)
 		{
+			position += collision.colNormal.normalize() * 0.0001f;
 			Vector3 newDir = velocity.dot(collision.colNormal);
 			newDir = newDir * collision.colNormal;
 
 			velocity.x -= newDir.x;
 			velocity.z -= newDir.z;
+			velocity.y -= newDir.y;
 		}
 	}
 
 	position = position + velocity * dt;
-	std::cout << "X:" << velocity.x << "Y:" << velocity.y << "Z:" << velocity.z << std::endl;
-	velocity = velocity - (velocity * 10.0f * dt);
+	velocity.x = velocity.x - (velocity.x * 10.0f * dt);
+	velocity.z = velocity.z - (velocity.z * 10.0f * dt);
 	
 	model.setTranslation(position.x, position.y, position.z);
-}
+	if (Input::isKeyPressed(SDL_SCANCODE_R))
+	{
+		model.setTranslation(.0f, .5f, .0f);
+	}
 
-//Collisions
-//void EntityPlayer::checkCollisionEntities(vt<EntityMesh*>& roomEntities, Vector3& character_center, float dt, Vector3& movement_vec, Vector3& playerPos)
-//{
-//	for (size_t i = 0; i < roomEntities.size(); i++) {
-//		EntityMesh* checkEntity = roomEntities[i];
-//		Vector3 coll;
-//		Vector3 collnorm;
-//		if (!checkEntity->mesh->testSphereCollision(checkEntity->model, character_center, .5f, coll, collnorm))
-//			continue;
-//		std::cout << "Collision" << std::endl;
-//		//std::cout << "Positionat" << playerPos << std::endl;
-//		float alpha = movement_vec.dot(movement_vec) / collnorm.length();
-//		movement_vec = (movement_vec - alpha * collnorm) * movement_vec;
-//		
-//		//Vector3 pushDirection = normalize(collnorm);
-//		////pushDirection.y = 0.0f;
-//		//movement_vec = pushDirection;
-//		//std::cout << pushDirection.x << pushDirection.y << pushDirection.z << std::endl;
-//	}
-//}
+	// update timers
+	on_ground = clamp(on_ground - dt, 0.0f, 999.0f);
+	jump_cooldown = clamp(jump_cooldown - dt, 0.0f, 999.0f);
+	std::cout << position.x << position.y << position.z << std::endl;
+}
