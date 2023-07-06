@@ -86,7 +86,7 @@ Game::Game(int window_width, int window_height, SDL_Window *window)
 	camera->lookAt(Vector3(0.f, 1.f, 0.001f), Vector3(0.f, 0.f, 0.f), Vector3(0.f, 1.f, 0.f)); // position the camera and point to 0,0,0
 	camera->setPerspective(70.f, window_width / (float)window_height, 0.1f, 10000.f);		   // set the projection, we want to be perspective
 	player = new EntityPlayer();
-	player->model.setTranslation(.0f, .5f, .0f);
+	player->model.setTranslation(8.0f, 0.5f, 8.0f);
 
 	initStages();
 	setStage(STAGE_ID::GAME);
@@ -101,6 +101,7 @@ Game::Game(int window_width, int window_height, SDL_Window *window)
 	// Load the world
 	world = new World();
 	world->loadRooms();
+	//world->randomizeMap();
 	world->setTestRooms();
 
 	enemy_manager = new EnemyManager();
@@ -110,7 +111,7 @@ Game::Game(int window_width, int window_height, SDL_Window *window)
 	if (BASS_Init(-1, 44100, 0, 0, NULL) == false) {
 		// Error with sound device
 	}
-	channel = Audio::Play("data/audios/test.wav", BASS_SAMPLE_LOOP);
+	//channel = Audio::Play("data/audios/test.wav", BASS_SAMPLE_LOOP);
 
 	// hide the cursor
 	SDL_ShowCursor(!mouse_locked); // hide or show the mouse
@@ -131,6 +132,10 @@ void Game::update(double seconds_elapsed)
 		camera_pitch += Input::mouse_delta.y * camera_rotation_speed * seconds_elapsed;
 
 		camera_pitch = clamp(camera_pitch, -M_PI * 0.25, M_PI * 0.25);
+	}
+	if (Input::isKeyPressed(SDL_SCANCODE_C))
+	{
+		mouse_locked = !mouse_locked;
 	}
 
 	getCurrentStage()->update(seconds_elapsed);

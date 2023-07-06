@@ -6,14 +6,12 @@
 EntityPlayer::EntityPlayer()
 {
 	camera = Game::instance->camera;
-	//mesh = Mesh::createQuad(0,0);
 
 }
 
 void EntityPlayer::movePlayer(Vector3 delta)
 {
 	model.setTranslation(delta.x, delta.y, delta.z);
-	//camera->XZmove(delta);
 }
 
 struct sCollisionData
@@ -30,7 +28,7 @@ bool checkPlayerCollisions(const Vector3& target_pos, vt<sCollisionData>& collis
 	EACH(e, room->staticEntities)
 	{
 		Mesh* mesh = e->mesh;
-		if (mesh->testSphereCollision(e->model, target_pos, sphereRadius, colPoint, colNormal))
+		if (mesh->testSphereCollision(e->getGlobalMatrix(), target_pos, sphereRadius, colPoint, colNormal))
 		{
 			collisions.push_back({ colPoint, colNormal.normalize() });
 		}
@@ -41,7 +39,7 @@ bool checkPlayerCollisions(const Vector3& target_pos, vt<sCollisionData>& collis
 
 bool checkPlayerOnGround(const Vector3& position, vt<sCollisionData>& collisions, EntityMeshRoom* room)
 {
-	float sphereRadius = 0.5f;
+	float sphereRadius = 1.f;
 	Vector3 colPoint, colNormal;
 
 	EACH(e, room->staticEntities)
@@ -58,7 +56,7 @@ bool checkPlayerOnGround(const Vector3& position, vt<sCollisionData>& collisions
 
 void EntityPlayer::update(float dt)
 {
-	EntityMeshRoom* room = Game::instance->room;
+	World* world = Game::instance->world;
 	bool mouse_locked = Game::instance->mouse_locked;
 	float speed = dt * mouse_speed; // the speed is defined by the seconds_elapsed so it goes constant
 
@@ -70,13 +68,6 @@ void EntityPlayer::update(float dt)
 	nYaw.setRotation(Game::instance->camera_yaw, Vector3(0, -1, 0));
 	Vector3 forward = nYaw.frontVector();
 	Vector3 right = nYaw.rightVector();
-	
-	// Update on_ground
-	vt<sCollisionData> ground_collisions;
-	if (checkPlayerOnGround(position, ground_collisions, room))
-	{
-		on_ground = 0.2f;
-	}
 
 	// WASD to move the player around
 	if (Input::isKeyPressed(SDL_SCANCODE_W))
@@ -105,19 +96,32 @@ void EntityPlayer::update(float dt)
 
 	Vector3 to_pos = position + velocity * dt;
 	vt<sCollisionData> collisions;
-	if (checkPlayerCollisions(to_pos, collisions, room))
+	EACH(row, world->mapGrid)
 	{
-		EACH(collision, collisions)
+		EACH(room, row)
 		{
-			position += collision.colNormal.normalize() * 0.0001f;
-			Vector3 newDir = velocity.dot(collision.colNormal);
-			newDir = newDir * collision.colNormal;
+			if (checkPlayerCollisions(to_pos, collisions, room))
+			{
+				EACH(collision, collisions)
+				{
+					//position += collision.colNormal.normalize() * 0.0005f;
+					Vector3 newDir = velocity.dot(collision.colNormal);
+					newDir = newDir * collision.colNormal;
 
-			velocity.x -= newDir.x;
-			velocity.z -= newDir.z;
-			velocity.y -= newDir.y;
+					velocity.x -= newDir.x;
+					velocity.z -= newDir.z;
+					velocity.y -= newDir.y;
+				}
+			}
+			// Update on_ground
+			vt<sCollisionData> ground_collisions;
+			if (checkPlayerOnGround(position, ground_collisions, room))
+			{
+				on_ground = 0.2f;
+			}
 		}
 	}
+
 
 	position = position + velocity * dt;
 	velocity.x = velocity.x - (velocity.x * 10.0f * dt);
@@ -126,7 +130,19 @@ void EntityPlayer::update(float dt)
 	model.setTranslation(position.x, position.y, position.z);
 	if (Input::isKeyPressed(SDL_SCANCODE_R))
 	{
-		model.setTranslation(.0f, .5f, .0f);
+		model.setTranslation(8.0f, .5f, 8.0f);
+	}
+	if (Input::isKeyPressed(SDL_SCANCODE_T))
+	{
+		model.setTranslation(8.0f, .5f, 24.0f);
+	}
+	if (Input::isKeyPressed(SDL_SCANCODE_Y))
+	{
+		model.setTranslation(8.0f, .5f, 0.0f);
+	}
+	if (Input::isKeyPressed(SDL_SCANCODE_U))
+	{
+		model.setTranslation(0.0f, .5f, 8.0f);
 	}
 
 	// update timers

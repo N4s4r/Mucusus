@@ -33,8 +33,8 @@ void EntityMesh::render()
 
     shader->setUniform("u_time", time);
     shader->setUniform("u_tiles", 10.0f);
-
-    shader->setUniform("u_model", model);
+    Matrix44 mmatrix = getGlobalMatrix();
+    shader->setUniform("u_model", mmatrix);
 
     mesh->render(GL_TRIANGLES);
 

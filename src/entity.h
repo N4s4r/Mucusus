@@ -18,7 +18,7 @@ public:
     vt<Animation *> animations;
 
     // Pointer to parent
-    Entity* parent;
+    Entity* parent = NULL;
 
     // Pointers to children
     vt<Entity*> children;

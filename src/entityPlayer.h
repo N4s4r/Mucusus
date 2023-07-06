@@ -4,6 +4,7 @@
 #include "entityMeshRoom.h"
 #include "camera.h"
 #include "game.h"
+#include "world.h"
 
 class EntityPlayer :public Entity
 {

@@ -8,7 +8,7 @@ void StageIntro::changeSelector()
 	int wWidth = Game::instance->window_width;
 	int wHeight = Game::instance->window_height;
 
-	menuOption option = this->selectedOption;
+	menuOption option = selectedOption;
 	float boxW = wWidth / 1.5;
 	float boxH = wHeight / 8;
 	float boxX = wWidth / 2;
@@ -16,13 +16,13 @@ void StageIntro::changeSelector()
 	float boxSpacing = (wHeight - yScreenMargin) / MENU_OPTIONS;
 
 	float selX = boxX - boxW / 2 - 50;
-	float y = boxSpacing * this->selectedOption + yScreenMargin;;
+	float y = boxSpacing * selectedOption + yScreenMargin;;
 	float w = 50;
 	float h = 50;
 
 	// create selector visuals
-	this->menuSelectorMesh.vertices.clear();
-	this->menuSelectorMesh.createQuad(selX, y, w, h, true);
+	menuSelectorMesh.vertices.clear();
+	menuSelectorMesh.createQuad(selX, y, w, h, true);
 }
 
 StageIntro::StageIntro() 
@@ -36,11 +36,11 @@ StageIntro::StageIntro()
 	float yScreenMargin = wHeight * 0.2;
 	float boxSpacing = (wHeight - yScreenMargin) / MENU_OPTIONS;
 
-	this->cam2d.view_matrix = Matrix44();
-	this->cam2d.setOrthographic(0, wWidth, wHeight, 0, -1, 1);
+	cam2d.view_matrix = Matrix44();
+	cam2d.setOrthographic(0, wWidth, wHeight, 0, -1, 1);
 
-	this->quadTexture = Texture::Get("data/textures/ceiling.tga");
-	this->menuSelectorTexture = Texture::Get("data/textures/wall.tga");
+	quadTexture = Texture::Get("data/textures/ceiling.tga");
+	menuSelectorTexture = Texture::Get("data/textures/crosshair.tga");
 	char* options[MENU_OPTIONS] = { "Start Game", "Controls", "Exit", "xd"};
 
 	for (int i = 0; i < MENU_OPTIONS; i++)
@@ -49,21 +49,21 @@ StageIntro::StageIntro()
 
 		Mesh quad;
 		quad.createQuad(boxX, y, boxW, boxH, true);
-		this->quads.push_back(quad);
+		quads.push_back(quad);
 
 		//TEXT
 		menuText text;
 		text.text = options[i];
 		text.scale = wWidth / 400;
 		text.position = Vector2(boxX - strlen(text.text) * (3 + text.scale), y - 10);
-		this->labels.push_back(text);
+		labels.push_back(text);
 	}
 	// Menu selector
 	float selX = boxX - boxW/2 - 50;
-	float y = boxSpacing * this->selectedOption + yScreenMargin;;
+	float y = boxSpacing * selectedOption + yScreenMargin;;
 	float w = 50;
 	float h = 50;
-	this->menuSelectorMesh.createQuad(selX, y, w, h, true);
+	menuSelectorMesh.createQuad(selX, y, w, h, true);
 }
 
 void StageIntro::render() 
@@ -84,20 +84,20 @@ void StageIntro::render()
 	cam2d.enable();
 
 	//Render Quads
-	Texture* texture = this->quadTexture;
-	for (int i = 0; i < this->quads.size(); i++)
+	Texture* texture = quadTexture;
+	for (int i = 0; i < quads.size(); i++)
 	{
-		Mesh quad = this->quads[i];
+		Mesh quad = quads[i];
 		renderQuad(quad, texture);
 	}
 	//Render selector
-	Mesh selector = this->menuSelectorMesh;
-	texture = this->menuSelectorTexture;
+	Mesh selector = menuSelectorMesh;
+	texture = menuSelectorTexture;
 	renderQuad(selector, texture);
 	// Render text
-	for (int i = 0; i < this->labels.size(); i++)
+	for (int i = 0; i < labels.size(); i++)
 	{
-		menuText curr = this->labels[i];
+		menuText curr = labels[i];
 		drawText(curr.position.x, curr.position.y, curr.text, Vector3(1, 1, 1), curr.scale);
 	}
 
@@ -111,14 +111,14 @@ void StageIntro::render()
 void StageIntro::update(double seconds_elapsed) 
 {
 	if (Input::wasKeyPressed(SDL_SCANCODE_S)) {
-		this->selectedOption = static_cast<menuOption>((this->selectedOption + 1) % MENU_OPTIONS);
+		selectedOption = static_cast<menuOption>((selectedOption + 1) % MENU_OPTIONS);
 		changeSelector();
 	}
 
 	if (Input::wasKeyPressed(SDL_SCANCODE_W)) {
-		int to_option = (this->selectedOption - 1) % MENU_OPTIONS;
+		int to_option = (selectedOption - 1) % MENU_OPTIONS;
 		if (to_option < 0) to_option = MENU_OPTIONS - 1;
-		this->selectedOption = static_cast<menuOption>(to_option);
+		selectedOption = static_cast<menuOption>(to_option);
 
 		changeSelector();
 	}

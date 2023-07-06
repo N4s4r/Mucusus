@@ -45,10 +45,10 @@ bool EntityMeshRoom::parseScene(const char* roomName)
 	 meshes_to_load["meshes/wallEast.obj"] = { Texture::Get("data/textures/wall2.tga"), Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs") };
 	 meshes_to_load["meshes/wallWest.obj"] = { Texture::Get("data/textures/wall2.tga"), Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs") };
 	 meshes_to_load["meshes/wallSouth.obj"] = { Texture::Get("data/textures/wall2.tga"), Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs") };
-	 meshes_to_load["meshes/wallNorth.obj"] = { Texture::Get("data/textures/wall2.tga"), Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs") };
+	 meshes_to_load["meshes/wallNorth.obj"] = { Texture::Get("data/textures/biga.tga"), Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs") };
 	 meshes_to_load["meshes/MidCube.obj"] = { Texture::Get("data/textures/wall2.tga"), Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs") };
-	 meshes_to_load["meshes/diagonalNO.obj"] = { Texture::Get("data/textures/wall2.tga"), Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs") };
-	 meshes_to_load["meshes/diagonalSO.obj"] = { Texture::Get("data/textures/wall2.tga"), Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs") };
+	 meshes_to_load["meshes/diagonalNW.obj"] = { Texture::Get("data/textures/wall2.tga"), Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs") };
+	 meshes_to_load["meshes/diagonalSW.obj"] = { Texture::Get("data/textures/wall2.tga"), Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs") };
 	 meshes_to_load["meshes/diagonalNE.obj"] = { Texture::Get("data/textures/wall2.tga"), Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs") };
 	 meshes_to_load["meshes/diagonalSE.obj"] = { Texture::Get("data/textures/wall2.tga"), Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs") };
 
