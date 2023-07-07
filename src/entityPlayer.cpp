@@ -72,19 +72,19 @@ void EntityPlayer::update(float dt)
 	// WASD to move the player around
 	if (Input::isKeyPressed(SDL_SCANCODE_W))
 	{
-		velocity = velocity + (forward.normalize() * player_speed * dt);
+		velocity = velocity + (forward.normalize() * playerSpeed * dt);
 	}
 	if (Input::isKeyPressed(SDL_SCANCODE_S))
 	{
-		velocity = velocity - (forward.normalize() * player_speed * dt);
+		velocity = velocity - (forward.normalize() * playerSpeed * dt);
 	}
 	if (Input::isKeyPressed(SDL_SCANCODE_A))
 	{
-		velocity = velocity + (right.normalize() * player_speed * dt);
+		velocity = velocity + (right.normalize() * playerSpeed * dt);
 	}
 	if (Input::isKeyPressed(SDL_SCANCODE_D))
 	{
-		velocity = velocity - (right.normalize() * player_speed * dt);
+		velocity = velocity - (right.normalize() * playerSpeed * dt);
 	}
 	if (on_ground > 0 && Input::isKeyPressed(SDL_SCANCODE_SPACE) && jump_cooldown == 0.0f)
 	{
@@ -119,7 +119,6 @@ void EntityPlayer::update(float dt)
 		}
 	}
 
-
 	position = position + velocity * dt;
 	velocity.x = velocity.x - (velocity.x * 10.0f * dt);
 	velocity.z = velocity.z - (velocity.z * 10.0f * dt);
@@ -127,24 +126,31 @@ void EntityPlayer::update(float dt)
 	model.setTranslation(position.x, position.y, position.z);
 	if (Input::isKeyPressed(SDL_SCANCODE_R))
 	{
-		model.setTranslation(8.0f, .5f, 8.0f);
+		health -= 1.0f;
+		statChange = true;
 	}
 	if (Input::isKeyPressed(SDL_SCANCODE_T))
 	{
-		model.setTranslation(8.0f, .5f, 24.0f);
+		health += 1.0f;
+		statChange = true;
 	}
 	if (Input::isKeyPressed(SDL_SCANCODE_Y))
 	{
-		model.setTranslation(8.0f, .5f, 0.0f);
+		maxHealth += 1.0f;
+		statChange = true;
 	}
 	if (Input::isKeyPressed(SDL_SCANCODE_U))
 	{
-		model.setTranslation(0.0f, .5f, 8.0f);
+		maxHealth -= 1.0f;
+		statChange = true;
 	}
 
 	// update timers
 	on_ground = clamp(on_ground - dt, 0.0f, 999.0f);
 	jump_cooldown = clamp(jump_cooldown - dt, 0.0f, 999.0f);
+
+	if (statChange) 
+
 	//std::cout << position.x << position.y << position.z << std::endl;
 	std::cout << on_ground << std::endl;
 }

@@ -14,6 +14,8 @@ public:
 	Camera* camera;
 	Mesh* mesh;
 
+	bool statChange = false;
+
 	//Movement
 	float mouse_speed = 100.0f;
 	float player_speed = 100.0f;
@@ -25,6 +27,13 @@ public:
 	float jump_cooldown = 0.0f;
 	Vector3 velocity;
 
+	//Stats
+	float maxHealth = 100.0f;
+	float health = maxHealth;
+	float attack = 1.0f;
+	float caddence = 5.0f;
+	float projectileSpeed = 1.0f;
+	float playerSpeed = 50.0f;
 
 	void movePlayer(Vector3 delta);
 	void rotatePlayer(float angle, const Vector3& axis);
