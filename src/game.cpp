@@ -101,8 +101,8 @@ Game::Game(int window_width, int window_height, SDL_Window *window)
 	// Load the world
 	world = new World();
 	world->loadRooms();
-	//world->randomizeMap();
-	world->setTestRooms();
+	world->randomLoad();
+	//world->setTestRooms();
 
 	enemy_manager = new EnemyManager();
 	enemy_manager->addNormalEnemy(Vector3(0, 1, 0));

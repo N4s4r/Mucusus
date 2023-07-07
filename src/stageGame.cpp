@@ -8,7 +8,7 @@ StageGame::StageGame()
 	cam2d.setOrthographic(0, wWidth, wHeight, 0, -1, 1);
 
 	crosshair.createQuad(wWidth/2, wHeight/2, chW, chH, true);
-	crosshairTexture = Texture::Get("data/textures/crosshair.tga");
+	crosshairTexture = Texture::Get("data/textures/HUD/crosshair.tga");
 }
 
 void StageGame::render()
@@ -65,12 +65,9 @@ void StageGame::render()
 	}
 	*/
 
-	EACH(row, Game::instance->world->mapGrid)
+	EACH(room, Game::instance->world->mapGrid)
 	{
-		EACH(room, row)
-		{
-			room->render();
-		}
+		room->render();
 	}
 	renderHUD();
 

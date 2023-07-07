@@ -59,7 +59,7 @@ void EntityPlayer::update(float dt)
 	World* world = Game::instance->world;
 	bool mouse_locked = Game::instance->mouse_locked;
 	float speed = dt * mouse_speed; // the speed is defined by the seconds_elapsed so it goes constant
-
+	EntityMeshRoom* currentRoom = world->currentRoom;
 	Vector3 position = model.getTranslation();
 
 	// mouse input to rotate the cam
@@ -96,29 +96,26 @@ void EntityPlayer::update(float dt)
 
 	Vector3 to_pos = position + velocity * dt;
 	vt<sCollisionData> collisions;
-	EACH(row, world->mapGrid)
+	EACH(room, world->mapGrid)
 	{
-		EACH(room, row)
+		if (checkPlayerCollisions(to_pos, collisions, room))
 		{
-			if (checkPlayerCollisions(to_pos, collisions, room))
+			EACH(collision, collisions)
 			{
-				EACH(collision, collisions)
-				{
-					//position += collision.colNormal.normalize() * 0.0005f;
-					Vector3 newDir = velocity.dot(collision.colNormal);
-					newDir = newDir * collision.colNormal;
+				//position += collision.colNormal.normalize() * 0.0005f;
+				Vector3 newDir = velocity.dot(collision.colNormal);
+				newDir = newDir * collision.colNormal;
 
-					velocity.x -= newDir.x;
-					velocity.z -= newDir.z;
-					velocity.y -= newDir.y;
-				}
+				velocity.x -= newDir.x;
+				velocity.z -= newDir.z;
+				velocity.y -= newDir.y;
 			}
-			// Update on_ground
-			vt<sCollisionData> ground_collisions;
-			if (checkPlayerOnGround(position, ground_collisions, room))
-			{
-				on_ground = 0.2f;
-			}
+		}
+		// Update on_ground
+		vt<sCollisionData> ground_collisions;
+		if (checkPlayerOnGround(position, ground_collisions, room))
+		{
+			on_ground = 0.2f;
 		}
 	}
 
@@ -148,5 +145,6 @@ void EntityPlayer::update(float dt)
 	// update timers
 	on_ground = clamp(on_ground - dt, 0.0f, 999.0f);
 	jump_cooldown = clamp(jump_cooldown - dt, 0.0f, 999.0f);
-	std::cout << position.x << position.y << position.z << std::endl;
+	//std::cout << position.x << position.y << position.z << std::endl;
+	std::cout << on_ground << std::endl;
 }

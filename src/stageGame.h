@@ -11,8 +11,8 @@ public:
     Camera cam2d;
 
     // crosshair
-    float chW = 50.f;
-    float chH = 50.f;
+    float chW = 20.f;
+    float chH = 20.f;
     Mesh crosshair;
     Texture* crosshairTexture;
 

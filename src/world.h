@@ -13,6 +13,8 @@
 
 #define MAX_BULLETS 50
 #define ROOMTYPES 3
+#define ROOMWIDTH 16
+#define ROOMHEIGHT 16
 #define GRIDWIDTH 4
 #define GRIDHEIGHT 4
 
@@ -24,11 +26,15 @@ public:
     char* roomTypeNames[ROOMTYPES] = { "roomBasic", "roomDiamond", "roomSquare" };
 
     vt<EntityMeshRoom *> roomTypes;
-    vt<vt<EntityMeshRoom *>> mapGrid;
+    vt<EntityMeshRoom*> mapGrid{ GRIDWIDTH * GRIDHEIGHT };
+
+    EntityMeshRoom* currentRoom;
 
     void loadRooms();
     void randomizeMap();
+    void randomLoad();
     void setTestRooms();
 
     void update();
+    void setCurrentRoom();
 };
