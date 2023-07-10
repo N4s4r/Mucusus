@@ -48,15 +48,15 @@ char* fetchBufferVec3u(char* data, std::vector<Vector3u>& vector);
 char* fetchBufferVec4ub(char* data, std::vector<Vector4ub>& vector);
 char* fetchBufferVec4(char* data, std::vector<Vector4>& vector);
 
+struct sCollisionData
+{
+	Vector3 colPoint;
+	Vector3 colNormal;
+};
 
 class EntityMeshRoom;
 
-//struct sCollisionData
-//{
-//	Vector3 colPoint;
-//	Vector3 colNormal;
-//};
-//
+bool checkRoomCollisions(const Vector3& target_pos, vt<sCollisionData>& collisions, EntityMeshRoom* room);
 //bool checkPlayerCollisions(const Vector3& target_pos, vt<sCollisionData>& collisions, EntityMeshRoom* room)
 //{
 //	Vector3 center = target_pos + Vector3(0.f, 1.25f, 0.f);

@@ -1,4 +1,5 @@
 #include "utils.h"
+#include "defines.h"
 
 #ifdef WIN32
 	#include <windows.h>
@@ -12,7 +13,7 @@
 #include "camera.h"
 #include "shader.h"
 #include "mesh.h"
-
+#include "entityMeshRoom.h"
 #include "extra/stb_easy_font.h"
 
 long getTime()
@@ -26,6 +27,22 @@ long getTime()
 	#endif
 }
 
+bool checkRoomCollisions(const Vector3& target_pos, vt<sCollisionData>& collisions, EntityMeshRoom* room)
+{
+	float sphereRadius = 0.5f;
+	Vector3 colPoint, colNormal;
+
+	EACH(e, room->staticEntities)
+	{
+		Mesh* mesh = e->mesh;
+		if (mesh->testSphereCollision(e->getGlobalMatrix(), target_pos, sphereRadius, colPoint, colNormal))
+		{
+			collisions.push_back({ colPoint, colNormal.normalize() });
+		}
+	}
+
+	return !collisions.empty();
+}
 
 //this function is used to access OpenGL Extensions (special features not supported by all cards)
 void* getGLProcAddress(const char* name)

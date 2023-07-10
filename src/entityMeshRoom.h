@@ -36,8 +36,6 @@ public:
 	EntityMesh* diagonalNE = NULL;
 	EntityMesh* diagonalSE = NULL;
 
-	
-
     EntityMeshRoom();
 
     bool parseScene(const char* filename);

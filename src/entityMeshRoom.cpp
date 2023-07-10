@@ -50,18 +50,18 @@ bool EntityMeshRoom::parseScene(const char *roomName)
 	//  meshes_to_load["meshes/diagonalNE.obj"] = { Texture::Get("data/textures/wall2.tga"), Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs") };
 	//  meshes_to_load["meshes/diagonalSE.obj"] = { Texture::Get("data/textures/wall2.tga"), Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs") };
 
-	meshes_to_load["meshes/CeilLight.obj"].texture = Texture::Get("data/textures/ceiling.tga");
-	meshes_to_load["meshes/CeilLight.obj"].shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
+	meshes_to_load["meshes/Ceiling.obj"].texture = Texture::Get("data/textures/ceiling.tga");
+	meshes_to_load["meshes/Ceiling.obj"].shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
 	meshes_to_load["meshes/Floor.obj"].texture = Texture::Get("data/textures/floor.tga");
 	meshes_to_load["meshes/Floor.obj"].shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
-	meshes_to_load["meshes/pilarEast.obj"].texture = Texture::Get("data/textures/pilar.tga");
-	meshes_to_load["meshes/pilarEast.obj"].shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
-	meshes_to_load["meshes/pilarWest.obj"].texture = Texture::Get("data/textures/pilar.tga");
-	meshes_to_load["meshes/pilarWest.obj"].shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
-	meshes_to_load["meshes/pilarSouth.obj"].texture = Texture::Get("data/textures/pilar.tga");
-	meshes_to_load["meshes/pilarSouth.obj"].shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
-	meshes_to_load["meshes/pilarNorth.obj"].texture = Texture::Get("data/textures/pilar.tga");
-	meshes_to_load["meshes/pilarNorth.obj"].shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
+	meshes_to_load["meshes/pilarsEast.obj"].texture = Texture::Get("data/textures/pilar.tga");
+	meshes_to_load["meshes/pilarsEast.obj"].shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
+	meshes_to_load["meshes/pilarsWest.obj"].texture = Texture::Get("data/textures/pilar.tga");
+	meshes_to_load["meshes/pilarsWest.obj"].shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
+	meshes_to_load["meshes/pilarsSouth.obj"].texture = Texture::Get("data/textures/pilar.tga");
+	meshes_to_load["meshes/pilarsSouth.obj"].shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
+	meshes_to_load["meshes/pilarsNorth.obj"].texture = Texture::Get("data/textures/pilar.tga");
+	meshes_to_load["meshes/pilarsNorth.obj"].shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
 	meshes_to_load["meshes/bigaEast.obj"].texture = Texture::Get("data/textures/biga.tga");
 	meshes_to_load["meshes/bigaEast.obj"].shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
 	meshes_to_load["meshes/bigaWest.obj"].texture = Texture::Get("data/textures/biga.tga");
@@ -107,14 +107,8 @@ bool EntityMeshRoom::parseScene(const char *roomName)
 		return false;
 	}
 
-<<<<<<< Updated upstream
-	std::string scene_info, mesh_name, model_data;
-	file >> scene_info;
-	file >> scene_info;
-=======
 	std::string scene_info, mesh_name, model_data, entity_name;
 	file >> scene_info; file >> scene_info;
->>>>>>> Stashed changes
 	int mesh_count = 0;
 
 	// Read file line by line and store mesh path and model info in separated variables
@@ -139,15 +133,9 @@ bool EntityMeshRoom::parseScene(const char *roomName)
 	// Iterate through meshes loaded and create corresponding entities
 	for (auto data : meshes_to_load)
 	{
-
-<<<<<<< Updated upstream
-		mesh_name = "data/rooms/" + std::string(roomName) + "/" + data.first;
-		sRenderData &render_data = data.second;
-=======
 		entity_name = data.first;
 		mesh_name = "data/rooms/" + std::string(roomName) + "/" + entity_name;
 		sRenderData& render_data = data.second;
->>>>>>> Stashed changes
 
 		// No transforms, anything to do here
 		if (render_data.models.empty())
@@ -156,13 +144,8 @@ bool EntityMeshRoom::parseScene(const char *roomName)
 		if (render_data.shader == nullptr)
 			render_data.shader = Game::instance->shader;
 
-<<<<<<< Updated upstream
-		// Create instanced entity
-		// if (render_data.models.size() > 1) {
-=======
 		 //Create instanced entity
 		//if (render_data.models.size() > 1) {
->>>>>>> Stashed changes
 		//	InstancedEntityMesh* new_entity = new InstancedEntityMesh(Mesh::Get(mesh_name.c_str()), render_data.shader, render_data.texture);
 		//	// Add all instances
 		//	new_entity->models = render_data.models;

@@ -14,29 +14,6 @@ void EntityPlayer::movePlayer(Vector3 delta)
 	model.setTranslation(delta.x, delta.y, delta.z);
 }
 
-struct sCollisionData
-{
-	Vector3 colPoint;
-	Vector3 colNormal;
-};
-
-bool checkPlayerCollisions(const Vector3& target_pos, vt<sCollisionData>& collisions, EntityMeshRoom* room)
-{
-	float sphereRadius = 0.5f;
-	Vector3 colPoint, colNormal;
-
-	EACH(e, room->staticEntities)
-	{
-		Mesh* mesh = e->mesh;
-		if (mesh->testSphereCollision(e->getGlobalMatrix(), target_pos, sphereRadius, colPoint, colNormal))
-		{
-			collisions.push_back({ colPoint, colNormal.normalize() });
-		}
-	}
-
-	return !collisions.empty();
-}
-
 bool checkPlayerOnGround(const Vector3& position, vt<sCollisionData>& collisions, EntityMeshRoom* room)
 {
 	float sphereRadius = 1.f;
@@ -98,7 +75,7 @@ void EntityPlayer::update(float dt)
 	vt<sCollisionData> collisions;
 	EACH(room, world->mapGrid)
 	{
-		if (checkPlayerCollisions(to_pos, collisions, room))
+		if (checkRoomCollisions(to_pos, collisions, room))
 		{
 			EACH(collision, collisions)
 			{
