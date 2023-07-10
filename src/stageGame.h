@@ -7,7 +7,8 @@
 #include "entityPlayer.h"
 #include "gameHUD.h"
 
-class StageGame : public Stage {
+class StageGame : public Stage
+{
 public:
     Camera cam2d;
     Camera minimap;
@@ -15,11 +16,11 @@ public:
     gameHUD HUD;
 
     StageGame();
-    virtual void render(); //empty body
-    virtual void update(double seconds_elapsed);//empty body
+    virtual void render();                       // empty body
+    virtual void update(double seconds_elapsed); // empty body
 
     void updateMinimap();
     void renderMinimap();
-    void renderQuad(Mesh quad, Texture* texture, Camera camera);
-    void renderQuad(Mesh quad, Texture* texture);
+    void renderQuad(Mesh quad, Texture *texture, Camera camera);
+    void renderQuad(Mesh quad, Texture *texture);
 };

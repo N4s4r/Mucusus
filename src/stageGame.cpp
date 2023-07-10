@@ -2,21 +2,25 @@
 #include <iostream>
 #include <string>
 
+#include "mesh.h"
+
 StageGame::StageGame()
 {
 	HUD.initHUD();
 	updateMinimap();
 }
 
-void frustrumCulling(EntityMesh* entity, Vector3 camPos)
+void frustrumCulling(EntityMesh *entity, Vector3 camPos)
 {
 	Vector3 entityPos = entity->getGlobalPosition();
-	Mesh* entityMesh = entity->mesh;
+	Mesh *entityMesh = entity->mesh;
 	float dist = entityPos.distance(camPos);
-	if (dist > 500) {
+	if (dist > 500)
+	{
 		return;
 	}
-	if (!Game::instance->camera->testSphereInFrustum(entityPos, entityMesh->radius)) {
+	if (!Game::instance->camera->testSphereInFrustum(entityPos, entityMesh->radius))
+	{
 		return;
 	}
 	entity->render();
@@ -24,8 +28,8 @@ void frustrumCulling(EntityMesh* entity, Vector3 camPos)
 
 void StageGame::render()
 {
-	//EntityMeshRoom* room = Game::instance->room;
-	// set the clear color (the background color)
+	// EntityMeshRoom* room = Game::instance->room;
+	//  set the clear color (the background color)
 	glClearColor(0.0, 0.0, 1.0, 1.0);
 
 	// Clear the window and the depth buffer
@@ -36,13 +40,13 @@ void StageGame::render()
 	SDL_Window *window = Game::instance->window;
 	camera->enable();
 
-	//Update camera
+	// Update camera
 	Matrix44 nPitch, nYaw;
 	nPitch.setRotation(Game::instance->camera_pitch, (Vector3(1, 0, 0)));
 	nYaw.setRotation(Game::instance->camera_yaw, Vector3(0, -1, 0));
 	Matrix44 new_matrix = nPitch * nYaw;
 
-	EntityPlayer* player = Game::instance->player;
+	EntityPlayer *player = Game::instance->player;
 	Vector3 eye = player->model.getTranslation() + Vector3(0, 1, 0);
 
 	camera->lookAt(eye, eye + new_matrix.frontVector().normalize(), Vector3(0, 1, 0));
@@ -95,8 +99,8 @@ void StageGame::render()
 
 void StageGame::update(double seconds_elapsed)
 {
-	EntityPlayer* player = Game::instance->player;
-	EntityMeshRoom* room = Game::instance->room;
+	EntityPlayer *player = Game::instance->player;
+	EntityMeshRoom *room = Game::instance->room;
 	player->update(seconds_elapsed);
 	room->update(seconds_elapsed);
 
@@ -122,17 +126,17 @@ void StageGame::updateMinimap()
 	int mmH = Game::instance->player->health;
 	minimap.setOrthographic(mmX, mmW, mmH, mmY, -1, 1);
 
-	//minimapFrame.mesh.createQuad(mmX, mmY, mmW, mmH, true);
+	// minimapFrame.mesh.createQuad(mmX, mmY, mmW, mmH, true);
 }
 
 void StageGame::renderMinimap()
 {
 	int wWidth = Game::instance->window_width;
 	int wHeight = Game::instance->window_height;
-	//float hudScale = min(wWidth, wHeight) * hudScaleFactor;
-	EntityPlayer* player = Game::instance->player;
+	// float hudScale = min(wWidth, wHeight) * hudScaleFactor;
+	EntityPlayer *player = Game::instance->player;
 
-	SDL_Window* window = Game::instance->window;
+	SDL_Window *window = Game::instance->window;
 
 	// Set the flags
 	glDisable(GL_DEPTH_TEST);
@@ -143,24 +147,26 @@ void StageGame::renderMinimap()
 	minimap.enable();
 
 	////Render minimap
-	//renderQuad(minimapFrame.mesh, minimapFrame.texture, minimap);
+	// renderQuad(minimapFrame.mesh, minimapFrame.texture, minimap);
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 	glDisable(GL_BLEND);
 }
 
-void StageGame::renderQuad(Mesh quad, Texture* texture, Camera camera)
+void StageGame::renderQuad(Mesh quad, Texture *texture, Camera camera)
 {
-	Shader* qShader = Shader::Get("data/shaders/basic.vs", "data/shaders/gui.fs");
+	Shader *qShader = Shader::Get("data/shaders/basic.vs", "data/shaders/gui.fs");
 
-	if (!qShader) return;
+	if (!qShader)
+		return;
 
 	qShader->enable();
 
 	qShader->setUniform("u_color", Vector4(1, 1, 1, 1));
 	qShader->setUniform("u_viewprojection", camera.viewprojection_matrix);
-	if (texture != NULL) {
+	if (texture != NULL)
+	{
 		qShader->setUniform("u_texture", texture, 0);
 	}
 	qShader->setUniform("u_time", Game::instance->time);
