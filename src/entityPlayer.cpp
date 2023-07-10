@@ -6,7 +6,6 @@
 EntityPlayer::EntityPlayer()
 {
 	camera = Game::instance->camera;
-
 }
 
 void EntityPlayer::movePlayer(Vector3 delta)
@@ -14,14 +13,14 @@ void EntityPlayer::movePlayer(Vector3 delta)
 	model.setTranslation(delta.x, delta.y, delta.z);
 }
 
-bool checkPlayerOnGround(const Vector3& position, vt<sCollisionData>& collisions, EntityMeshRoom* room)
+bool checkPlayerOnGround(const Vector3 &position, vt<sCollisionData> &collisions, EntityMeshRoom *room)
 {
 	float sphereRadius = 1.f;
 	Vector3 colPoint, colNormal;
 
 	EACH(e, room->staticEntities)
 	{
-		Mesh* mesh = e->mesh;
+		Mesh *mesh = e->mesh;
 		if (mesh->testRayCollision(e->model, position, Vector3(0, -1, 0), colPoint, colNormal, 1.0f))
 		{
 			return true;
@@ -33,14 +32,14 @@ bool checkPlayerOnGround(const Vector3& position, vt<sCollisionData>& collisions
 
 void EntityPlayer::update(float dt)
 {
-	World* world = Game::instance->world;
+	World *world = Game::instance->world;
 	bool mouse_locked = Game::instance->mouse_locked;
 	float speed = dt * mouse_speed; // the speed is defined by the seconds_elapsed so it goes constant
-	EntityMeshRoom* currentRoom = world->currentRoom;
+	EntityMeshRoom *currentRoom = world->currentRoom;
 	Vector3 position = model.getTranslation();
 
 	// mouse input to rotate the cam
-		//Update camera
+	// Update camera
 	Matrix44 nYaw;
 	nYaw.setRotation(Game::instance->camera_yaw, Vector3(0, -1, 0));
 	Vector3 forward = nYaw.frontVector();
@@ -79,7 +78,7 @@ void EntityPlayer::update(float dt)
 		{
 			EACH(collision, collisions)
 			{
-				//position += collision.colNormal.normalize() * 0.0005f;
+				// position += collision.colNormal.normalize() * 0.0005f;
 				Vector3 newDir = velocity.dot(collision.colNormal);
 				newDir = newDir * collision.colNormal;
 
@@ -99,7 +98,7 @@ void EntityPlayer::update(float dt)
 	position = position + velocity * dt;
 	velocity.x = velocity.x - (velocity.x * 10.0f * dt);
 	velocity.z = velocity.z - (velocity.z * 10.0f * dt);
-	
+
 	model.setTranslation(position.x, position.y, position.z);
 	if (Input::isKeyPressed(SDL_SCANCODE_R))
 	{
@@ -126,8 +125,8 @@ void EntityPlayer::update(float dt)
 	on_ground = clamp(on_ground - dt, 0.0f, 999.0f);
 	jump_cooldown = clamp(jump_cooldown - dt, 0.0f, 999.0f);
 
-	if (statChange) 
+	if (statChange)
 
-	//std::cout << position.x << position.y << position.z << std::endl;
-	std::cout << on_ground << std::endl;
+		// std::cout << position.x << position.y << position.z << std::endl;
+		std::cout << on_ground << std::endl;
 }

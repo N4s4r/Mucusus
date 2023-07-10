@@ -2,9 +2,9 @@
 #include "defines.h"
 
 #ifdef WIN32
-	#include <windows.h>
+#include <windows.h>
 #else
-	#include <sys/time.h>
+#include <sys/time.h>
 #endif
 
 #include "includes.h"
@@ -15,83 +15,84 @@
 #include "mesh.h"
 #include "entityMeshRoom.h"
 #include "extra/stb_easy_font.h"
+#include "entityMesh.h"
 
 long getTime()
 {
-	#ifdef WIN32
-		return GetTickCount();
-	#else
-		struct timeval tv;
-		gettimeofday(&tv,NULL);
-		return (int)(tv.tv_sec*1000 + (tv.tv_usec / 1000));
-	#endif
+#ifdef WIN32
+	return GetTickCount();
+#else
+	struct timeval tv;
+	gettimeofday(&tv, NULL);
+	return (int)(tv.tv_sec * 1000 + (tv.tv_usec / 1000));
+#endif
 }
 
-bool checkRoomCollisions(const Vector3& target_pos, vt<sCollisionData>& collisions, EntityMeshRoom* room)
+bool checkRoomCollisions(const Vector3 &target_pos, vt<sCollisionData> &collisions, EntityMeshRoom *room)
 {
 	float sphereRadius = 0.5f;
 	Vector3 colPoint, colNormal;
 
 	EACH(e, room->staticEntities)
 	{
-		Mesh* mesh = e->mesh;
+		Mesh *mesh = e->mesh;
 		if (mesh->testSphereCollision(e->getGlobalMatrix(), target_pos, sphereRadius, colPoint, colNormal))
 		{
-			collisions.push_back({ colPoint, colNormal.normalize() });
+			collisions.push_back({colPoint, colNormal.normalize()});
 		}
 	}
 
 	return !collisions.empty();
 }
 
-//this function is used to access OpenGL Extensions (special features not supported by all cards)
-void* getGLProcAddress(const char* name)
+// this function is used to access OpenGL Extensions (special features not supported by all cards)
+void *getGLProcAddress(const char *name)
 {
 	return SDL_GL_GetProcAddress(name);
 }
 
-//Retrieve the current path of the application
+// Retrieve the current path of the application
 #ifdef __APPLE__
 #include "CoreFoundation/CoreFoundation.h"
 #endif
 
 #ifdef WIN32
-	#include <direct.h>
-	#define GetCurrentDir _getcwd
+#include <direct.h>
+#define GetCurrentDir _getcwd
 #else
-	#include <unistd.h>
-	#define GetCurrentDir getcwd
+#include <unistd.h>
+#define GetCurrentDir getcwd
 #endif
 
 std::string getPath()
 {
-    std::string fullpath;
-    // ----------------------------------------------------------------------------
-    // This makes relative paths work in C++ in Xcode by changing directory to the Resources folder inside the .app bundle
+	std::string fullpath;
+	// ----------------------------------------------------------------------------
+	// This makes relative paths work in C++ in Xcode by changing directory to the Resources folder inside the .app bundle
 #ifdef __APPLE__
-    CFBundleRef mainBundle = CFBundleGetMainBundle();
-    CFURLRef resourcesURL = CFBundleCopyResourcesDirectoryURL(mainBundle);
-    char path[PATH_MAX];
-    if (!CFURLGetFileSystemRepresentation(resourcesURL, TRUE, (UInt8 *)path, PATH_MAX))
-    {
-        // error!
-    }
-    CFRelease(resourcesURL);
-    chdir(path);
-    fullpath = path;
+	CFBundleRef mainBundle = CFBundleGetMainBundle();
+	CFURLRef resourcesURL = CFBundleCopyResourcesDirectoryURL(mainBundle);
+	char path[PATH_MAX];
+	if (!CFURLGetFileSystemRepresentation(resourcesURL, TRUE, (UInt8 *)path, PATH_MAX))
+	{
+		// error!
+	}
+	CFRelease(resourcesURL);
+	chdir(path);
+	fullpath = path;
 #else
-	 char cCurrentPath[1024];
-	 if (!GetCurrentDir(cCurrentPath, sizeof(cCurrentPath)))
-		 return "";
+	char cCurrentPath[1024];
+	if (!GetCurrentDir(cCurrentPath, sizeof(cCurrentPath)))
+		return "";
 
 	cCurrentPath[sizeof(cCurrentPath) - 1] = '\0';
 	fullpath = cCurrentPath;
 
-#endif    
-    return fullpath;
+#endif
+	return fullpath;
 }
 
-bool readFile(const std::string& filename, std::string& content)
+bool readFile(const std::string &filename, std::string &content)
 {
 	content.clear();
 
@@ -120,36 +121,40 @@ bool readFile(const std::string& filename, std::string& content)
 
 bool checkGLErrors()
 {
-	#ifdef _DEBUG
+#ifdef _DEBUG
 	GLenum errCode;
 	const GLubyte *errString;
 
-	if ((errCode = glGetError()) != GL_NO_ERROR) {
+	if ((errCode = glGetError()) != GL_NO_ERROR)
+	{
 		errString = gluErrorString(errCode);
 		std::cerr << "OpenGL Error: " << errString << std::endl;
 		return false;
 	}
-	#endif
+#endif
 
 	return true;
 }
 
-std::vector<std::string>& split(const std::string &s, char delim, std::vector<std::string> &elems) {
-    std::stringstream ss(s);
-    std::string item;
-    while (std::getline(ss, item, delim)) {
-        elems.push_back(item);
-    }
-    return elems;
+std::vector<std::string> &split(const std::string &s, char delim, std::vector<std::string> &elems)
+{
+	std::stringstream ss(s);
+	std::string item;
+	while (std::getline(ss, item, delim))
+	{
+		elems.push_back(item);
+	}
+	return elems;
 }
 
-std::vector<std::string> split(const std::string &s, char delim) {
-    std::vector<std::string> elems;
-    split(s, delim, elems);
-    return elems;
+std::vector<std::string> split(const std::string &s, char delim)
+{
+	std::vector<std::string> elems;
+	split(s, delim, elems);
+	return elems;
 }
 
-std::string join(std::vector<std::string>& strings, const char* delim)
+std::string join(std::vector<std::string> &strings, const char *delim)
 {
 	std::string str;
 	for (int i = 0; i < strings.size(); ++i)
@@ -157,7 +162,8 @@ std::string join(std::vector<std::string>& strings, const char* delim)
 	return str;
 }
 
-bool replace(std::string& str, const std::string& from, const std::string& to) {
+bool replace(std::string &str, const std::string &from, const std::string &to)
+{
 	size_t start_pos = str.find(from);
 	if (start_pos == std::string::npos)
 		return false;
@@ -165,16 +171,15 @@ bool replace(std::string& str, const std::string& from, const std::string& to) {
 	return true;
 }
 
-Vector2 getDesktopSize( int display_index )
+Vector2 getDesktopSize(int display_index)
 {
-  SDL_DisplayMode current;
-  // Get current display mode of all displays.
-  int should_be_zero = SDL_GetCurrentDisplayMode(display_index, &current);
-  return Vector2( (float)current.w, (float)current.h );
+	SDL_DisplayMode current;
+	// Get current display mode of all displays.
+	int should_be_zero = SDL_GetCurrentDisplayMode(display_index, &current);
+	return Vector2((float)current.w, (float)current.h);
 }
 
-
-bool drawText(float x, float y, std::string text, Vector3 c, float scale )
+bool drawText(float x, float y, std::string text, Vector3 c, float scale)
 {
 	static char buffer[99999]; // ~500 chars
 	int num_quads;
@@ -188,7 +193,7 @@ bool drawText(float x, float y, std::string text, Vector3 c, float scale )
 	if (Shader::current)
 		Shader::current->disable();
 
-	num_quads = stb_easy_font_print(x, y, (char*)(text.c_str()), NULL, buffer, sizeof(buffer));
+	num_quads = stb_easy_font_print(x, y, (char *)(text.c_str()), NULL, buffer, sizeof(buffer));
 
 	Matrix44 projection_matrix;
 	projection_matrix.ortho(0, Game::instance->window_width / scale, Game::instance->window_height / scale, 0, -1, 1);
@@ -219,13 +224,13 @@ bool drawText(float x, float y, std::string text, Vector3 c, float scale )
 	return true;
 }
 
-std::vector<std::string> tokenize(const std::string& source, const char* delimiters, bool process_strings)
+std::vector<std::string> tokenize(const std::string &source, const char *delimiters, bool process_strings)
 {
 	std::vector<std::string> tokens;
 
 	std::string str;
 	size_t del_size = strlen(delimiters);
-	const char* pos = source.c_str();
+	const char *pos = source.c_str();
 	char in_string = 0;
 	unsigned int i = 0;
 	while (*pos != 0)
@@ -234,13 +239,15 @@ std::vector<std::string> tokenize(const std::string& source, const char* delimit
 
 		if (!process_strings || (process_strings && in_string == 0))
 		{
-			for (i = 0; i < del_size && *pos != delimiters[i]; i++);
-			if (i != del_size) split = true;
+			for (i = 0; i < del_size && *pos != delimiters[i]; i++)
+				;
+			if (i != del_size)
+				split = true;
 		}
 
 		if (process_strings && (*pos == '\"' || *pos == '\''))
 		{
-			if (!str.empty() && in_string == 0) //some chars remaining
+			if (!str.empty() && in_string == 0) // some chars remaining
 			{
 				tokens.push_back(str);
 				str.clear();
@@ -280,19 +287,19 @@ std::string getGPUStats()
 	glGetIntegerv(GL_GPU_MEM_INFO_TOTAL_AVAILABLE_MEM_NVX, &nTotalMemoryInKB);
 	GLint nCurAvailMemoryInKB = 0;
 	glGetIntegerv(GL_GPU_MEM_INFO_CURRENT_AVAILABLE_MEM_NVX, &nCurAvailMemoryInKB);
-	if (glGetError() != GL_NO_ERROR) //unsupported feature by driver
+	if (glGetError() != GL_NO_ERROR) // unsupported feature by driver
 	{
 		nTotalMemoryInKB = 0;
 		nCurAvailMemoryInKB = 0;
 	}
 
-	std::string str = "FPS: " + std::to_string(Game::instance->fps) + " DCS: " + std::to_string(Mesh::num_meshes_rendered) + " Tris: " + std::to_string(long(Mesh::num_triangles_rendered * 0.001)) + "Ks  VRAM: " + std::to_string(int((nTotalMemoryInKB-nCurAvailMemoryInKB) * 0.001)) + "MBs / " + std::to_string(int(nTotalMemoryInKB * 0.001)) + "MBs";
+	std::string str = "FPS: " + std::to_string(Game::instance->fps) + " DCS: " + std::to_string(Mesh::num_meshes_rendered) + " Tris: " + std::to_string(long(Mesh::num_triangles_rendered * 0.001)) + "Ks  VRAM: " + std::to_string(int((nTotalMemoryInKB - nCurAvailMemoryInKB) * 0.001)) + "MBs / " + std::to_string(int(nTotalMemoryInKB * 0.001)) + "MBs";
 	Mesh::num_meshes_rendered = 0;
 	Mesh::num_triangles_rendered = 0;
 	return str;
 }
 
-Mesh* grid = NULL;
+Mesh *grid = NULL;
 
 void drawGrid()
 {
@@ -306,40 +313,43 @@ void drawGrid()
 	glEnable(GL_BLEND);
 	glDepthMask(false);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	Shader* grid_shader = Shader::getDefaultShader("grid");
+	Shader *grid_shader = Shader::getDefaultShader("grid");
 	grid_shader->enable();
 	Matrix44 m;
-	m.translate(floor(Camera::current->eye.x / 100.0)*100.0f, 0.0f, floor(Camera::current->eye.z / 100.0f)*100.0f);
+	m.translate(floor(Camera::current->eye.x / 100.0) * 100.0f, 0.0f, floor(Camera::current->eye.z / 100.0f) * 100.0f);
 	grid_shader->setUniform("u_color", Vector4(0.7, 0.7, 0.7, 0.7));
 	grid_shader->setUniform("u_model", m);
 	grid_shader->setUniform("u_camera_position", Camera::current->eye);
 	grid_shader->setUniform("u_viewprojection", Camera::current->viewprojection_matrix);
-	grid->render(GL_LINES); //background grid
+	grid->render(GL_LINES); // background grid
 	glDisable(GL_BLEND);
 	glDepthMask(true);
 	grid_shader->disable();
 }
 
-
-char* fetchWord(char* data, char* word)
+char *fetchWord(char *data, char *word)
 {
 	int pos = 0;
-	while (*data && *data != ',' && *data != '\n' && pos < 254) { word[pos++] = *data; data++; }
+	while (*data && *data != ',' && *data != '\n' && pos < 254)
+	{
+		word[pos++] = *data;
+		data++;
+	}
 	word[pos] = 0;
 	if (pos < 254)
-		data++; //skip ',' or '\n'
+		data++; // skip ',' or '\n'
 	return data;
 }
 
-char* fetchFloat(char* data, float& v)
+char *fetchFloat(char *data, float &v)
 {
 	char w[255];
-	data = fetchWord(data,w);
+	data = fetchWord(data, w);
 	v = atof(w);
 	return data;
 }
 
-char* fetchMatrix44(char* data, Matrix44& m)
+char *fetchMatrix44(char *data, Matrix44 &m)
 {
 	char word[255];
 	for (int i = 0; i < 16; ++i)
@@ -350,21 +360,24 @@ char* fetchMatrix44(char* data, Matrix44& m)
 	return data;
 }
 
-char* fetchEndLine(char* data)
+char *fetchEndLine(char *data)
 {
-	while (*data && *data != '\n') { data++; }
+	while (*data && *data != '\n')
+	{
+		data++;
+	}
 	if (*data == '\n')
 		data++;
 	return data;
 }
 
-char* fetchBufferFloat(char* data, std::vector<float>& vector, int num )
+char *fetchBufferFloat(char *data, std::vector<float> &vector, int num)
 {
 	int pos = 0;
 	char word[255];
 	if (num)
 		vector.resize(num);
-	else //read size with the first number
+	else // read size with the first number
 	{
 		data = fetchWord(data, word);
 		float v = atof(word);
@@ -373,7 +386,8 @@ char* fetchBufferFloat(char* data, std::vector<float>& vector, int num )
 	}
 
 	int index = 0;
-	while (*data != 0) {
+	while (*data != 0)
+	{
 		if (*data == ',' || *data == '\n')
 		{
 			if (pos == 0)
@@ -405,29 +419,29 @@ char* fetchBufferFloat(char* data, std::vector<float>& vector, int num )
 	return data;
 }
 
-char* fetchBufferVec3(char* data, std::vector<Vector3>& vector)
+char *fetchBufferVec3(char *data, std::vector<Vector3> &vector)
 {
-	//int pos = 0;
+	// int pos = 0;
 	std::vector<float> floats;
 	data = fetchBufferFloat(data, floats);
 	vector.resize(floats.size() / 3);
-	memcpy(&vector[0], &floats[0], sizeof(float)*floats.size());
+	memcpy(&vector[0], &floats[0], sizeof(float) * floats.size());
 	return data;
 }
 
-char* fetchBufferVec2(char* data, std::vector<Vector2>& vector)
+char *fetchBufferVec2(char *data, std::vector<Vector2> &vector)
 {
-	//int pos = 0;
+	// int pos = 0;
 	std::vector<float> floats;
 	data = fetchBufferFloat(data, floats);
 	vector.resize(floats.size() / 2);
-	memcpy(&vector[0], &floats[0], sizeof(float)*floats.size());
+	memcpy(&vector[0], &floats[0], sizeof(float) * floats.size());
 	return data;
 }
 
-char* fetchBufferVec3u(char* data, std::vector<Vector3u>& vector)
+char *fetchBufferVec3u(char *data, std::vector<Vector3u> &vector)
 {
-	//int pos = 0;
+	// int pos = 0;
 	std::vector<float> floats;
 	data = fetchBufferFloat(data, floats);
 	vector.resize(floats.size() / 3);
@@ -436,9 +450,9 @@ char* fetchBufferVec3u(char* data, std::vector<Vector3u>& vector)
 	return data;
 }
 
-char* fetchBufferVec4ub(char* data, std::vector<Vector4ub>& vector)
+char *fetchBufferVec4ub(char *data, std::vector<Vector4ub> &vector)
 {
-	//int pos = 0;
+	// int pos = 0;
 	std::vector<float> floats;
 	data = fetchBufferFloat(data, floats);
 	vector.resize(floats.size() / 4);
@@ -447,42 +461,41 @@ char* fetchBufferVec4ub(char* data, std::vector<Vector4ub>& vector)
 	return data;
 }
 
-char* fetchBufferVec4(char* data, std::vector<Vector4>& vector)
+char *fetchBufferVec4(char *data, std::vector<Vector4> &vector)
 {
-	//int pos = 0;
+	// int pos = 0;
 	std::vector<float> floats;
 	data = fetchBufferFloat(data, floats);
 	vector.resize(floats.size() / 4);
-	memcpy(&vector[0], &floats[0], sizeof(float)*floats.size());
+	memcpy(&vector[0], &floats[0], sizeof(float) * floats.size());
 	return data;
 }
 
-void RenderGUI(Mesh quad, Texture* tex, Vector4 color = Vector4(1, 1, 1, 1))
+void RenderGUI(Mesh quad, Texture *tex, Vector4 color = Vector4(1, 1, 1, 1))
 {
-	//int windowWidth = Game::instance->window_width;
-	//int windowHeight = Game::instance->window_height;
+	// int windowWidth = Game::instance->window_width;
+	// int windowHeight = Game::instance->window_height;
 
-	//Camera cam2D;
-	//cam2D.setOrthographic(0, windowWidth, windowHeight, 0, -1, 1);
+	// Camera cam2D;
+	// cam2D.setOrthographic(0, windowWidth, windowHeight, 0, -1, 1);
 
-	//Shader* shader = Shader::Get((PATH1 + a.assign("shaders/basic.vs")).c_str(), (PATH1 + a.assign("shaders/gui.fs")).c_str());
-	//if (!shader) return;
+	// Shader* shader = Shader::Get((PATH1 + a.assign("shaders/basic.vs")).c_str(), (PATH1 + a.assign("shaders/gui.fs")).c_str());
+	// if (!shader) return;
 
 	////enable shader
-	//shader->enable();
+	// shader->enable();
 
 	////upload uniforms
-	//shader->setUniform("u_color", color);
-	//shader->setUniform("u_viewprojection", cam2D.viewprojection_matrix);
-	//shader->setUniform("u_texture", tex, 0);
-	//shader->setUniform("u_tex_tiling", 1.0f);
-	//shader->setUniform("u_time", time);
-	//shader->setUniform("u_tex_range", Vector4(0, 0, 1, 1));
+	// shader->setUniform("u_color", color);
+	// shader->setUniform("u_viewprojection", cam2D.viewprojection_matrix);
+	// shader->setUniform("u_texture", tex, 0);
+	// shader->setUniform("u_tex_tiling", 1.0f);
+	// shader->setUniform("u_time", time);
+	// shader->setUniform("u_tex_range", Vector4(0, 0, 1, 1));
 
-	//shader->setUniform("u_model", Matrix44());
-	//quad.render(GL_TRIANGLES);
-
+	// shader->setUniform("u_model", Matrix44());
+	// quad.render(GL_TRIANGLES);
 
 	////disable shader
-	//shader->disable();
+	// shader->disable();
 }

@@ -2,21 +2,22 @@
 #include "entity.h"
 #include "mesh.h"
 #include "entityMeshRoom.h"
+#include "entityMesh.h"
 #include "camera.h"
 #include "game.h"
 #include "world.h"
 
-class EntityPlayer :public Entity
+class EntityPlayer : public Entity
 {
 public:
 	EntityPlayer();
 	Vector3 crosshair;
-	Camera* camera;
-	Mesh* mesh;
+	Camera *camera;
+	Mesh *mesh;
 
 	bool statChange = false;
 
-	//Movement
+	// Movement
 	float mouse_speed = 100.0f;
 	float player_speed = 100.0f;
 	float camera_rotation_speed = 5.0f;
@@ -27,7 +28,7 @@ public:
 	float jump_cooldown = 0.0f;
 	Vector3 velocity;
 
-	//Stats
+	// Stats
 	float maxHealth = 100.0f;
 	float health = maxHealth;
 	float attack = 1.0f;
@@ -36,8 +37,8 @@ public:
 	float playerSpeed = 50.0f;
 
 	void movePlayer(Vector3 delta);
-	void rotatePlayer(float angle, const Vector3& axis);
+	void rotatePlayer(float angle, const Vector3 &axis);
 
-	//collisions
+	// collisions
 	void update(float dt);
 };

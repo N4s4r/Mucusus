@@ -1,6 +1,9 @@
 #include "stageTuto.h"
+
+#include "mesh.h"
+#include "texture.h"
 //
-//StageIntro::StageIntro()
+// StageIntro::StageIntro()
 //{
 //	// Windows size
 //	int wWidth = Game::instance->window_width;
@@ -41,7 +44,7 @@
 //	menuSelectorMesh.createQuad(selX, y, w, h, true);
 //}
 //
-//void StageIntro::render()
+// void StageIntro::render()
 //{
 //	SDL_Window* window = Game::instance->window;
 //	// set the clear color (the background color)
@@ -83,7 +86,7 @@
 //	SDL_GL_SwapWindow(window);
 //};
 //
-//void StageIntro::update(double seconds_elapsed)
+// void StageIntro::update(double seconds_elapsed)
 //{
 //	if (Input::wasKeyPressed(SDL_SCANCODE_S)) {
 //		selectedOption = static_cast<menuOption>((selectedOption + 1) % MENU_OPTIONS);

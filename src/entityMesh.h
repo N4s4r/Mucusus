@@ -10,9 +10,9 @@ class EntityMesh : public Entity
 {
 public:
     vt<str> audios;
-    Shader* shader;
-    Mesh* mesh;
-    Texture* texture;
+    Shader *shader;
+    Mesh *mesh;
+    Texture *texture;
 
     EntityMesh();
     EntityMesh(Mesh *mesh, Shader *shader, Texture *texture);

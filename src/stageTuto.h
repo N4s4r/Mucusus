@@ -1,7 +1,12 @@
 #pragma once
 #include "stage.h"
+#include "camera.h"
 
-class StageTuto : public Stage {
+class Mesh;
+class Texture;
+
+class StageTuto : public Stage
+{
 public:
     StageTuto();
     virtual void render(void);
@@ -12,6 +17,5 @@ public:
     vt<Mesh> pages;
     Camera cam2d;
 
-    void renderQuad(Mesh quad, Texture* texture);
-
+    void renderQuad(Mesh quad, Texture *texture);
 };
