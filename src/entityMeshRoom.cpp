@@ -107,9 +107,14 @@ bool EntityMeshRoom::parseScene(const char *roomName)
 		return false;
 	}
 
+<<<<<<< Updated upstream
 	std::string scene_info, mesh_name, model_data;
 	file >> scene_info;
 	file >> scene_info;
+=======
+	std::string scene_info, mesh_name, model_data, entity_name;
+	file >> scene_info; file >> scene_info;
+>>>>>>> Stashed changes
 	int mesh_count = 0;
 
 	// Read file line by line and store mesh path and model info in separated variables
@@ -135,8 +140,14 @@ bool EntityMeshRoom::parseScene(const char *roomName)
 	for (auto data : meshes_to_load)
 	{
 
+<<<<<<< Updated upstream
 		mesh_name = "data/rooms/" + std::string(roomName) + "/" + data.first;
 		sRenderData &render_data = data.second;
+=======
+		entity_name = data.first;
+		mesh_name = "data/rooms/" + std::string(roomName) + "/" + entity_name;
+		sRenderData& render_data = data.second;
+>>>>>>> Stashed changes
 
 		// No transforms, anything to do here
 		if (render_data.models.empty())
@@ -145,8 +156,13 @@ bool EntityMeshRoom::parseScene(const char *roomName)
 		if (render_data.shader == nullptr)
 			render_data.shader = Game::instance->shader;
 
+<<<<<<< Updated upstream
 		// Create instanced entity
 		// if (render_data.models.size() > 1) {
+=======
+		 //Create instanced entity
+		//if (render_data.models.size() > 1) {
+>>>>>>> Stashed changes
 		//	InstancedEntityMesh* new_entity = new InstancedEntityMesh(Mesh::Get(mesh_name.c_str()), render_data.shader, render_data.texture);
 		//	// Add all instances
 		//	new_entity->models = render_data.models;
@@ -161,6 +177,26 @@ bool EntityMeshRoom::parseScene(const char *roomName)
 		addChild(new_entity);
 		addStaticEntity(new_entity);
 		//}
+		if (entity_name == "meshes/Ceiling.obj") ceiling = new_entity;
+		else if (entity_name == "meshes/Floor.obj") floor = new_entity;
+		else if (entity_name == "meshes/pilarsEast.obj") pilarEast = new_entity;
+		else if (entity_name == "meshes/pilarsWest.obj") pilarWest = new_entity;
+		else if (entity_name == "meshes/pilarsSouth.obj") pilarSouth = new_entity;
+		else if (entity_name == "meshes/pilarsNorth.obj") pilarNorth = new_entity;
+		else if (entity_name == "meshes/bigaEast.obj") bigaEast = new_entity;
+		else if (entity_name == "meshes/bigaWest.obj") bigaWest = new_entity;
+		else if (entity_name == "meshes/bigaSouth.obj") bigaSouth = new_entity;
+		else if (entity_name == "meshes/bigaNorth.obj") bigaNorth = new_entity;
+		else if (entity_name == "meshes/wallEast.obj") wallEast = new_entity;
+		else if (entity_name == "meshes/wallWest.obj") wallWest = new_entity;
+		else if (entity_name == "meshes/wallSouth.obj") wallSouth = new_entity;
+		else if (entity_name == "meshes/wallNorth.obj") wallNorth = new_entity;
+		else if (entity_name == "meshes/MidCube.obj") midCube = new_entity;
+		else if (entity_name == "meshes/diagonalNW.obj") diagonalNW = new_entity;
+		else if (entity_name == "meshes/diagonalSW.obj") diagonalSW = new_entity;
+		else if (entity_name == "meshes/diagonalNE.obj") diagonalNE = new_entity;
+		else if (entity_name == "meshes/diagonalSE.obj") diagonalSE = new_entity;
+
 	}
 
 	std::cout << "Scene [OK]"

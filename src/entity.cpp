@@ -28,6 +28,13 @@ Matrix44 Entity::getGlobalMatrix()
 	return model;
 }
 
+Vector3 Entity::getGlobalPosition()
+{
+	if (parent)
+		return model.getTranslation() + parent->getGlobalPosition();
+	return model.getTranslation();
+}
+
 void Entity::render()
 {
 	for (int i = 0; i < children.size(); i++)

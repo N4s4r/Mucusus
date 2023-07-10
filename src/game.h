@@ -12,6 +12,7 @@
 class EntityMeshRoom;
 class EntityPlayer;
 class World;
+enum STAGE_ID;
 
 class Game
 {
@@ -52,6 +53,10 @@ public:
 	bool mouse_locked; // tells if the mouse is locked (not seen)
 
 	Game(int window_width, int window_height, SDL_Window *window);
+
+	Game();
+
+	void setStage(STAGE_ID id);
 
 	// main functions
 	void render(void);

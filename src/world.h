@@ -30,6 +30,26 @@ public:
 
     EntityMeshRoom* currentRoom;
 
+	vt<EntityMesh*> ceiling;
+	vt<EntityMesh*> floor;
+	vt<EntityMesh*> pilarEast;
+	vt<EntityMesh*> pilarWest;
+	vt<EntityMesh*> pilarSouth;
+	vt<EntityMesh*> pilarNorth;
+	vt<EntityMesh*> bigaEast;
+	vt<EntityMesh*> bigaWest;
+	vt<EntityMesh*> bigaSouth;
+	vt<EntityMesh*> bigaNorth;
+	vt<EntityMesh*> wallEast;
+	vt<EntityMesh*> wallWest;
+	vt<EntityMesh*> wallSouth;
+	vt<EntityMesh*> wallNorth;
+	vt<EntityMesh*> midCube;
+	vt<EntityMesh*> diagonalNW;
+	vt<EntityMesh*> diagonalSW;
+	vt<EntityMesh*> diagonalNE;
+	vt<EntityMesh*> diagonalSE;
+
     void loadRooms();
     void randomizeMap();
     void randomLoad();
@@ -37,4 +57,5 @@ public:
 
     void update();
     void setCurrentRoom();
+	void render();
 };

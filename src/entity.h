@@ -28,6 +28,7 @@ public:
 
     // Get transform in world coordinates
     Matrix44 getGlobalMatrix();
+    Vector3 getGlobalPosition();
 
     virtual void render();
     virtual void render(Matrix44 extra_model){};

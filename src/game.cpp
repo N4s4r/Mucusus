@@ -51,7 +51,7 @@ Stage *getCurrentStage()
 	return getStage(currentStage);
 }
 
-void setStage(STAGE_ID id)
+void Game::setStage(STAGE_ID id)
 {
 	currentStage = id;
 }
@@ -89,7 +89,7 @@ Game::Game(int window_width, int window_height, SDL_Window *window)
 	player->model.setTranslation(8.0f, 0.5f, 8.0f);
 
 	initStages();
-	setStage(STAGE_ID::GAME);
+	setStage(STAGE_ID::INTRO);
 	shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
 
 	// Create the room

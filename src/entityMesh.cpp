@@ -17,6 +17,8 @@ EntityMesh::EntityMesh(Mesh *mesh, Shader *shader, Texture *texture)
 
 void EntityMesh::render()
 {
+    Camera* cam = Game::instance->camera;
+
     float time = Game::instance->time;
 
     if (!shader)
@@ -24,7 +26,6 @@ void EntityMesh::render()
 
     shader->enable();
 
-    Camera *cam = Game::instance->camera;
     shader->setUniform("u_color", Vector4(1, 1, 1, 1));
     shader->setUniform("u_viewprojection", cam->viewprojection_matrix);
     if (texture)
