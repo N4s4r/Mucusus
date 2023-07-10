@@ -1,8 +1,10 @@
 #pragma once
 #include "input.h"
+#include "entityMeshRoom.h"
+#include "entityPlayer.h"
 
-enum STAGE_ID
-{
+
+enum STAGE_ID {
     INTRO = 0,
     GAME = 1,
     TUTO = 2,
@@ -11,7 +13,7 @@ enum STAGE_ID
 class Stage
 {
 public:
-    Stage(){};
-    virtual void render(){};
-    virtual void update(double seconds_elapsed){};
+    Stage() {};
+    virtual void render() {};
+    virtual void update(double seconds_elapsed) {};
 };

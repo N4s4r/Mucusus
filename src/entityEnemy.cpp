@@ -9,7 +9,6 @@ EntityEnemy::EntityEnemy()
 
     // To move
     model.setIdentity();
-    max_speed = 1.0f;
 }
 
 void EntityEnemy::render()
@@ -29,4 +28,22 @@ void EntityEnemy::render()
 void EntityEnemy::update(float dt)
 {
     // TODO: move the enemy
+}
+
+bool EntityEnemy::checkMeshCollision(vt<sCollisionData>& collisions, Matrix44 globalMatrix, Mesh* mesh)
+{
+    Vector3 position = model.getTranslation();
+
+    float sphereRadius = 0.5f;
+    Vector3 colPoint, colNormal;
+    if (mesh->testSphereCollision(globalMatrix, position, sphereRadius, colPoint, colNormal))
+    {
+        collisions.push_back({ colPoint, colNormal.normalize() });
+    }
+    return !collisions.empty();
+}
+
+void EntityEnemy::applyInputDamage(float damage)
+{
+    health -= damage;
 }
