@@ -8,6 +8,7 @@
 #include "utils.h"
 #include "shader.h"
 #include "mesh.h"
+#include "stage.h"
 
 class EntityMeshRoom;
 class EntityPlayer;
@@ -37,11 +38,11 @@ public:
 	float camera_pitch = 0;
 
 	Shader *shader; // our global shader
-	EntityMeshRoom* room = NULL;
-	EntityPlayer* player = NULL;
-	World* world = NULL;
+	EntityMeshRoom *room = NULL;
+	EntityPlayer *player = NULL;
+	World *world = NULL;
 
-	//EntityMeshRoom* room;
+	// EntityMeshRoom* room;
 
 	// Some public meshes
 	Mesh *X_wall_mesh = Mesh::Get("data/meshes/X_wall.obj");
