@@ -3,9 +3,11 @@
 #include <string>
 #include "entityBullet.h"
 #include "mesh.h"
+#include "enemyManager.h"
 
 StageGame::StageGame()
 {
+	enemy_manager = new EnemyManager();
 	enemy_manager->addNormalEnemy(Vector3(0, 1, 0));
 	HUD.initHUD();
 	updateMinimap();
@@ -46,11 +48,12 @@ void StageGame::render()
 	nPitch.setRotation(Game::instance->camera_pitch, (Vector3(1, 0, 0)));
 	nYaw.setRotation(Game::instance->camera_yaw, Vector3(0, -1, 0));
 	Matrix44 new_matrix = nPitch * nYaw;
+	Game::instance->player->lookingAt = new_matrix.frontVector().normalize();
 
 	EntityPlayer *player = Game::instance->player;
 	Vector3 eye = player->model.getTranslation() + Vector3(0, 1, 0);
 
-	camera->lookAt(eye, eye + new_matrix.frontVector().normalize(), Vector3(0, 1, 0));
+	camera->lookAt(eye, eye + Game::instance->player->lookingAt, Vector3(0, 1, 0));
 
 	// set flags
 	glDisable(GL_BLEND);

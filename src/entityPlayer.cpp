@@ -84,7 +84,7 @@ void EntityPlayer::update(float dt)
 	if (shootingCD == 0.0f && Input::isMousePressed(SDL_BUTTON_LEFT))
 	{
 		Vector3 bulletDir = Game::instance->camera->center;
-		Game::instance->world->shootBullet(bulletDir);
+		Game::instance->world->shootBullet(lookingAt);
 		shootingCD = 1 / caddence; 
 	}
 	if (on_ground > 0 && Input::isKeyPressed(SDL_SCANCODE_SPACE) && jump_cooldown == 0.0f)

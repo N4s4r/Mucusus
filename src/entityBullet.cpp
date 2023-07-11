@@ -87,6 +87,7 @@ void EntityBullet::render()
 	if (distance < 5 * meshFULL->radius) mesh = meshFULL;
 	else if (distance < 25 * meshFULL->radius) mesh = meshMID;
 	else if (distance < 100 * meshFULL->radius) mesh = meshLOW;
+	else return;
 
 	float time = Game::instance->time;
 

@@ -20,7 +20,7 @@
 #include "enemyManager.h"
 
 // Game params
-float camera_rotation_speed = 5.0f;
+float camera_rotation_speed = 1.0f;
 float camera_move_speed = 5.0f;
 float camera_jump_speed = 10.0f;
 
@@ -117,7 +117,6 @@ Game::Game(int window_width, int window_height, SDL_Window *window)
 void Game::render(void)
 {
 	getCurrentStage()->render();
-	SDL_GL_SwapWindow(window);
 }
 
 void Game::update(double seconds_elapsed)
@@ -135,7 +134,6 @@ void Game::update(double seconds_elapsed)
 	}
 
 	getCurrentStage()->update(seconds_elapsed);
-	enemy_manager->update(seconds_elapsed);
 }
 
 // Keyboard event handler (sync input)

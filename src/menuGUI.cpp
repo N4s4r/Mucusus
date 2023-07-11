@@ -115,7 +115,6 @@ void menuGUI::render(Camera* cam2d)
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 	glDisable(GL_BLEND);
-	//SDL_GL_SwapWindow(window);
 };
 
 void menuGUI::update()

@@ -11,12 +11,14 @@ StageIntro::StageIntro()
 
 void StageIntro::render() 
 {
+	SDL_Window* window = Game::instance->window;
 	glClearColor(1.0, 0.0, 1.0, 1.0);
 	int wWidth = Game::instance->window_width;
 	int wHeight = Game::instance->window_height;
 	cam2d.view_matrix = Matrix44();
 	cam2d.setOrthographic(0, wWidth, wHeight, 0, -1, 1);
 	menu->render(&cam2d);
+	SDL_GL_SwapWindow(window);
 };
 
 void StageIntro::update(double seconds_elapsed) 

@@ -1,12 +1,27 @@
 #pragma once
-#include "entityMesh.h"
+#include "entity.h"
 
-class entityDoor : public EntityMesh
+#define OPENING_SPEED 1.0f;
+#define CLOSING_SPEED 2.0f;
+
+struct meshLOD {
+    Mesh* meshFULL;
+    Mesh* meshMID;
+    Mesh* meshLOW;
+};
+
+class EntityDoor : public Entity
 {
 public:
-	entityDoor();
+    EntityDoor();
+    EntityDoor(meshLOD* mesh, Shader* shader, Texture* texture);
 
-	bool isClose = true;
+    Shader* shader;
+    meshLOD* mesh;
+    Texture* texture;
+
+	bool isExternal;
+	bool isClosed = true;
 
 	void close();
 	void open();
