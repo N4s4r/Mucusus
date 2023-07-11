@@ -6,12 +6,14 @@
 #include "entityMeshRoom.h"
 #include "entityPlayer.h"
 #include "gameHUD.h"
+#include "enemyManager.h"
 
 class StageGame : public Stage
 {
 public:
     Camera cam2d;
     Camera minimap;
+    EnemyManager *enemy_manager = new EnemyManager();
 
     gameHUD HUD;
 

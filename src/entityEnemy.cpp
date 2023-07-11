@@ -1,5 +1,7 @@
 #include "entityEnemy.h"
 
+#include "entityPlayer.h"
+
 EntityEnemy::EntityEnemy()
 {
     // To render
@@ -15,6 +17,7 @@ void EntityEnemy::render()
 {
     if (mesh && texture && shader)
     {
+        cout << "Rendering SUSSUSUS" << rand() << endl;
         shader->enable();
         shader->setUniform("u_color", Vector4(1, 1, 1, 1));
         shader->setUniform("u_viewprojection", Camera::current->viewprojection_matrix);
@@ -28,9 +31,12 @@ void EntityEnemy::render()
 void EntityEnemy::update(float dt)
 {
     // TODO: move the enemy
+    // Move the enemy to the player
+    // Import game
+    Vector3 playerPos = Game::instance->player->model.getTranslation();
 }
 
-bool EntityEnemy::checkMeshCollision(vt<sCollisionData>& collisions, Matrix44 globalMatrix, Mesh* mesh)
+bool EntityEnemy::checkMeshCollision(vt<sCollisionData> &collisions, Matrix44 globalMatrix, Mesh *mesh)
 {
     Vector3 position = model.getTranslation();
 
@@ -38,7 +44,7 @@ bool EntityEnemy::checkMeshCollision(vt<sCollisionData>& collisions, Matrix44 gl
     Vector3 colPoint, colNormal;
     if (mesh->testSphereCollision(globalMatrix, position, sphereRadius, colPoint, colNormal))
     {
-        collisions.push_back({ colPoint, colNormal.normalize() });
+        collisions.push_back({colPoint, colNormal.normalize()});
     }
     return !collisions.empty();
 }

@@ -6,6 +6,9 @@
 #include "shader.h"
 #include "camera.h"
 #include "utils.h"
+#include "game.h"
+
+class EntityPlayer;
 
 class EntityEnemy : public Entity
 {
@@ -29,6 +32,6 @@ public:
     void render();
     void update(float dt);
 
-    bool checkMeshCollision(vt<sCollisionData>& collisions, Matrix44 globalMatrix, Mesh* mesh);
+    bool checkMeshCollision(vt<sCollisionData> &collisions, Matrix44 globalMatrix, Mesh *mesh);
     void applyInputDamage(float damage);
 };

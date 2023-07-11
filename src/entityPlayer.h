@@ -21,7 +21,7 @@ public:
 	// Movement
 	float mouse_speed = 100.0f;
 	float player_speed = 100.0f;
-	float camera_rotation_speed = 5.0f;
+	float camera_rotation_speed = 1.0f;
 	float angle = 0;
 	float yaw;
 	float gravity_speed = 30.0f;

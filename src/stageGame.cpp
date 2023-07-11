@@ -6,6 +6,7 @@
 
 StageGame::StageGame()
 {
+	enemy_manager->addNormalEnemy(Vector3(0, 1, 0));
 	HUD.initHUD();
 	updateMinimap();
 }
@@ -87,14 +88,15 @@ void StageGame::render()
 			frustrumCulling(entity, camera->eye);
 		}
 	}
+
+	// render enemies
+	enemy_manager->render();
+
 	HUD.render();
 	renderMinimap();
 
 	// render the FPS, Draw Calls, etc
 	drawText(2, 2, getGPUStats(), Vector3(1, 1, 1), 2);
-
-	// swap between front buffer and back buffer
-	SDL_GL_SwapWindow(window);
 }
 
 void StageGame::update(double seconds_elapsed)
@@ -103,6 +105,9 @@ void StageGame::update(double seconds_elapsed)
 	EntityMeshRoom *room = Game::instance->room;
 	player->update(seconds_elapsed);
 	room->update(seconds_elapsed);
+
+	// Update enemies
+	enemy_manager->update(seconds_elapsed);
 
 	// to navigate with the mouse fixed in the middle
 	if (Game::instance->mouse_locked)
