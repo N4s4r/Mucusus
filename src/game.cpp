@@ -20,7 +20,7 @@
 #include "enemyManager.h"
 
 // Game params
-float camera_rotation_speed = 0.5f;
+float camera_rotation_speed = 5.0f;
 float camera_move_speed = 5.0f;
 float camera_jump_speed = 10.0f;
 
@@ -35,6 +35,8 @@ float mouse_speed = 100.0f;
 FBO *fbo = NULL;
 STAGE_ID currentStage;
 vt<Stage *> stages;
+
+// Enemies
 
 Game *Game::instance = NULL;
 
@@ -99,14 +101,13 @@ Game::Game(int window_width, int window_height, SDL_Window *window)
 	world = new World();
 	world->loadRooms();
 	world->randomLoad();
-	// world->setTestRooms();
+	//world->setTestRooms();
 
 	// Audio
-	if (BASS_Init(-1, 44100, 0, 0, NULL) == false)
-	{
+	if (BASS_Init(-1, 44100, 0, 0, NULL) == false) {
 		// Error with sound device
 	}
-	// channel = Audio::Play("data/audios/test.wav", BASS_SAMPLE_LOOP);
+	//channel = Audio::Play("data/audios/test.wav", BASS_SAMPLE_LOOP);
 
 	// hide the cursor
 	SDL_ShowCursor(!mouse_locked); // hide or show the mouse
@@ -116,8 +117,6 @@ Game::Game(int window_width, int window_height, SDL_Window *window)
 void Game::render(void)
 {
 	getCurrentStage()->render();
-
-	// swap between front buffer and back buffer
 	SDL_GL_SwapWindow(window);
 }
 
@@ -128,7 +127,7 @@ void Game::update(double seconds_elapsed)
 		camera_yaw += Input::mouse_delta.x * camera_rotation_speed * seconds_elapsed;
 		camera_pitch += Input::mouse_delta.y * camera_rotation_speed * seconds_elapsed;
 
-		camera_pitch = clamp(camera_pitch, -M_PI * 0.49, M_PI * 0.49);
+		camera_pitch = clamp(camera_pitch, -M_PI * 0.25, M_PI * 0.25);
 	}
 	if (Input::isKeyPressed(SDL_SCANCODE_C))
 	{
@@ -136,6 +135,7 @@ void Game::update(double seconds_elapsed)
 	}
 
 	getCurrentStage()->update(seconds_elapsed);
+	enemy_manager->update(seconds_elapsed);
 }
 
 // Keyboard event handler (sync input)

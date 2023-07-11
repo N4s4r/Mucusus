@@ -13,7 +13,6 @@
 class EntityMeshRoom;
 class EntityPlayer;
 class World;
-enum STAGE_ID;
 
 class Game
 {

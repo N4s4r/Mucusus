@@ -18,6 +18,9 @@
 #define GRIDWIDTH 4
 #define GRIDHEIGHT 4
 
+class EntityEnemy;
+class EntityBullet;
+
 class World
 {
 public:
@@ -27,6 +30,12 @@ public:
 
     vt<EntityMeshRoom *> roomTypes;
     vt<EntityMeshRoom*> mapGrid{ GRIDWIDTH * GRIDHEIGHT };
+
+	vt<EntityEnemy*> activeEnemies;
+
+	vt<EntityBullet*> bulletBuffer;
+	EntityBullet* bullet;
+	//vt<EntityBullet*> activeBullets;
 
     EntityMeshRoom* currentRoom;
 
@@ -58,4 +67,8 @@ public:
     void update();
     void setCurrentRoom();
 	void render();
+
+	void initializeBullets(int nBullets = MAX_BULLETS);
+	void shootBullet(Vector3 direction, EntityEnemy* source = NULL);
+	void stashBullet(EntityBullet* bullet);
 };

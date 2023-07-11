@@ -81,6 +81,12 @@ void EntityPlayer::update(float dt)
 	{
 		velocity = velocity - (right.normalize() * playerSpeed * dt);
 	}
+	if (shootingCD == 0.0f && Input::isMousePressed(SDL_BUTTON_LEFT))
+	{
+		Vector3 bulletDir = Game::instance->camera->center;
+		Game::instance->world->shootBullet(bulletDir);
+		shootingCD = 1 / caddence; 
+	}
 	if (on_ground > 0 && Input::isKeyPressed(SDL_SCANCODE_SPACE) && jump_cooldown == 0.0f)
 	{
 		velocity.y = 10.0f;
@@ -143,9 +149,10 @@ void EntityPlayer::update(float dt)
 	// update timers
 	on_ground = clamp(on_ground - dt, 0.0f, 999.0f);
 	jump_cooldown = clamp(jump_cooldown - dt, 0.0f, 999.0f);
+	shootingCD = clamp(shootingCD - dt, 0.0f, 999.0f);
 
-	if (statChange) 
+	//if (statChange) 
 
 	//std::cout << position.x << position.y << position.z << std::endl;
-	std::cout << on_ground << std::endl;
+	/*std::cout << on_ground << std::endl;*/
 }

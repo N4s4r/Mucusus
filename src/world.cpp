@@ -1,10 +1,46 @@
 #include "world.h"
 #include "entityPlayer.h"
+#include "entityBullet.h"
 
 
 World::World()
 {
+	initializeBullets();
+	bullet = new EntityBullet();
+}
 
+void World::initializeBullets(int nBullets)
+{
+	for (int i = 0; i < nBullets; i++)
+	{
+		EntityBullet* bullet = new EntityBullet();
+		bulletBuffer.push_back(bullet);
+	}
+}
+
+void World::shootBullet(Vector3 direction, EntityEnemy* source) 
+{
+	//EntityBullet* bullet = bulletBuffer[0];
+
+	auto it = std::find_if(bulletBuffer.begin(), bulletBuffer.end(), [&](const auto& ptr) {	return ptr == bullet; });
+	if (source)
+	{
+		bullet->enemySource = source;
+		bullet->velocity = source->projectileSpeed;
+	}
+	else
+	{
+		bullet->velocity = Game::instance->player->projectileSpeed;
+	}
+	bullet->direction = direction;
+	bullet->activate();
+	Vector3 pos = Game::instance->camera->eye;
+	bullet->model.setTranslation(pos.x, pos.y, pos.z);
+	//bullet.model.setTranslation(position.x, position.y, position.z);
+}
+
+void World::stashBullet(EntityBullet* bullet)
+{
 }
 
 void World::loadRooms()
@@ -122,3 +158,34 @@ void World::render()
 {
 
 }
+
+//void World::stashBullet(EntityBullet* bullet)
+//{
+//	// Find the position of the desired pointer in vectorA
+//	auto it = std::find_if(activeBullets.begin(), activeBullets.end(), [&](const auto& ptr) {
+//		return ptr.get() == bullet->get();
+//	});
+//
+//	if (it != activeBullets.end()) {
+//		// Use std::move to transfer ownership of the pointer from vectorA to vectorB
+//		bulletBuffer.emplace_back(std::move(*it));
+//		activeBullets.erase(it); // Remove the pointer from vectorA
+//	}
+//}
+//
+//void World::shootBullet(Vector3 direction, EntityEnemy* source)
+//{
+//	EntityBullet* bullet = bulletBuffer[0];
+//	auto it = std::find_if(activeBullets.begin(), activeBullets.end(), [&](const auto& ptr) {
+//		return ptr.get() == bullet->get();
+//		});
+//	if (source)
+//	{
+//		bullet->enemySource = source;
+//		bullet->velocity = source->projectileSpeed;
+//		bullet->direction = direction;
+//		bullet->activate();
+//		activeBullets.push_back(std::move(*it));
+//		bulletBuffer.erase(it);
+//	}
+//}

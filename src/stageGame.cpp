@@ -1,7 +1,7 @@
 #include "stageGame.h"
 #include <iostream>
 #include <string>
-
+#include "entityBullet.h"
 #include "mesh.h"
 
 StageGame::StageGame()
@@ -81,6 +81,7 @@ void StageGame::render()
 	}
 	*/
 
+
 	EACH(room, Game::instance->world->mapGrid)
 	{
 		EACH(entity, room->staticEntities)
@@ -88,7 +89,13 @@ void StageGame::render()
 			frustrumCulling(entity, camera->eye);
 		}
 	}
-
+	EACH(bullet, Game::instance->world->bulletBuffer)
+	{
+		if (bullet->isActive) bullet->render();
+	}
+	EntityBullet* sbullet = Game::instance->world->bullet;
+	if (sbullet->isActive) sbullet->render();
+	
 	// render enemies
 	enemy_manager->render();
 
@@ -97,6 +104,9 @@ void StageGame::render()
 
 	// render the FPS, Draw Calls, etc
 	drawText(2, 2, getGPUStats(), Vector3(1, 1, 1), 2);
+
+	// swap between front buffer and back buffer
+	SDL_GL_SwapWindow(window);
 }
 
 void StageGame::update(double seconds_elapsed)
@@ -109,6 +119,12 @@ void StageGame::update(double seconds_elapsed)
 	// Update enemies
 	enemy_manager->update(seconds_elapsed);
 
+	EACH(bullet, Game::instance->world->bulletBuffer)
+	{
+		if (bullet->isActive) bullet->update(seconds_elapsed);
+	}
+	EntityBullet* sbullet = Game::instance->world->bullet;
+	if (sbullet->isActive) sbullet->update(seconds_elapsed);
 	// to navigate with the mouse fixed in the middle
 	if (Game::instance->mouse_locked)
 		Input::centerMouse();
@@ -117,6 +133,7 @@ void StageGame::update(double seconds_elapsed)
 		HUD.updateHUDElements();
 		player->statChange = false;
 	}
+
 	updateMinimap();
 }
 

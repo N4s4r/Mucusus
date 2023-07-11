@@ -11,20 +11,24 @@ public:
     EntityBullet(Mesh* mesh, Shader* shader, Texture* texture);
 
     Shader* shader;
-    Mesh* mesh;
+    Mesh* meshFULL;
+    Mesh* meshMID;
+    Mesh* meshLOW;
     Texture* texture;
 
-    EntityEnemy* enemySource = NULL;
+    EntityEnemy* enemySource = nullptr;
 
     Vector3 direction;
-    
+
+    float velocity;
     float liveTime;
     
     bool isActive = false;
 
-    void activate();
+    void activate(EntityEnemy* source = nullptr);
     void deactivate();
 
     virtual void update(float dt) override;
+    void render();
 };
 

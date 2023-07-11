@@ -2,7 +2,7 @@
 #include "game.h"
 #include "input.h"
 
-menuGUI::menuGUI(vt<char *> menuOptions)
+menuGUI::menuGUI(vt<char*> menuOptions)
 {
 	selectionBoxTexture = Texture::Get("data/textures/ceiling.tga");
 	pointerTexture = Texture::Get("data/textures/HUD/glove.tga");
@@ -16,13 +16,14 @@ menuGUI::menuGUI(vt<char *> menuOptions)
 		selectionBoxes.push_back(quad);
 	}
 
+
 	initMenuBoxes();
 	menuBoxesInitSize = Game::instance->window_height;
 }
 
 int menuGUI::getMenuLength()
 {
-	return menuOptions.size();
+    return menuOptions.size();
 }
 
 void menuGUI::initMenuBoxes()
@@ -42,14 +43,13 @@ void menuGUI::initMenuBoxes()
 		selectionBoxes[i].vertices.clear();
 		selectionBoxes[i].createQuad(boxX, y, boxW, boxH, true);
 
-		// TEXT
+		//TEXT
 		menuOptions[i].scale = wWidth / 400;
 		menuOptions[i].position = Vector2(boxX - strlen(menuOptions[i].text) * (3 + menuOptions[i].scale), y - 10);
 	}
 	// Menu selector
 	float selX = boxX - boxW / 2 - 50;
-	float y = boxSpacing * selectedOption + yScreenMargin;
-	;
+	float y = boxSpacing * selectedOption + yScreenMargin;;
 	float w = 50;
 	float h = 50;
 	pointerMesh.vertices.clear();
@@ -68,8 +68,7 @@ void menuGUI::moveSelector()
 	float boxSpacing = (wHeight - yScreenMargin) / getMenuLength();
 
 	float selX = boxX - boxW / 2 - 50;
-	float y = boxSpacing * selectedOption + yScreenMargin;
-	;
+	float y = boxSpacing * selectedOption + yScreenMargin;;
 	float w = 50;
 	float h = 50;
 
@@ -78,15 +77,14 @@ void menuGUI::moveSelector()
 	pointerMesh.createQuad(selX, y, w, h, true);
 }
 
-void menuGUI::render(Camera *cam2d)
+void menuGUI::render(Camera* cam2d)
 {
-	if (menuBoxesInitSize != Game::instance->window_height)
-	{ // resize window
+	if (menuBoxesInitSize != Game::instance->window_height) { //resize window
 		menuBoxesInitSize = Game::instance->window_height;
 		initMenuBoxes();
 	}
 
-	SDL_Window *window = Game::instance->window;
+	SDL_Window* window = Game::instance->window;
 
 	// Clear the window and the depth buffer
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -99,13 +97,13 @@ void menuGUI::render(Camera *cam2d)
 
 	cam2d->enable();
 
-	// Render Quads
+	//Render Quads
 	for (int i = 0; i < selectionBoxes.size(); i++)
 	{
 		Mesh quad = selectionBoxes[i];
 		renderQuad(quad, selectionBoxTexture, cam2d);
 	}
-	// Render selector
+	//Render selector
 	renderQuad(pointerMesh, pointerTexture, cam2d);
 	// Render text
 	for (int i = 0; i < menuOptions.size(); i++)
@@ -117,39 +115,35 @@ void menuGUI::render(Camera *cam2d)
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 	glDisable(GL_BLEND);
+	//SDL_GL_SwapWindow(window);
 };
 
 void menuGUI::update()
 {
-	if (Input::wasKeyPressed(SDL_SCANCODE_S))
-	{
+	if (Input::wasKeyPressed(SDL_SCANCODE_S)) {
 		selectedOption = (selectedOption + 1) % getMenuLength();
 		moveSelector();
 	}
 
-	if (Input::wasKeyPressed(SDL_SCANCODE_W))
-	{
+	if (Input::wasKeyPressed(SDL_SCANCODE_W)) {
 		int to_option = (selectedOption - 1) % getMenuLength();
-		if (to_option < 0)
-			to_option = getMenuLength() - 1;
+		if (to_option < 0) to_option = getMenuLength() - 1;
 		selectedOption = to_option;
 		moveSelector();
 	}
 }
 
-void menuGUI::renderQuad(Mesh quad, Texture *texture, Camera *cam2d)
+void menuGUI::renderQuad(Mesh quad, Texture* texture, Camera* cam2d)
 {
-	Shader *qShader = Shader::Get("data/shaders/basic.vs", "data/shaders/gui.fs");
+	Shader* qShader = Shader::Get("data/shaders/basic.vs", "data/shaders/gui.fs");
 
-	if (!qShader)
-		return;
+	if (!qShader) return;
 
 	qShader->enable();
 
 	qShader->setUniform("u_color", Vector4(1, 1, 1, 1));
 	qShader->setUniform("u_viewprojection", cam2d->viewprojection_matrix);
-	if (texture != NULL)
-	{
+	if (texture != NULL) {
 		qShader->setUniform("u_texture", texture, 0);
 	}
 	qShader->setUniform("u_time", Game::instance->time);
