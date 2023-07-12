@@ -4,6 +4,7 @@
 #include "entityBullet.h"
 #include "mesh.h"
 #include "enemyManager.h"
+#include "entityDoor.h"
 
 StageGame::StageGame()
 {
@@ -27,6 +28,22 @@ void frustrumCulling(EntityMesh *entity, Vector3 camPos)
 		return;
 	}
 	entity->render();
+}
+
+void frustrumCulling(EntityDoor* door, Vector3 camPos)
+{
+	Vector3 entityPos = door->getGlobalPosition();
+	Mesh* entityMesh = door->meshFULL;
+	float dist = entityPos.distance(camPos);
+	if (dist > 500)
+	{
+		return;
+	}
+	if (!Game::instance->camera->testSphereInFrustum(entityPos, entityMesh->radius))
+	{
+		return;
+	}
+	door->render();
 }
 
 void StageGame::render()
@@ -87,9 +104,15 @@ void StageGame::render()
 
 	EACH(room, Game::instance->world->mapGrid)
 	{
-		EACH(entity, room->staticEntities)
-		{
-			frustrumCulling(entity, camera->eye);
+		if (room) {
+			EACH(entity, room->staticEntities)
+			{
+				frustrumCulling(entity, camera->eye);
+			}
+			EACH(door, room->roomDoors)
+			{
+				frustrumCulling(door, camera->eye);
+			}
 		}
 	}
 	EACH(bullet, Game::instance->world->bulletBuffer)
@@ -115,9 +138,7 @@ void StageGame::render()
 void StageGame::update(double seconds_elapsed)
 {
 	EntityPlayer *player = Game::instance->player;
-	EntityMeshRoom *room = Game::instance->room;
 	player->update(seconds_elapsed);
-	room->update(seconds_elapsed);
 
 	// Update enemies
 	enemy_manager->update(seconds_elapsed);

@@ -85,7 +85,6 @@ Game::Game(int window_width, int window_height, SDL_Window *window)
 	camera->lookAt(Vector3(0.f, 1.f, 0.001f), Vector3(0.f, 0.f, 0.f), Vector3(0.f, 1.f, 0.f)); // position the camera and point to 0,0,0
 	camera->setPerspective(70.f, window_width / (float)window_height, 0.1f, 10000.f);		   // set the projection, we want to be perspective
 	player = new EntityPlayer();
-	player->model.setTranslation(8.0f, 0.5f, 8.0f);
 
 	initStages();
 	setStage(STAGE_ID::INTRO);
@@ -94,17 +93,21 @@ Game::Game(int window_width, int window_height, SDL_Window *window)
 	// Create the room
 	wall_texture = Texture::Get("data/textures/wall.tga");
 	floor_texture = Texture::Get("data/textures/box.tga");
-	room = new EntityMeshRoom();
-	room->parseScene("roomDiamond");
 
 	// Load the world
 	world = new World();
 	world->loadRooms();
-	world->randomLoad();
+	while (world->placedRooms < world->totalRooms)
+	{
+		world->mapGrid.empty();
+		world->placedRooms = 0;
+		world->randomLoad();
+	}
+	world->placeRoomsDoors();
 	//world->setTestRooms();
 
 	// Audio
-	if (BASS_Init(-1, 44100, 0, 0, NULL) == false) {
+ 	if (BASS_Init(-1, 44100, 0, 0, NULL) == false) {
 		// Error with sound device
 	}
 	//channel = Audio::Play("data/audios/test.wav", BASS_SAMPLE_LOOP);

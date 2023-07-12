@@ -3,6 +3,7 @@
 #include "entity.h"
 
 class EntityMesh;
+class EntityDoor;
 
 class EntityMeshRoom : public Entity
 {
@@ -16,8 +17,14 @@ class EntityMeshRoom : public Entity
 	std::map<std::string, sRenderData> meshes_to_load;
 
 public:
+	EntityMeshRoom(bool isRoom);
+	int roomID = -1;
+	bool isRoom;
+	bool isEdge;
+
 	Matrix44 room_model;
 	vt<EntityMesh *> staticEntities;
+	vt<EntityDoor *> roomDoors;
 
 	EntityMesh *ceiling = NULL;
 	EntityMesh *floor = NULL;
@@ -43,6 +50,8 @@ public:
 
 	bool parseScene(const char *filename);
 	void addStaticEntity(EntityMesh *entity);
+
+	void loadDoors();
 
 	bool isCleared = false;
 };

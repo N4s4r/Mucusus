@@ -6,7 +6,11 @@
 EntityPlayer::EntityPlayer()
 {
 	camera = Game::instance->camera;
-
+	int roomID = GRIDHEIGHT * GRIDHEIGHT / 2;
+	int i = roomID % GRIDHEIGHT;
+	int j = roomID / GRIDHEIGHT;
+	Vector3 playerPosition = Vector3(j * 16.0f + 8.0f, 0.5f, i * 16.0f + 8.0f);
+	model.setTranslation(playerPosition.x , playerPosition.y, playerPosition.z);
 }
 
 void EntityPlayer::movePlayer(Vector3 delta)
@@ -99,7 +103,8 @@ void EntityPlayer::update(float dt)
 	vt<sCollisionData> collisions;
 	EACH(room, world->mapGrid)
 	{
-		if (checkRoomCollisions(to_pos, collisions, room))
+		if (!room) continue;
+		if (checkRoomCollisions(to_pos, collisions, room, 0.5f))
 		{
 			EACH(collision, collisions)
 			{

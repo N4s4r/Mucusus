@@ -1,7 +1,7 @@
 #include "world.h"
 #include "entityPlayer.h"
 #include "entityBullet.h"
-
+#include "entityDoor.h"
 
 World::World()
 {
@@ -47,7 +47,7 @@ void World::loadRooms()
 {
 	for (int i = 0; i < ROOMTYPES; i++)
 	{
-		EntityMeshRoom* room = new EntityMeshRoom();
+		EntityMeshRoom* room = new EntityMeshRoom(false);
 		room->parseScene(this->roomTypeNames[i]);
 		this->roomTypes.push_back(room);
 	}
@@ -81,49 +81,55 @@ void World::loadRooms()
 //	}
 //}
 
+void World::placeRoom(int roomID, int roomType) 
+{
+	EntityMeshRoom* room = new EntityMeshRoom(true);
+	room->parseScene(roomTypeNames[roomType]);
+	int i = roomID % GRIDHEIGHT;
+	int j = roomID / GRIDHEIGHT;
+	room->roomID = roomID;
+	Vector3 roomPosition = Vector3(j * 16.0f, .0f, i * 16.0f);
+	room->model.setTranslation(roomPosition.x, roomPosition.y, roomPosition.z);
+	mapGrid[roomID] = room;
+	placedRooms += 1;
+}
+
+void World::tryNeighbour(int roomID)
+{
+	std::srand(std::time(0));
+	if (roomID < GRIDHEIGHT || roomID > GRIDHEIGHT * (GRIDHEIGHT - 1) || roomID % GRIDHEIGHT == 0 || (roomID + 1) % GRIDHEIGHT == 0) return; // edges must be empty
+	if (mapGrid[roomID]) return; // already a room
+	int neighbourNeighbours = 0;
+	for (int i = 0; i < 4; i++) // count Neighbour Neighbours
+	{
+		if (mapGrid[roomID + neightbourOps[i]]) neighbourNeighbours += 1;
+	}
+	if (neighbourNeighbours > 2) return; // if more than two neighbours continue
+	if (placedRooms == totalRooms) return; // All rooms placed
+	if (std::rand() % 2 == 1) return; // 50% of filling the room
+	placeRoom(roomID, std::rand() % 3); // place room
+	
+	for (int i = 0; i < 4; i++)
+	{
+		tryNeighbour(roomID + neightbourOps[i]);
+	}
+}
+
 void World::randomLoad()
 {
 	// Seed the random number generator
 	std::srand(std::time(0));
+	totalRooms = 8 + std::rand() % 3;
+	int roomID, roomType, neighbour, neighbourNeighbours;
+	roomID = GRIDHEIGHT * GRIDHEIGHT / 2;
+	// Place central Room
+	placeRoom(roomID, 0);
+	placedRooms += 1;
 
-	int roomType;
-	for (int i = 0; i < GRIDWIDTH; i++)
+	// access Neighbours
+	for (int i = 0; i < 4; i++)
 	{
-		for (int j = 0; j < GRIDHEIGHT; j++)
-		{
-			if (i == 0 && j == 0)
-			{
-				roomType = 0;
-			} 
-			else
-			{
-				roomType = std::rand() % 3;
-			}
-			EntityMeshRoom* room = new EntityMeshRoom();
-			room->parseScene(roomTypeNames[roomType]);
-			Vector3 roomPosition = Vector3(j * 16.0f, .0f, i * 16.0f);
-			room->model.setTranslation(roomPosition.x, roomPosition.y, roomPosition.z);
-			mapGrid[i * GRIDHEIGHT + j] = room;
-			if (room->ceiling) ceiling.push_back(room->ceiling);
-			if (room->floor) floor.push_back(room->floor);
-			if (room->pilarEast) pilarEast.push_back(room->pilarEast);
-			if (room->pilarWest) pilarWest.push_back(room->pilarWest);
-			if (room->pilarSouth) pilarSouth.push_back(room->pilarSouth);
-			if (room->pilarNorth) pilarNorth.push_back(room->pilarNorth);
-			if (room->bigaEast) bigaEast.push_back(room->bigaEast);
-			if (room->bigaWest) bigaWest.push_back(room->bigaWest);
-			if (room->bigaSouth) bigaSouth.push_back(room->bigaSouth);
-			if (room->bigaNorth) bigaNorth.push_back(room->bigaNorth);
-			if (room->wallEast) wallEast.push_back(room->wallEast);
-			if (room->wallWest) wallWest.push_back(room->wallWest);
-			if (room->wallSouth) wallSouth.push_back(room->wallSouth);
-			if (room->wallNorth) wallNorth.push_back(room->wallNorth);
-			if (room->midCube) midCube.push_back(room->midCube);
-			if (room->diagonalNW) diagonalNW.push_back(room->diagonalNW);
-			if (room->diagonalSW) diagonalSW.push_back(room->diagonalSW);
-			if (room->diagonalNE) diagonalNE.push_back(room->diagonalNE);
-			if (room->diagonalSE) diagonalSE.push_back(room->diagonalSE);
-		}
+		tryNeighbour(roomID + neightbourOps[i]);
 	}
 }
 
@@ -137,7 +143,6 @@ void World::setTestRooms()
 		room->model.setTranslation(roomPosition.x, roomPosition.y, roomPosition.z);
 		mapGrid[i] = room;
 	}
-	
 }
 
 void World::update()
@@ -152,6 +157,52 @@ void World::setCurrentRoom()
 
 	std::cout << i << j << std::endl;
 	currentRoom = mapGrid[i * GRIDHEIGHT + j];
+}
+
+int World::countRoomNeighbours(EntityMeshRoom* room)
+{
+	int neighbourNeighbours = 0;
+	for (int i = 0; i < 4; i++) // count Neighbour Neighbours
+	{
+		if (mapGrid[room->roomID + neightbourOps[i]]) neighbourNeighbours += 1;
+	}
+	return neighbourNeighbours;
+}
+
+void World::placeRoomsDoors()
+{
+ 	EACH(room, mapGrid)
+	{
+		if (!room) continue;
+		int neighbourNeighbours = 0;
+		int roomID = room->roomID;
+		bool isExternal = false;
+		for (int direction = NORTH; direction < 4; direction++) // count Neighbour Neighbours
+		{
+			bool isExternal = false;
+			if (mapGrid[room->roomID + neightbourOps[direction]]) isExternal = true;
+			Vector3 position;
+			switch (direction)
+			{
+			case NORTH:
+				position = Vector3(16.0f, 0.0f, 6.0f);
+				break;
+			case EAST:
+				position = Vector3(10.0f, 0.0f, 16.0f);
+				break;
+			case SOUTH:
+				position = Vector3(0.0f, 0.0f, 6.0f);
+				break;
+			case WEST:
+				position = Vector3(6.0f, 0.0f, 0.0f);
+				break;
+			}
+			EntityDoor* door = new EntityDoor(position, isExternal);
+			room->children.push_back(door);
+			door->parent = room;
+			room->roomDoors.push_back(door);
+		}
+	}
 }
 
 void World::render()

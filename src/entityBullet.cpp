@@ -48,7 +48,8 @@ void EntityBullet::update(float dt)
 	vt<sCollisionData> collisions;
 	EACH(room, world->mapGrid)
 	{
-		if (checkRoomCollisions(to_pos, collisions, room))
+		if (!room) continue;
+		if (checkRoomCollisions(to_pos, collisions, room, 0.2f))
 		{
 			deactivate();
 			return;

@@ -15,21 +15,32 @@
 #define ROOMTYPES 3
 #define ROOMWIDTH 16
 #define ROOMHEIGHT 16
-#define GRIDWIDTH 4
-#define GRIDHEIGHT 4
+#define GRIDWIDTH 7
+#define GRIDHEIGHT 7
 
 class EntityEnemy;
 class EntityBullet;
+
+enum Directions {
+	NORTH = 0,
+	EAST = 1,
+	SOUTH = 2,
+	WEST = 3,
+};
 
 class World
 {
 public:
     World();
 
+	int totalRooms = 1;
+	int placedRooms = 0;
+
     char* roomTypeNames[ROOMTYPES] = { "roomBasic", "roomDiamond", "roomSquare" };
 
     vt<EntityMeshRoom *> roomTypes;
     vt<EntityMeshRoom*> mapGrid{ GRIDWIDTH * GRIDHEIGHT };
+	vt<int> neightbourOps = { GRIDWIDTH, 1, -GRIDWIDTH, -1 };
 
 	vt<EntityEnemy*> activeEnemies;
 
@@ -61,8 +72,13 @@ public:
 
     void loadRooms();
     void randomizeMap();
+	void placeRoom(int roomID, int roomType);
+	void tryNeighbour(int roomID);
     void randomLoad();
     void setTestRooms();
+
+	int countRoomNeighbours(EntityMeshRoom* room);
+	void placeRoomsDoors();
 
     void update();
     void setCurrentRoom();

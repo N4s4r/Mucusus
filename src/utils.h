@@ -56,7 +56,7 @@ struct sCollisionData
 
 class EntityMeshRoom;
 
-bool checkRoomCollisions(const Vector3& target_pos, vt<sCollisionData>& collisions, EntityMeshRoom* room);
+bool checkRoomCollisions(const Vector3& target_pos, vt<sCollisionData>& collisions, EntityMeshRoom* room, float sphereRadius);
 //bool checkPlayerCollisions(const Vector3& target_pos, vt<sCollisionData>& collisions, EntityMeshRoom* room)
 //{
 //	Vector3 center = target_pos + Vector3(0.f, 1.25f, 0.f);

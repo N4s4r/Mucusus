@@ -28,9 +28,8 @@ long getTime()
 #endif
 }
 
-bool checkRoomCollisions(const Vector3 &target_pos, vt<sCollisionData> &collisions, EntityMeshRoom *room)
+bool checkRoomCollisions(const Vector3 &target_pos, vt<sCollisionData> &collisions, EntityMeshRoom *room, float sphereRadius)
 {
-	float sphereRadius = 0.5f;
 	Vector3 colPoint, colNormal;
 
 	EACH(e, room->staticEntities)
