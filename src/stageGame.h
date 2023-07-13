@@ -6,6 +6,7 @@
 #include "entityMeshRoom.h"
 #include "entityPlayer.h"
 #include "gameHUD.h"
+#include "menuGUI.h"
 
 class EnemyManager;
 
@@ -16,11 +17,19 @@ public:
     Camera minimap;
     EnemyManager* enemy_manager;
 
+    bool battlePhase = false;
+
     gameHUD HUD;
+    menuGUI* GUI;
 
     StageGame();
+
+
     virtual void render();                       // empty body
     virtual void update(double seconds_elapsed); // empty body
+
+
+    void updateBattlePhase(double seconds_elapsed);
 
     void updateMinimap();
     void renderMinimap();

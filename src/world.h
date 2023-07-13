@@ -1,13 +1,11 @@
 #pragma once
 
 #include "defines.h"
-
 #include "entityMeshRoom.h"
 #include "includes.h"
 #include "camera.h"
 #include "utils.h"
 #include "shader.h"
-
 #include <cstdlib>
 #include <ctime>
 
@@ -20,13 +18,6 @@
 
 class EntityEnemy;
 class EntityBullet;
-
-enum Directions {
-	NORTH = 0,
-	EAST = 1,
-	SOUTH = 2,
-	WEST = 3,
-};
 
 class World
 {
@@ -47,8 +38,6 @@ public:
 	vt<EntityBullet*> bulletBuffer;
 	EntityBullet* bullet;
 	//vt<EntityBullet*> activeBullets;
-
-    EntityMeshRoom* currentRoom;
 
 	vt<EntityMesh*> ceiling;
 	vt<EntityMesh*> floor;
@@ -79,10 +68,13 @@ public:
 
 	int countRoomNeighbours(EntityMeshRoom* room);
 	void placeRoomsDoors();
+	EntityMeshRoom* getRoom(int x, int y);
 
     void update();
     void setCurrentRoom();
 	void render();
+
+	void setRoomClearStatus(int roomID);
 
 	void initializeBullets(int nBullets = MAX_BULLETS);
 	void shootBullet(Vector3 direction, EntityEnemy* source = NULL);

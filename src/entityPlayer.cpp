@@ -11,6 +11,7 @@ EntityPlayer::EntityPlayer()
 	int j = roomID / GRIDHEIGHT;
 	Vector3 playerPosition = Vector3(j * 16.0f + 8.0f, 0.5f, i * 16.0f + 8.0f);
 	model.setTranslation(playerPosition.x , playerPosition.y, playerPosition.z);
+	currentRoom = Game::instance->world->mapGrid[roomID];
 }
 
 void EntityPlayer::movePlayer(Vector3 delta)
@@ -23,20 +24,17 @@ bool checkPlayerOnGround(const Vector3& position, vt<sCollisionData>& collisions
 	float sphereRadius = 1.f;
 	Vector3 colPoint, colNormal;
 
-	EACH(e, room->staticEntities)
+	Mesh* mesh = room->floor->mesh;
+	if (mesh->testRayCollision(room->floor->getGlobalMatrix(), position, Vector3(0, -1, 0), colPoint, colNormal, 1.0f))
 	{
-		Mesh* mesh = e->mesh;
-		if (mesh->testRayCollision(e->model, position, Vector3(0, -1, 0), colPoint, colNormal, 1.0f))
-		{
-			return true;
-		}
+		return true;
 	}
-
 	return !collisions.empty();
 }
 
 void EntityPlayer::applyInputDamage(EntityEnemy* damageSource)
 {
+	// Audio 
 	health -= damageSource->damage;
 }
 
@@ -58,8 +56,8 @@ void EntityPlayer::update(float dt)
 	World* world = Game::instance->world;
 	bool mouse_locked = Game::instance->mouse_locked;
 	float speed = dt * mouse_speed; // the speed is defined by the seconds_elapsed so it goes constant
-	EntityMeshRoom* currentRoom = world->currentRoom;
 	Vector3 position = model.getTranslation();
+	currentRoom = world->getRoom(position.x / ROOMWIDTH, position.z / ROOMHEIGHT);
 
 	// mouse input to rotate the cam
 		//Update camera
@@ -101,29 +99,29 @@ void EntityPlayer::update(float dt)
 
 	Vector3 to_pos = position + velocity * dt;
 	vt<sCollisionData> collisions;
-	EACH(room, world->mapGrid)
+	//EACH(room, world->mapGrid)
+	//{
+	//	if (!room) continue;
+	if (checkRoomCollisions(to_pos, collisions, currentRoom, 0.5f))
 	{
-		if (!room) continue;
-		if (checkRoomCollisions(to_pos, collisions, room, 0.5f))
+		EACH(collision, collisions)
 		{
-			EACH(collision, collisions)
-			{
-				//position += collision.colNormal.normalize() * 0.0005f;
-				Vector3 newDir = velocity.dot(collision.colNormal);
-				newDir = newDir * collision.colNormal;
+			//position += collision.colNormal.normalize() * 0.0005f;
+			Vector3 newDir = velocity.dot(collision.colNormal);
+			newDir = newDir * collision.colNormal;
 
-				velocity.x -= newDir.x;
-				velocity.z -= newDir.z;
-				velocity.y -= newDir.y;
-			}
-		}
-		// Update on_ground
-		vt<sCollisionData> ground_collisions;
-		if (checkPlayerOnGround(position, ground_collisions, room))
-		{
-			on_ground = 0.2f;
+			velocity.x -= newDir.x;
+			velocity.z -= newDir.z;
+			velocity.y -= newDir.y;
 		}
 	}
+	// Update on_ground
+	vt<sCollisionData> ground_collisions;
+	if (checkPlayerOnGround(position, ground_collisions, currentRoom))
+	{
+		on_ground = 0.2f;
+	}
+	//}
 
 	position = position + velocity * dt;
 	velocity.x = velocity.x - (velocity.x * 10.0f * dt);
@@ -147,8 +145,7 @@ void EntityPlayer::update(float dt)
 	}
 	if (Input::isKeyPressed(SDL_SCANCODE_U))
 	{
-		maxHealth -= 1.0f;
-		statChange = true;
+		world->setRoomClearStatus(currentRoom->roomID);
 	}
 
 	// update timers
@@ -159,5 +156,5 @@ void EntityPlayer::update(float dt)
 	//if (statChange) 
 
 	//std::cout << position.x << position.y << position.z << std::endl;
-	/*std::cout << on_ground << std::endl;*/
+	std::cout << currentRoom->roomID << std::endl;
 }

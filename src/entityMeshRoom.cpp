@@ -199,3 +199,35 @@ void EntityMeshRoom::addStaticEntity(EntityMesh *entity)
 void EntityMeshRoom::loadDoors()
 {
 }
+
+void EntityMeshRoom::openDoor(Directions orientation)
+{
+	roomDoors[orientation]->open();
+}
+
+void EntityMeshRoom::closeDoor(Directions orientation)
+{
+	roomDoors[orientation]->close();
+}
+
+void EntityMeshRoom::openAllDoors()
+{
+	EACH(door, roomDoors)
+	{
+		door->open();
+	}
+}
+
+void EntityMeshRoom::closeAllDoors()
+{
+	EACH(door, roomDoors)
+	{
+		door->close();
+	}
+}
+
+void EntityMeshRoom::setClearStatus()
+{
+	isCleared = true;
+	openAllDoors();
+}

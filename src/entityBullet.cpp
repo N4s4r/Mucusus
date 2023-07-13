@@ -11,7 +11,7 @@ EntityBullet::EntityBullet()
 	meshMID = Mesh::Get("data/meshes/bullet_MID.obj");
 	meshLOW = Mesh::Get("data/meshes/bullet_LOW.obj");
 	shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
-	texture = Texture::Get("data/textures/wall2.tga");
+	texture = Texture::Get("data/textures/wall.tga");
 }
 
 void EntityBullet::activate(EntityEnemy* source)
@@ -38,7 +38,7 @@ void EntityBullet::update(float dt)
 
 	World* world = Game::instance->world;
 	EntityPlayer* player = Game::instance->player;
-	EntityMeshRoom* currentRoom = world->currentRoom;
+	EntityMeshRoom* currentRoom = player->currentRoom;
 	Vector3 position = model.getTranslation();
 	std::cout << position.x << " " << position.y << " " << position.z << " " << std::endl;
 

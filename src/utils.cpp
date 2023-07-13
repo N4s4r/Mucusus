@@ -14,6 +14,7 @@
 #include "shader.h"
 #include "mesh.h"
 #include "entityMeshRoom.h"
+#include "entityDoor.h"
 #include "extra/stb_easy_font.h"
 #include "entityMesh.h"
 
@@ -40,7 +41,14 @@ bool checkRoomCollisions(const Vector3 &target_pos, vt<sCollisionData> &collisio
 			collisions.push_back({colPoint, colNormal.normalize()});
 		}
 	}
-
+	EACH(e, room->roomDoors)
+	{
+		Mesh* mesh = e->meshFULL;
+		if (mesh->testSphereCollision(e->getGlobalMatrix(), target_pos, sphereRadius, colPoint, colNormal))
+		{
+			collisions.push_back({ colPoint, colNormal.normalize() });
+		}
+	}
 	return !collisions.empty();
 }
 

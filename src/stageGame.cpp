@@ -6,10 +6,14 @@
 #include "enemyManager.h"
 #include "entityDoor.h"
 
+#define STARTING_ROOM GRIDWIDTH * GRIDWIDTH / 2
+
 StageGame::StageGame()
 {
 	enemy_manager = new EnemyManager();
 	HUD.initHUD();
+	vt<char*> introOptions = { "pause" };
+	GUI = new menuGUI(introOptions);
 	updateMinimap();
 	enemy_manager->fillRoomWithEnemies();
 }
@@ -30,10 +34,10 @@ void frustrumCulling(EntityMesh *entity, Vector3 camPos)
 	entity->render();
 }
 
-void frustrumCulling(EntityDoor *door, Vector3 camPos)
+void frustrumCulling(EntityDoor* door, Vector3 camPos)
 {
 	Vector3 entityPos = door->getGlobalPosition();
-	Mesh *entityMesh = door->meshFULL;
+	Mesh* entityMesh = door->meshFULL;
 	float dist = entityPos.distance(camPos);
 	if (dist > 500)
 	{
@@ -101,10 +105,10 @@ void StageGame::render()
 	}
 	*/
 
+
 	EACH(room, Game::instance->world->mapGrid)
 	{
-		if (room)
-		{
+		if (room) {
 			EACH(entity, room->staticEntities)
 			{
 				frustrumCulling(entity, camera->eye);
@@ -117,13 +121,11 @@ void StageGame::render()
 	}
 	EACH(bullet, Game::instance->world->bulletBuffer)
 	{
-		if (bullet->isActive)
-			bullet->render();
+		if (bullet->isActive) bullet->render();
 	}
-	EntityBullet *sbullet = Game::instance->world->bullet;
-	if (sbullet->isActive)
-		sbullet->render();
-
+	EntityBullet* sbullet = Game::instance->world->bullet;
+	if (sbullet->isActive) sbullet->render();
+	
 	// render enemies
 	enemy_manager->render();
 
@@ -134,35 +136,66 @@ void StageGame::render()
 	drawText(2, 2, getGPUStats(), Vector3(1, 1, 1), 2);
 
 	// swap between front buffer and back buffer
+
+	if (!Game::instance->mouse_locked)
+	{
+		GUI->render(&cam2d);
+	}
+
 	SDL_GL_SwapWindow(window);
 }
 
 void StageGame::update(double seconds_elapsed)
 {
-	EntityPlayer *player = Game::instance->player;
-	player->update(seconds_elapsed);
-
-	// Update enemies
-	enemy_manager->update(seconds_elapsed);
-
-	EACH(bullet, Game::instance->world->bulletBuffer)
-	{
-		if (bullet->isActive)
-			bullet->update(seconds_elapsed);
-	}
-	EntityBullet *sbullet = Game::instance->world->bullet;
-	if (sbullet->isActive)
-		sbullet->update(seconds_elapsed);
-	// to navigate with the mouse fixed in the middle
 	if (Game::instance->mouse_locked)
-		Input::centerMouse();
-	if (player->statChange)
 	{
-		HUD.updateHUDElements();
-		player->statChange = false;
-	}
+		World* world = Game::instance->world;
+		if (!world->mapGrid[STARTING_ROOM]->isCleared) world->setRoomClearStatus(STARTING_ROOM);
+		EntityPlayer* player = Game::instance->player;
+		player->update(seconds_elapsed);
 
-	updateMinimap();
+		// Update enemies
+		enemy_manager->update(seconds_elapsed);
+
+		EACH(bullet, Game::instance->world->bulletBuffer)
+		{
+			if (bullet->isActive) bullet->update(seconds_elapsed);
+		}
+		EntityBullet* sbullet = Game::instance->world->bullet;
+		if (sbullet->isActive) sbullet->update(seconds_elapsed);
+		// to navigate with the mouse fixed in the middle
+		if (Game::instance->mouse_locked)
+			Input::centerMouse();
+		if (player->statChange)
+		{
+			HUD.updateHUDElements();
+			player->statChange = false;
+		}
+		EACH(room, Game::instance->world->mapGrid)
+		{
+			if (room) {
+				room->update(seconds_elapsed);
+			}
+		}
+		EntityMeshRoom* currentRoom = player->currentRoom;
+		std::cout << currentRoom->roomID << std::endl;
+		if (!currentRoom->isCleared)
+		{
+			currentRoom->closeAllDoors();
+			battlePhase = true;
+		}
+		updateMinimap();
+		if (battlePhase) updateBattlePhase(seconds_elapsed);
+	}
+	else
+	{
+		GUI->update();
+	}
+}
+
+void StageGame::updateBattlePhase(double seconds_elapsed)
+{
+	
 }
 
 void StageGame::updateMinimap()

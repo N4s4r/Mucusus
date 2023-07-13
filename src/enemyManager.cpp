@@ -53,7 +53,6 @@ void EnemyManager::fillRoomWithEnemies()
     // Add four enemies in the corners of the room where the player is, computing the position from the player position
     Vector3 playerPos = Game::instance->player->model.getTranslation();
     float distance = 2;
-    playerPos.y = 0;
     addNormalEnemy(playerPos + Vector3(distance, 0, distance));
     addNormalEnemy(playerPos + Vector3(distance, 0, -distance));
     addNormalEnemy(playerPos + Vector3(-distance, 0, distance));

@@ -90,13 +90,14 @@ void World::placeRoom(int roomID, int roomType)
 	room->roomID = roomID;
 	Vector3 roomPosition = Vector3(j * 16.0f, .0f, i * 16.0f);
 	room->model.setTranslation(roomPosition.x, roomPosition.y, roomPosition.z);
+	room->model.scale(0.999f, 0.999f, 0.999f);
+	room->floor->model.scale(1.002f, 1.002f, 1.002f);
 	mapGrid[roomID] = room;
 	placedRooms += 1;
 }
 
 void World::tryNeighbour(int roomID)
 {
-	std::srand(std::time(0));
 	if (roomID < GRIDHEIGHT || roomID > GRIDHEIGHT * (GRIDHEIGHT - 1) || roomID % GRIDHEIGHT == 0 || (roomID + 1) % GRIDHEIGHT == 0) return; // edges must be empty
 	if (mapGrid[roomID]) return; // already a room
 	int neighbourNeighbours = 0;
@@ -118,7 +119,6 @@ void World::tryNeighbour(int roomID)
 void World::randomLoad()
 {
 	// Seed the random number generator
-	std::srand(std::time(0));
 	totalRooms = 8 + std::rand() % 3;
 	int roomID, roomType, neighbour, neighbourNeighbours;
 	roomID = GRIDHEIGHT * GRIDHEIGHT / 2;
@@ -149,16 +149,6 @@ void World::update()
 {
 }
 
-void World::setCurrentRoom()
-{
-	Vector3 player_pos = Game::instance->player->model.getTranslation();
-	int i = player_pos.x / ROOMHEIGHT;
-	int j = player_pos.z / ROOMWIDTH;
-
-	std::cout << i << j << std::endl;
-	currentRoom = mapGrid[i * GRIDHEIGHT + j];
-}
-
 int World::countRoomNeighbours(EntityMeshRoom* room)
 {
 	int neighbourNeighbours = 0;
@@ -167,6 +157,21 @@ int World::countRoomNeighbours(EntityMeshRoom* room)
 		if (mapGrid[room->roomID + neightbourOps[i]]) neighbourNeighbours += 1;
 	}
 	return neighbourNeighbours;
+}
+
+void World::setRoomClearStatus(int roomID)
+{
+	if (mapGrid[roomID]) mapGrid[roomID]->setClearStatus();
+	for (int i = 0; i < 4; i++) // count Neighbour Neighbours
+	{
+		EntityMeshRoom* neighbour = mapGrid[roomID + neightbourOps[i]];
+		if (neighbour) neighbour->openDoor(static_cast<Directions>((i + 2) % 4));
+	}
+}
+
+EntityMeshRoom* World::getRoom(int x, int y)
+{
+	return mapGrid[x * GRIDHEIGHT + y];
 }
 
 void World::placeRoomsDoors()
@@ -179,25 +184,10 @@ void World::placeRoomsDoors()
 		bool isExternal = false;
 		for (int direction = NORTH; direction < 4; direction++) // count Neighbour Neighbours
 		{
-			bool isExternal = false;
-			if (mapGrid[room->roomID + neightbourOps[direction]]) isExternal = true;
-			Vector3 position;
-			switch (direction)
-			{
-			case NORTH:
-				position = Vector3(16.0f, 0.0f, 6.0f);
-				break;
-			case EAST:
-				position = Vector3(10.0f, 0.0f, 16.0f);
-				break;
-			case SOUTH:
-				position = Vector3(0.0f, 0.0f, 6.0f);
-				break;
-			case WEST:
-				position = Vector3(6.0f, 0.0f, 0.0f);
-				break;
-			}
-			EntityDoor* door = new EntityDoor(position, isExternal);
+			bool isExternal = true;
+			int neoghbourID = room->roomID + neightbourOps[direction];
+			if (mapGrid[neoghbourID]) isExternal = false;
+			EntityDoor* door = new EntityDoor(static_cast<Directions>(direction), isExternal);
 			room->children.push_back(door);
 			door->parent = room;
 			room->roomDoors.push_back(door);

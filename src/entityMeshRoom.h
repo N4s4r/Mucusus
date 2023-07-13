@@ -1,6 +1,7 @@
 #pragma once
 #include "defines.h"
 #include "entity.h"
+#include "entityDoor.h"
 
 class EntityMesh;
 class EntityDoor;
@@ -50,6 +51,14 @@ public:
 
 	bool parseScene(const char *filename);
 	void addStaticEntity(EntityMesh *entity);
+
+	void setClearStatus();
+
+	void closeAllDoors();
+	void closeDoor(Directions orientation);
+	void openAllDoors();
+	void openDoor(Directions orientation);
+
 
 	void loadDoors();
 

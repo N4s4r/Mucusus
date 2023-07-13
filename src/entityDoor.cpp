@@ -5,23 +5,45 @@ EntityDoor::EntityDoor()
 {
 }
 
-EntityDoor::EntityDoor(Vector3 position, bool isExternal)
+EntityDoor::EntityDoor(Directions direction, bool isExternal)
 {
-	this->isExternal = true;
+	Vector3 position;
+	switch (direction)
+	{
+	case NORTH:
+		model.setTranslation(16.0f, -0.1f, 8.0f);
+		rotationFactor = M_PI / 2.0f;
+		break;
+	case EAST:
+		model.setTranslation(8.0f, -0.1f, 16.0f);
+		rotationFactor = 0.0f;
+		break;
+	case SOUTH:
+		model.setTranslation(0.0f, -0.1f, 8.0f);
+		rotationFactor = -M_PI / 2.0f;
+		break;
+	case WEST:
+		model.setTranslation(8.0f, -0.1f, 0.0f);
+		rotationFactor = M_PI;
+		break;
+	}
+	model.rotate(rotationFactor, Vector3(.0f, 1.0f, .0f));
+	this->isExternal = isExternal;
 	if (isExternal)
 	{
-		meshFULL = Mesh::Get("data/meshes/InteractiveDoor_FULL.obj");
-		meshMID = Mesh::Get("data/meshes/InteractiveDoor_MID.obj");
-		meshLOW = Mesh::Get("data/meshes/InteractiveDoor_LOW.obj");
+		meshFULL = Mesh::Get("data/meshes/Door.obj");
+		meshMID = Mesh::Get("data/meshes/Door.obj");
+		meshLOW = Mesh::Get("data/meshes/Door.obj");
+		texture = Texture::Get("data/textures/externalDoor.tga");
 	}
 	else
 	{
-		meshFULL = Mesh::Get("data/meshes/InteractiveDoor_FULL.obj");
-		meshMID = Mesh::Get("data/meshes/InteractiveDoor_MID.obj");
-		meshLOW = Mesh::Get("data/meshes/InteractiveDoor_LOW.obj");
+		meshFULL = Mesh::Get("data/meshes/Door.obj");
+		meshMID = Mesh::Get("data/meshes/Door.obj");
+		meshLOW = Mesh::Get("data/meshes/Door.obj");
+		texture = Texture::Get("data/textures/internalDoor.tga");
 	}
 	shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
-	texture = Texture::Get("data/textures/wall2.tga");
 }
 
 void EntityDoor::render()
@@ -57,4 +79,27 @@ void EntityDoor::render()
 	mesh->render(GL_TRIANGLES);
 
 	shader->disable();
+}
+
+void EntityDoor::update(float dt)
+{
+	
+	if (isExternal) return;
+	float new_y ;
+	Vector3 position = model.getTranslation();
+	Vector3 to_pos;
+	if (isClosed && position.y != -0.1f) // Close door
+	{
+		to_pos = position + (Vector3(0.0f, 1.0f, 0.0f).normalize() * closingSpeed * dt);
+	}
+	else if (!isClosed && position.y != -3.0f) // Open DOor
+	{
+		to_pos = position + (Vector3(0.0f, -1.0f, 0.0f).normalize() * openingSpeed * dt);
+	}
+	else
+	{
+		return;
+	}
+	model.setTranslation(to_pos.x, clamp(to_pos.y, -3.0f, -0.1f), to_pos.z);
+	model.rotate(rotationFactor, Vector3(.0f, 1.0f, .0f));
 }

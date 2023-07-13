@@ -17,9 +17,11 @@ public:
 	Camera *camera;
 	Mesh *mesh;
 
+	EntityMeshRoom* currentRoom;
+	
 	bool statChange = false;
 	Vector3 lookingAt;
-
+	 
 	// Movement
 	float mouse_speed = 100.0f;
 	float player_speed = 100.0f;
