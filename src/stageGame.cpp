@@ -9,9 +9,9 @@
 StageGame::StageGame()
 {
 	enemy_manager = new EnemyManager();
-	enemy_manager->addNormalEnemy(Vector3(0, 1, 0));
 	HUD.initHUD();
 	updateMinimap();
+	enemy_manager->fillRoomWithEnemies();
 }
 
 void frustrumCulling(EntityMesh *entity, Vector3 camPos)
@@ -30,10 +30,10 @@ void frustrumCulling(EntityMesh *entity, Vector3 camPos)
 	entity->render();
 }
 
-void frustrumCulling(EntityDoor* door, Vector3 camPos)
+void frustrumCulling(EntityDoor *door, Vector3 camPos)
 {
 	Vector3 entityPos = door->getGlobalPosition();
-	Mesh* entityMesh = door->meshFULL;
+	Mesh *entityMesh = door->meshFULL;
 	float dist = entityPos.distance(camPos);
 	if (dist > 500)
 	{
@@ -101,10 +101,10 @@ void StageGame::render()
 	}
 	*/
 
-
 	EACH(room, Game::instance->world->mapGrid)
 	{
-		if (room) {
+		if (room)
+		{
 			EACH(entity, room->staticEntities)
 			{
 				frustrumCulling(entity, camera->eye);
@@ -117,11 +117,13 @@ void StageGame::render()
 	}
 	EACH(bullet, Game::instance->world->bulletBuffer)
 	{
-		if (bullet->isActive) bullet->render();
+		if (bullet->isActive)
+			bullet->render();
 	}
-	EntityBullet* sbullet = Game::instance->world->bullet;
-	if (sbullet->isActive) sbullet->render();
-	
+	EntityBullet *sbullet = Game::instance->world->bullet;
+	if (sbullet->isActive)
+		sbullet->render();
+
 	// render enemies
 	enemy_manager->render();
 
@@ -145,10 +147,12 @@ void StageGame::update(double seconds_elapsed)
 
 	EACH(bullet, Game::instance->world->bulletBuffer)
 	{
-		if (bullet->isActive) bullet->update(seconds_elapsed);
+		if (bullet->isActive)
+			bullet->update(seconds_elapsed);
 	}
-	EntityBullet* sbullet = Game::instance->world->bullet;
-	if (sbullet->isActive) sbullet->update(seconds_elapsed);
+	EntityBullet *sbullet = Game::instance->world->bullet;
+	if (sbullet->isActive)
+		sbullet->update(seconds_elapsed);
 	// to navigate with the mouse fixed in the middle
 	if (Game::instance->mouse_locked)
 		Input::centerMouse();

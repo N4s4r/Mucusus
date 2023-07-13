@@ -5,6 +5,8 @@
 #include "mesh.h"
 #include "texture.h"
 #include "shader.h"
+#include "entityMeshRoom.h"
+#include "game.h"
 
 class EnemyManager
 {
@@ -21,6 +23,7 @@ public:
     void update(float dt);
 
     void addNormalEnemy(Vector3 pos);
+    void fillRoomWithEnemies();
 
     void removeEnemy(EntityEnemy *enemy);
 };

@@ -1,4 +1,6 @@
 #include "enemyManager.h"
+#include "game.h"
+#include "entityPlayer.h"
 
 EnemyManager::EnemyManager()
 {
@@ -44,4 +46,15 @@ void EnemyManager::addNormalEnemy(Vector3 pos)
     enemy->model.setTranslation(pos.x, pos.y, pos.z);
     enemy->model.scale(0.5, 0.5, 0.5);
     enemies.push_back(enemy);
+}
+
+void EnemyManager::fillRoomWithEnemies()
+{
+    // Add four enemies in the corners of the room where the player is, computing the position from the player position
+    Vector3 playerPos = Game::instance->player->model.getTranslation();
+    float distance = 2;
+    addNormalEnemy(playerPos + Vector3(distance, 0, distance));
+    addNormalEnemy(playerPos + Vector3(distance, 0, -distance));
+    addNormalEnemy(playerPos + Vector3(-distance, 0, distance));
+    addNormalEnemy(playerPos + Vector3(-distance, 0, -distance));
 }

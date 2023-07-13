@@ -86,10 +86,6 @@ Game::Game(int window_width, int window_height, SDL_Window *window)
 	camera->setPerspective(70.f, window_width / (float)window_height, 0.1f, 10000.f);		   // set the projection, we want to be perspective
 	player = new EntityPlayer();
 
-	initStages();
-	setStage(STAGE_ID::INTRO);
-	shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
-
 	// Create the room
 	wall_texture = Texture::Get("data/textures/wall.tga");
 	floor_texture = Texture::Get("data/textures/box.tga");
@@ -104,13 +100,19 @@ Game::Game(int window_width, int window_height, SDL_Window *window)
 		world->randomLoad();
 	}
 	world->placeRoomsDoors();
-	//world->setTestRooms();
+	// world->setTestRooms();
+
+	// Create the stage after the world is loaded, because the rooms are needed
+	initStages();
+	setStage(STAGE_ID::INTRO);
+	shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
 
 	// Audio
- 	if (BASS_Init(-1, 44100, 0, 0, NULL) == false) {
+	if (BASS_Init(-1, 44100, 0, 0, NULL) == false)
+	{
 		// Error with sound device
 	}
-	//channel = Audio::Play("data/audios/test.wav", BASS_SAMPLE_LOOP);
+	// channel = Audio::Play("data/audios/test.wav", BASS_SAMPLE_LOOP);
 
 	// hide the cursor
 	SDL_ShowCursor(!mouse_locked); // hide or show the mouse

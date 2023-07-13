@@ -16,7 +16,6 @@ void EntityEnemy::render()
 {
     if (mesh && texture && shader)
     {
-        cout << "Rendering SUSSUSUS" << rand() << endl;
         shader->enable();
         shader->setUniform("u_color", Vector4(1, 1, 1, 1));
         shader->setUniform("u_viewprojection", Camera::current->viewprojection_matrix);
@@ -29,13 +28,17 @@ void EntityEnemy::render()
 
 void EntityEnemy::update(float dt)
 {
-    // TODO: move the enemy
-        // Move the enemy to the player
-    // Import game
+    // TODO: move the enemy towards the player
     Vector3 playerPos = Game::instance->player->model.getTranslation();
+    Vector3 enemyPos = model.getTranslation();
+    Vector3 direction = playerPos - enemyPos;
+    direction.y = 0;
+    direction.normalize();
+    Vector3 movement = direction * 0.5f * dt;
+    model.translate(movement.x, movement.y, movement.z);
 }
 
-bool EntityEnemy::checkMeshCollision(vt<sCollisionData>& collisions, Matrix44 globalMatrix, Mesh* mesh)
+bool EntityEnemy::checkMeshCollision(vt<sCollisionData> &collisions, Matrix44 globalMatrix, Mesh *mesh)
 {
     Vector3 position = model.getTranslation();
 
@@ -43,7 +46,7 @@ bool EntityEnemy::checkMeshCollision(vt<sCollisionData>& collisions, Matrix44 gl
     Vector3 colPoint, colNormal;
     if (mesh->testSphereCollision(globalMatrix, position, sphereRadius, colPoint, colNormal))
     {
-        collisions.push_back({ colPoint, colNormal.normalize() });
+        collisions.push_back({colPoint, colNormal.normalize()});
     }
     return !collisions.empty();
 }
