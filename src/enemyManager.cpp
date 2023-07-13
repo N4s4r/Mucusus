@@ -6,7 +6,7 @@ EnemyManager::EnemyManager()
     // TODO: load the sus texture
     cout << "Loading sus texture" << endl;
     normal_enemy_texture = Texture::Get("data/textures/wall.tga");
-    normal_enemy_shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
+    normal_enemy_shader = Shader::Get("data/shaders/basic.vs", "data/shaders/mtl.fs");
 }
 
 EnemyManager::~EnemyManager()
@@ -40,7 +40,7 @@ void EnemyManager::addNormalEnemy(Vector3 pos)
     EntityEnemy *enemy = new EntityEnemy();
     enemy->mesh = normal_enemy_mesh;
     enemy->texture = normal_enemy_texture;
-    enemy->shader = Shader::Get("data/shaders/basic.vs", "data/shaders/texture.fs");
+    enemy->shader = normal_enemy_shader;
     enemy->model.setTranslation(pos.x, pos.y, pos.z);
     enemy->model.scale(0.5, 0.5, 0.5);
     enemies.push_back(enemy);
