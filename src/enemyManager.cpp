@@ -1,11 +1,11 @@
 #include "enemyManager.h"
 #include "game.h"
 #include "entityPlayer.h"
+#include "entityMeshRoom.h"
 
 EnemyManager::EnemyManager()
 {
     normal_enemy_mesh = Mesh::Get("data/meshes/SUS.obj");
-    // TODO: load the sus texture
     normal_enemy_texture = Texture::Get("data/textures/wall.tga");
     normal_enemy_shader = Shader::Get("data/shaders/basic.vs", "data/shaders/mtl.fs");
 }
@@ -58,14 +58,13 @@ void EnemyManager::addNormalEnemy(Vector3 pos)
 
 void EnemyManager::fillRoomWithEnemies()
 {
-    // Add four enemies in the corners of the room where the player is, computing the position from the player position
-    Vector3 playerPos = Game::instance->player->model.getTranslation();
-    float distance = 4;
-    playerPos.y = 0;
-    addNormalEnemy(playerPos + Vector3(distance, 0, distance));
-    addNormalEnemy(playerPos + Vector3(distance, 0, -distance));
-    addNormalEnemy(playerPos + Vector3(-distance, 0, distance));
-    addNormalEnemy(playerPos + Vector3(-distance, 0, -distance));
+    EntityMeshRoom *current_room = Game::instance->player->currentRoom;
+    // Add four enemies in the corners of the room where the player is
+    Vector3 room_center = current_room->model.getTranslation();
+    addNormalEnemy(room_center + Vector3(1, 0, 1));
+    addNormalEnemy(room_center + Vector3(1, 0, 15));
+    addNormalEnemy(room_center + Vector3(15, 0, 1));
+    addNormalEnemy(room_center + Vector3(15, 0, 15));
 }
 
 void EnemyManager::removeEnemy(EntityEnemy *enemy)

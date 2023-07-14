@@ -59,8 +59,8 @@ public:
 	void openAllDoors();
 	void openDoor(Directions orientation);
 
-
 	void loadDoors();
 
 	bool isCleared = false;
+	bool isVisited = false;
 };

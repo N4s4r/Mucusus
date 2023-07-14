@@ -15,7 +15,8 @@ StageGame::StageGame()
 	vt<char *> introOptions = {"pause"};
 	GUI = new menuGUI(introOptions);
 	updateMinimap();
-	enemy_manager->fillRoomWithEnemies();
+	// Not needed on the first room
+	// enemy_manager->fillRoomWithEnemies();
 }
 
 void frustrumCulling(EntityMesh *entity, Vector3 camPos)
@@ -157,6 +158,27 @@ void StageGame::update(double seconds_elapsed)
 		EntityPlayer *player = Game::instance->player;
 		player->update(seconds_elapsed);
 
+		// If there is no enemies left, open all doors
+		if (enemy_manager->enemies.size() == 0)
+		{
+			StageGame *stageGame = (StageGame *)Game::instance->stages[(int)Game::instance->currentStage];
+			EntityMeshRoom *currentRoom = player->currentRoom;
+			// If current room is not visited, continue
+			if (currentRoom->isVisited)
+			{
+				// Open all the doors of all the rooms
+				EACH(room, Game::instance->world->mapGrid)
+				{
+					if (room)
+					{
+						room->openAllDoors();
+					}
+				}
+				currentRoom->isCleared = true;
+				stageGame->battlePhase = false;
+			}
+		}
+
 		// Update enemies
 		enemy_manager->update(seconds_elapsed);
 
@@ -187,6 +209,11 @@ void StageGame::update(double seconds_elapsed)
 		// std::cout << currentRoom->roomID << std::endl;
 		if (!currentRoom->isCleared)
 		{
+			if (!currentRoom->isVisited)
+			{
+				currentRoom->isVisited = true;
+				enemy_manager->fillRoomWithEnemies();
+			}
 			currentRoom->closeAllDoors();
 			battlePhase = true;
 		}
