@@ -58,7 +58,7 @@ class EntityMeshRoom;
 
 bool checkRoomCollisions(const Vector3 &target_pos, vt<sCollisionData> &collisions, EntityMeshRoom *room, float sphereRadius);
 
-bool checkEnemyCollisions(const Vector3 &target_pos, vt<sCollisionData> &collisions, float sphereRadius);
+bool checkEnemyCollisions(const Vector3 &target_pos, vt<sCollisionData> &collisions, EntityEnemy *enemy, float sphereRadius);
 
 // bool checkPlayerCollisions(const Vector3& target_pos, vt<sCollisionData>& collisions, EntityMeshRoom* room)
 //{

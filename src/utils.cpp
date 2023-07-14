@@ -57,19 +57,14 @@ bool checkRoomCollisions(const Vector3 &target_pos, vt<sCollisionData> &collisio
 	return !collisions.empty();
 }
 
-bool checkEnemyCollisions(const Vector3 &target_pos, vt<sCollisionData> &collisions, float sphereRadius)
+bool checkEnemyCollisions(const Vector3 &target_pos, vt<sCollisionData> &collisions, EntityEnemy *enemy, float sphereRadius)
 {
 	Vector3 colPoint, colNormal;
 
-	StageGame *stageGame = (StageGame *)Game::instance->stages[(int)Game::instance->currentStage];
-
-	EACH(e, stageGame->enemy_manager->enemies)
+	Mesh *mesh = enemy->mesh;
+	if (mesh->testSphereCollision(enemy->getGlobalMatrix(), target_pos, sphereRadius, colPoint, colNormal))
 	{
-		Mesh *mesh = e->mesh;
-		if (mesh->testSphereCollision(e->getGlobalMatrix(), target_pos, sphereRadius, colPoint, colNormal))
-		{
-			collisions.push_back({colPoint, colNormal.normalize()});
-		}
+		collisions.push_back({colPoint, colNormal.normalize()});
 	}
 	return !collisions.empty();
 }
