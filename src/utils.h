@@ -12,6 +12,8 @@
 #include "framework.h"
 #include "defines.h"
 
+class EntityEnemy;
+
 // General functions **************
 long getTime();
 bool readFile(const std::string &filename, std::string &content);
