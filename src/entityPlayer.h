@@ -8,7 +8,6 @@
 #include "world.h"
 #include "entityMesh.h"
 
-
 class EntityPlayer : public Entity
 {
 public:
@@ -17,11 +16,11 @@ public:
 	Camera *camera;
 	Mesh *mesh;
 
-	EntityMeshRoom* currentRoom;
-	
+	EntityMeshRoom *currentRoom;
+
 	bool statChange = false;
 	Vector3 lookingAt;
-	 
+
 	// Movement
 	float mouse_speed = 100.0f;
 	float player_speed = 100.0f;
@@ -33,13 +32,14 @@ public:
 
 	float jump_cooldown = 0.0f;
 	float shootingCD = 0.0f;
+	float immunity_remaining = 1.0f;
 	Vector3 velocity;
 
 	// Stats
 	float maxHealth = 100.0f;
 	float health = maxHealth;
 	float attack = 1.0f;
-	float caddence = 2.0f; //Bullets per second
+	float caddence = 2.0f; // Bullets per second
 	float projectileSpeed = 10.0f;
 	float playerSpeed = 50.0f;
 

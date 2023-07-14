@@ -2,6 +2,8 @@
 #include "input.h"
 #include "utils.h"
 #include "defines.h"
+#include "stageGame.h"
+#include "enemyManager.h"
 
 EntityPlayer::EntityPlayer()
 {
@@ -152,9 +154,22 @@ void EntityPlayer::update(float dt)
 	on_ground = clamp(on_ground - dt, 0.0f, 999.0f);
 	jump_cooldown = clamp(jump_cooldown - dt, 0.0f, 999.0f);
 	shootingCD = clamp(shootingCD - dt, 0.0f, 999.0f);
+	immunity_remaining = clamp(immunity_remaining - dt, 0.0f, 999.0f);
 
-	// if (statChange)
+	// If player is coliding with an enemy, apply damage
+	StageGame *stageGame = (StageGame *)Game::instance->stages[(int)Game::instance->currentStage];
 
-	// std::cout << position.x << position.y << position.z << std::endl;
-	// std::cout << currentRoom->roomID << std::endl;
+	EACH(enemy, stageGame->enemy_manager->enemies)
+	{
+		vt<sCollisionData> collisions;
+
+		if (checkMeshCollision(collisions, enemy->model, enemy->mesh) && immunity_remaining == 0.0f)
+		{
+			// Reset immunity
+			immunity_remaining = 1.0f;
+
+			applyInputDamage(enemy);
+			cout << "Player health: " << health << endl;
+		}
+	}
 }
