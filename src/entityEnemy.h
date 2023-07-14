@@ -18,7 +18,7 @@ public:
     Texture *texture;
     Shader *shader;
 
-    float health = 100.0f;
+    float health = 3.0f;
 
     // To move
     Matrix44 model;
@@ -33,6 +33,6 @@ public:
     void render();
     void update(float dt);
 
-    bool checkMeshCollision(vt<sCollisionData>& collisions, Matrix44 globalMatrix, Mesh* mesh);
+    bool checkMeshCollision(vt<sCollisionData> &collisions, Matrix44 globalMatrix, Mesh *mesh);
     void applyInputDamage(float damage);
 };

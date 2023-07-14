@@ -15,19 +15,17 @@ class StageGame : public Stage
 public:
     Camera cam2d;
     Camera minimap;
-    EnemyManager* enemy_manager;
+    EnemyManager *enemy_manager;
 
     bool battlePhase = false;
 
     gameHUD HUD;
-    menuGUI* GUI;
+    menuGUI *GUI;
 
     StageGame();
 
-
     virtual void render();                       // empty body
     virtual void update(double seconds_elapsed); // empty body
-
 
     void updateBattlePhase(double seconds_elapsed);
 

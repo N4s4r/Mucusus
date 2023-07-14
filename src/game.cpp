@@ -33,8 +33,6 @@ Animation *anim = NULL;
 float angle = 0;
 float mouse_speed = 100.0f;
 FBO *fbo = NULL;
-STAGE_ID currentStage;
-vt<Stage *> stages;
 
 // Enemies
 
@@ -42,12 +40,12 @@ Game *Game::instance = NULL;
 
 Stage *getStage(STAGE_ID id)
 {
-	return stages[(int)id];
+	return Game::instance->stages[(int)id];
 }
 
 Stage *getCurrentStage()
 {
-	return getStage(currentStage);
+	return getStage(Game::instance->currentStage);
 }
 
 void Game::setStage(STAGE_ID id)
@@ -57,9 +55,9 @@ void Game::setStage(STAGE_ID id)
 
 void initStages()
 {
-	stages.reserve(1);
-	stages.push_back(new StageIntro());
-	stages.push_back(new StageGame());
+	Game::instance->stages.reserve(1);
+	Game::instance->stages.push_back(new StageIntro());
+	Game::instance->stages.push_back(new StageGame());
 }
 
 Game::Game(int window_width, int window_height, SDL_Window *window)

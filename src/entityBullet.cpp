@@ -14,7 +14,7 @@ EntityBullet::EntityBullet()
 	texture = Texture::Get("data/textures/wall.tga");
 }
 
-void EntityBullet::activate(EntityEnemy* source)
+void EntityBullet::activate(EntityEnemy *source)
 {
 	enemySource = source;
 	isActive = true;
@@ -36,11 +36,10 @@ void EntityBullet::update(float dt)
 		return;
 	}
 
-	World* world = Game::instance->world;
-	EntityPlayer* player = Game::instance->player;
-	EntityMeshRoom* currentRoom = player->currentRoom;
+	World *world = Game::instance->world;
+	EntityPlayer *player = Game::instance->player;
+	EntityMeshRoom *currentRoom = player->currentRoom;
 	Vector3 position = model.getTranslation();
-	std::cout << position.x << " " << position.y << " " << position.z << " " << std::endl;
 
 	Matrix44 globalMatrix = getGlobalMatrix();
 
@@ -48,7 +47,8 @@ void EntityBullet::update(float dt)
 	vt<sCollisionData> collisions;
 	EACH(room, world->mapGrid)
 	{
-		if (!room) continue;
+		if (!room)
+			continue;
 		if (checkRoomCollisions(to_pos, collisions, room, 0.2f))
 		{
 			deactivate();
@@ -80,15 +80,19 @@ void EntityBullet::update(float dt)
 
 void EntityBullet::render()
 {
-	Camera* cam = Game::instance->camera;
+	Camera *cam = Game::instance->camera;
 
 	// LODs
-	Mesh* mesh = nullptr;
+	Mesh *mesh = nullptr;
 	float distance = cam->eye.distance(getGlobalPosition());
-	if (distance < 5 * meshFULL->radius) mesh = meshFULL;
-	else if (distance < 25 * meshFULL->radius) mesh = meshMID;
-	else if (distance < 100 * meshFULL->radius) mesh = meshLOW;
-	else return;
+	if (distance < 5 * meshFULL->radius)
+		mesh = meshFULL;
+	else if (distance < 25 * meshFULL->radius)
+		mesh = meshMID;
+	else if (distance < 100 * meshFULL->radius)
+		mesh = meshLOW;
+	else
+		return;
 
 	float time = Game::instance->time;
 
@@ -101,7 +105,8 @@ void EntityBullet::render()
 	shader->setUniform("u_viewprojection", cam->viewprojection_matrix);
 	if (texture)
 		shader->setUniform("u_texture", texture, 0);
-	else glBindTexture(GL_TEXTURE_2D, 0);
+	else
+		glBindTexture(GL_TEXTURE_2D, 0);
 
 	shader->setUniform("u_time", time);
 	shader->setUniform("u_tiles", 10.0f);

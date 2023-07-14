@@ -6,7 +6,6 @@ EnemyManager::EnemyManager()
 {
     normal_enemy_mesh = Mesh::Get("data/meshes/SUS.obj");
     // TODO: load the sus texture
-    cout << "Loading sus texture" << endl;
     normal_enemy_texture = Texture::Get("data/textures/wall.tga");
     normal_enemy_shader = Shader::Get("data/shaders/basic.vs", "data/shaders/mtl.fs");
 }
@@ -58,4 +57,16 @@ void EnemyManager::fillRoomWithEnemies()
     addNormalEnemy(playerPos + Vector3(distance, 0, -distance));
     addNormalEnemy(playerPos + Vector3(-distance, 0, distance));
     addNormalEnemy(playerPos + Vector3(-distance, 0, -distance));
+}
+
+void EnemyManager::removeEnemy(EntityEnemy *enemy)
+{
+    FOR(i, 0, enemies.size())
+    {
+        if (enemies[i] == enemy)
+        {
+            enemies.erase(enemies.begin() + i);
+            return;
+        }
+    }
 }

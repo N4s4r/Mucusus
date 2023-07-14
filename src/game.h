@@ -41,6 +41,9 @@ public:
 	EntityPlayer *player = NULL;
 	World *world = NULL;
 
+	vt<Stage *> stages;
+	STAGE_ID currentStage;
+
 	// EntityMeshRoom* room;
 
 	// Some public meshes

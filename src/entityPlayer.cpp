@@ -10,7 +10,7 @@ EntityPlayer::EntityPlayer()
 	int i = roomID % GRIDHEIGHT;
 	int j = roomID / GRIDHEIGHT;
 	Vector3 playerPosition = Vector3(j * 16.0f + 8.0f, 0.5f, i * 16.0f + 8.0f);
-	model.setTranslation(playerPosition.x , playerPosition.y, playerPosition.z);
+	model.setTranslation(playerPosition.x, playerPosition.y, playerPosition.z);
 	currentRoom = Game::instance->world->mapGrid[roomID];
 }
 
@@ -19,12 +19,12 @@ void EntityPlayer::movePlayer(Vector3 delta)
 	model.setTranslation(delta.x, delta.y, delta.z);
 }
 
-bool checkPlayerOnGround(const Vector3& position, vt<sCollisionData>& collisions, EntityMeshRoom* room)
+bool checkPlayerOnGround(const Vector3 &position, vt<sCollisionData> &collisions, EntityMeshRoom *room)
 {
 	float sphereRadius = 1.f;
 	Vector3 colPoint, colNormal;
 
-	Mesh* mesh = room->floor->mesh;
+	Mesh *mesh = room->floor->mesh;
 	if (mesh->testRayCollision(room->floor->getGlobalMatrix(), position, Vector3(0, -1, 0), colPoint, colNormal, 1.0f))
 	{
 		return true;
@@ -32,13 +32,13 @@ bool checkPlayerOnGround(const Vector3& position, vt<sCollisionData>& collisions
 	return !collisions.empty();
 }
 
-void EntityPlayer::applyInputDamage(EntityEnemy* damageSource)
+void EntityPlayer::applyInputDamage(EntityEnemy *damageSource)
 {
-	// Audio 
+	// Audio
 	health -= damageSource->damage;
 }
 
-bool EntityPlayer::checkMeshCollision(vt<sCollisionData>& collisions, Matrix44 globalMatrix, Mesh* mesh)
+bool EntityPlayer::checkMeshCollision(vt<sCollisionData> &collisions, Matrix44 globalMatrix, Mesh *mesh)
 {
 	Vector3 position = model.getTranslation();
 
@@ -46,21 +46,21 @@ bool EntityPlayer::checkMeshCollision(vt<sCollisionData>& collisions, Matrix44 g
 	Vector3 colPoint, colNormal;
 	if (mesh->testSphereCollision(globalMatrix, position, sphereRadius, colPoint, colNormal))
 	{
-		collisions.push_back({ colPoint, colNormal.normalize() });
+		collisions.push_back({colPoint, colNormal.normalize()});
 	}
 	return !collisions.empty();
 }
 
 void EntityPlayer::update(float dt)
 {
-	World* world = Game::instance->world;
+	World *world = Game::instance->world;
 	bool mouse_locked = Game::instance->mouse_locked;
 	float speed = dt * mouse_speed; // the speed is defined by the seconds_elapsed so it goes constant
 	Vector3 position = model.getTranslation();
 	currentRoom = world->getRoom(position.x / ROOMWIDTH, position.z / ROOMHEIGHT);
 
 	// mouse input to rotate the cam
-		//Update camera
+	// Update camera
 	Matrix44 nYaw;
 	nYaw.setRotation(Game::instance->camera_yaw, Vector3(0, -1, 0));
 	Vector3 forward = nYaw.frontVector();
@@ -87,7 +87,7 @@ void EntityPlayer::update(float dt)
 	{
 		Vector3 bulletDir = Game::instance->camera->center;
 		Game::instance->world->shootBullet(lookingAt);
-		shootingCD = 1 / caddence; 
+		shootingCD = 1 / caddence;
 	}
 	if (on_ground > 0 && Input::isKeyPressed(SDL_SCANCODE_SPACE) && jump_cooldown == 0.0f)
 	{
@@ -99,14 +99,14 @@ void EntityPlayer::update(float dt)
 
 	Vector3 to_pos = position + velocity * dt;
 	vt<sCollisionData> collisions;
-	//EACH(room, world->mapGrid)
+	// EACH(room, world->mapGrid)
 	//{
 	//	if (!room) continue;
 	if (checkRoomCollisions(to_pos, collisions, currentRoom, 0.5f))
 	{
 		EACH(collision, collisions)
 		{
-			//position += collision.colNormal.normalize() * 0.0005f;
+			// position += collision.colNormal.normalize() * 0.0005f;
 			Vector3 newDir = velocity.dot(collision.colNormal);
 			newDir = newDir * collision.colNormal;
 
@@ -126,7 +126,7 @@ void EntityPlayer::update(float dt)
 	position = position + velocity * dt;
 	velocity.x = velocity.x - (velocity.x * 10.0f * dt);
 	velocity.z = velocity.z - (velocity.z * 10.0f * dt);
-	
+
 	model.setTranslation(position.x, position.y, position.z);
 	if (Input::isKeyPressed(SDL_SCANCODE_R))
 	{
@@ -153,8 +153,8 @@ void EntityPlayer::update(float dt)
 	jump_cooldown = clamp(jump_cooldown - dt, 0.0f, 999.0f);
 	shootingCD = clamp(shootingCD - dt, 0.0f, 999.0f);
 
-	//if (statChange) 
+	// if (statChange)
 
-	//std::cout << position.x << position.y << position.z << std::endl;
-	std::cout << currentRoom->roomID << std::endl;
+	// std::cout << position.x << position.y << position.z << std::endl;
+	// std::cout << currentRoom->roomID << std::endl;
 }
