@@ -1,10 +1,38 @@
-COMPILING IN LINUX
-****************************
+Devs:
+Pol Ayala,231698, pol.ayala01@estudiant.upf.edu
+Nasar Roca, 231676 nasar.roca01@estudiant.upf.edu
 
-Remember to install the libraries:
 
-sudo apt-get install libsdl2-dev freeglut3 freeglut3-dev
+Optimicaciones:
+	- Nuestro mundo esta dividido en celdas. Cada room es una celda en una grid de 7 x 7. En cada loop se detecta en que habitación se encuentra
+	  el jugador y se calculan las colisiones solo con esa room.
+	- Frustrum: solo se renderizan las meshes que se encuentran dentro de camara.
+	- LODs: Las balas del juego cuentan con un sistema de LODs que hace que se renderice una mesh con mas o menos vértices en función de la distancia
+	  a camara.
+Implementaciones:
+	- Se ha implementado un sistema de generación de mazmorra aleatorio. Para cada partida, la grid que conforma el mapa es generada aleatoriamente a
+	  a partir del algoritmo de la función randomLoad() dentro de world.cpp. El algoritmo está basado en la generación de mapa del juego 
+	  The Binding of Isaac a partir de la explicación que dan en este artículo: https://www.boristhebrave.com/2020/09/12/dungeon-generation-in-binding-of-isaac/
+	- 
 
-and then just use the makefile:
+Partes del código de cada miembro:
+Entidades:
+	entityMesh: Nasar
+	entityBullet: Pol
+	entityDoor: Pol
+	entityEnemy: Nasar
+	entityMeshRoom: Pol
+	entityPlayer: Pol
+Stages:
+	stageGame: Pol, Nasar
+	stageIntro: Pol
+	stageTuto: Pol
+camera: Pol
+audio: Nasar
+enemyManager: Nasar
+gameHUD: Pol
+world: Pol
+menuGUI: Pol
 
-make
+Blender: Pol
+Texturas: Pol | Nasar
