@@ -51,6 +51,7 @@ void EntityBullet::update(float dt)
 			continue;
 		if (checkRoomCollisions(to_pos, collisions, room, 0.2f))
 		{
+			cout << "Bullet hit wall" << endl;
 			deactivate();
 			return;
 		}
@@ -65,13 +66,11 @@ void EntityBullet::update(float dt)
 	}
 	else
 	{
-		EACH(enemy, world->activeEnemies)
+		if (checkEnemyCollisions(to_pos, collisions, 0.2f))
 		{
-			if (enemy->checkMeshCollision(collisions, globalMatrix, meshFULL))
-			{
-				enemy->applyInputDamage(player->attack);
-				deactivate();
-			}
+			cout << "Bullet hit enemy" << endl;
+			deactivate();
+			return;
 		}
 	}
 

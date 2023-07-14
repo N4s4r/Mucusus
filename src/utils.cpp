@@ -17,6 +17,11 @@
 #include "entityDoor.h"
 #include "extra/stb_easy_font.h"
 #include "entityMesh.h"
+#include "entityPlayer.h"
+#include "entityEnemy.h"
+#include "stage.h"
+#include "stageGame.h"
+#include "enemyManager.h"
 
 long getTime()
 {
@@ -43,10 +48,27 @@ bool checkRoomCollisions(const Vector3 &target_pos, vt<sCollisionData> &collisio
 	}
 	EACH(e, room->roomDoors)
 	{
-		Mesh* mesh = e->meshFULL;
+		Mesh *mesh = e->meshFULL;
 		if (mesh->testSphereCollision(e->getGlobalMatrix(), target_pos, sphereRadius, colPoint, colNormal))
 		{
-			collisions.push_back({ colPoint, colNormal.normalize() });
+			collisions.push_back({colPoint, colNormal.normalize()});
+		}
+	}
+	return !collisions.empty();
+}
+
+bool checkEnemyCollisions(const Vector3 &target_pos, vt<sCollisionData> &collisions, float sphereRadius)
+{
+	Vector3 colPoint, colNormal;
+
+	StageGame *stageGame = (StageGame *)Game::instance->stages[(int)Game::instance->currentStage];
+
+	EACH(e, stageGame->enemy_manager->enemies)
+	{
+		Mesh *mesh = e->mesh;
+		if (mesh->testSphereCollision(e->getGlobalMatrix(), target_pos, sphereRadius, colPoint, colNormal))
+		{
+			collisions.push_back({colPoint, colNormal.normalize()});
 		}
 	}
 	return !collisions.empty();
