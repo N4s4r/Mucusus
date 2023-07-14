@@ -15,6 +15,12 @@ Implementaciones:
 	  The Binding of Isaac a partir de la explicación que dan en este artículo: https://www.boristhebrave.com/2020/09/12/dungeon-generation-in-binding-of-isaac/
 	- 
 
+
+Shortcuts:
+	- Para poder setear una sala como cleared, hay que pulsar 'u'. Entonces se limpia y se abren las puertas.
+
+
+
 Partes del código de cada miembro:
 Entidades:
 	entityMesh: Nasar
