@@ -60,3 +60,16 @@ void EntityEnemy::die()
     const char *audio_filename = "data/audios/SUS_kill.wav";
     Audio::Play(audio_filename, false);
 }
+
+bool EntityEnemy::checkMeshCollision(vt<sCollisionData>& collisions, Matrix44 globalMatrix, Mesh* mesh)
+{
+    Vector3 position = model.getTranslation();
+
+    float sphereRadius = 0.5f;
+    Vector3 colPoint, colNormal;
+    if (mesh->testSphereCollision(globalMatrix, position, sphereRadius, colPoint, colNormal))
+    {
+        collisions.push_back({ colPoint, colNormal.normalize() });
+    }
+    return !collisions.empty();
+}

@@ -34,5 +34,6 @@ public:
     void update(float dt);
 
     void applyInputDamage(float damage);
+    bool checkMeshCollision(vt<sCollisionData>& collisions, Matrix44 globalMatrix, Mesh* mesh);
     void die();
 };

@@ -74,7 +74,12 @@ void EntityBullet::update(float dt)
 		StageGame *stageGame = (StageGame *)Game::instance->stages[(int)Game::instance->currentStage];
 		EACH(enemy, stageGame->enemy_manager->enemies)
 		{
-			// NOT WORKING
+			if (enemy->checkMeshCollision(collisions, globalMatrix, meshFULL))
+			{
+				enemy->applyInputDamage(player->attack);
+				deactivate();
+				cout << "Bullet hit enemy" << endl;
+			}
 		}
 	}
 
