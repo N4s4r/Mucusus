@@ -4,6 +4,10 @@
 #include "entityPlayer.h"
 #include "defines.h"
 #include "utils.h"
+#include "entityEnemy.h"
+#include "stageGame.h"
+#include "game.h"
+#include "enemyManager.h"
 
 EntityBullet::EntityBullet()
 {
@@ -66,11 +70,16 @@ void EntityBullet::update(float dt)
 	}
 	else
 	{
-		if (checkEnemyCollisions(to_pos, collisions, 0.2f))
+		// Check enemy collisions
+		StageGame *stageGame = (StageGame *)Game::instance->stages[(int)Game::instance->currentStage];
+		EACH(enemy, stageGame->enemy_manager->enemies)
 		{
-			cout << "Bullet hit enemy" << endl;
-			deactivate();
-			return;
+			if (enemy->checkMeshCollision(collisions, globalMatrix, meshFULL))
+			{
+				enemy->applyInputDamage(player->attack);
+				deactivate();
+				return;
+			}
 		}
 	}
 
