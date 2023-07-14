@@ -48,6 +48,11 @@ void EntityEnemy::applyInputDamage(float damage)
     {
         die();
     }
+    else
+    {
+        const char *audio_filename = "data/audios/SUS_hit.wav";
+        Audio::Play(audio_filename, false);
+    }
 }
 
 void EntityEnemy::die()
@@ -61,7 +66,7 @@ void EntityEnemy::die()
     Audio::Play(audio_filename, false);
 }
 
-bool EntityEnemy::checkMeshCollision(vt<sCollisionData>& collisions, Matrix44 globalMatrix, Mesh* mesh)
+bool EntityEnemy::checkMeshCollision(vt<sCollisionData> &collisions, Matrix44 globalMatrix, Mesh *mesh)
 {
     Vector3 position = model.getTranslation();
 
@@ -69,7 +74,7 @@ bool EntityEnemy::checkMeshCollision(vt<sCollisionData>& collisions, Matrix44 gl
     Vector3 colPoint, colNormal;
     if (mesh->testSphereCollision(globalMatrix, position, sphereRadius, colPoint, colNormal))
     {
-        collisions.push_back({ colPoint, colNormal.normalize() });
+        collisions.push_back({colPoint, colNormal.normalize()});
     }
     return !collisions.empty();
 }
