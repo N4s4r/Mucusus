@@ -34,7 +34,7 @@ void EntityEnemy::update(float dt)
     Vector3 direction = playerPos - enemyPos;
     direction.y = 0;
     direction.normalize();
-    Vector3 movement = direction * 0.5f * dt;
+    Vector3 movement = direction * 2.0f * dt;
     model.translate(movement.x, movement.y, movement.z);
 }
 
