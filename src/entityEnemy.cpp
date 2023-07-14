@@ -2,6 +2,7 @@
 #include "entityPlayer.h"
 #include "stageGame.h"
 #include "enemyManager.h"
+#include "audio.h"
 
 EntityEnemy::EntityEnemy()
 {
@@ -45,10 +46,17 @@ void EntityEnemy::applyInputDamage(float damage)
     health -= damage;
     if (health <= 0)
     {
-        // get the enemy manager from the game
-        Stage *stage = Game::instance->stages[(int)Game::instance->currentStage];
-        StageGame *stageGame = (StageGame *)stage;
-        EnemyManager *enemyManager = stageGame->enemy_manager;
-        enemyManager->removeEnemy(this);
+        die();
     }
+}
+
+void EntityEnemy::die()
+{
+    Stage *stage = Game::instance->stages[(int)Game::instance->currentStage];
+    StageGame *stageGame = (StageGame *)stage;
+    EnemyManager *enemyManager = stageGame->enemy_manager;
+    enemyManager->removeEnemy(this);
+
+    const char *audio_filename = "data/audios/SUS_kill.wav";
+    Audio::Play(audio_filename, false);
 }

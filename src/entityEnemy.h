@@ -34,4 +34,5 @@ public:
     void update(float dt);
 
     void applyInputDamage(float damage);
+    void die();
 };
