@@ -2,6 +2,7 @@
 #include "entityPlayer.h"
 #include "entityBullet.h"
 #include "entityDoor.h"
+#include "audio.h"
 
 World::World()
 {
@@ -38,6 +39,9 @@ void World::shootBullet(Vector3 direction, EntityEnemy *source)
 	Vector3 pos = Game::instance->camera->eye;
 	bullet->model.setTranslation(pos.x, pos.y, pos.z);
 	// bullet.model.setTranslation(position.x, position.y, position.z);
+
+	// Sound effect
+	Audio::Play("data/audios/shoot.wav", false);
 }
 
 void World::stashBullet(EntityBullet *bullet)
