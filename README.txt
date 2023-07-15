@@ -16,7 +16,7 @@ Implementaciones:
 	- 
 
 
-Shortcuts:
+Shortcuts (Inhabilitados):
 	- Para poder setear una sala como cleared, hay que pulsar 'u'. Entonces se limpia y se abren las puertas.
 	- Para matar enemigos sin tener que disparar, pulsar 'k'. Un enemigo de la sala morira entonces.
 	- Para simular ganar el juego instantaniamente, pulsar 'c'
