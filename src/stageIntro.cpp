@@ -3,15 +3,15 @@
 
 #define MENU_OPTIONS 4
 
-StageIntro::StageIntro() 
+StageIntro::StageIntro()
 {
-	vt<char*> introOptions = { "start", "tuto", "exit", "xD" };
+	vt<char *> introOptions = {"start", "tuto", "exit", "xD"};
 	menu = new menuGUI(introOptions);
 }
 
-void StageIntro::render() 
+void StageIntro::render()
 {
-	SDL_Window* window = Game::instance->window;
+	SDL_Window *window = Game::instance->window;
 	glClearColor(1.0, 0.0, 1.0, 1.0);
 	int wWidth = Game::instance->window_width;
 	int wHeight = Game::instance->window_height;
@@ -21,21 +21,22 @@ void StageIntro::render()
 	SDL_GL_SwapWindow(window);
 };
 
-void StageIntro::update(double seconds_elapsed) 
+void StageIntro::update(double seconds_elapsed)
 {
-	if (Input::wasKeyPressed(SDL_SCANCODE_SPACE)) {
-		switch (menu->selectedOption) {
-			case menuOption::START:
-				Game::instance->setStage(STAGE_ID::GAME);
-				break;
-			case menuOption::TUTOR:
-				Game::instance->setStage(STAGE_ID::GAME);
-				break;
-			case menuOption::EXIT:
-				Game::instance->must_exit = true;
-				break;
+	if (Input::wasKeyPressed(SDL_SCANCODE_SPACE))
+	{
+		switch (menu->selectedOption)
+		{
+		case menuOption::START:
+			Game::instance->setStage(STAGE_ID::GAME);
+			break;
+		case menuOption::TUTOR:
+			Game::instance->setStage(STAGE_ID::TUTO);
+			break;
+		case menuOption::EXIT:
+			Game::instance->must_exit = true;
+			break;
 		}
 	}
 	menu->update();
-}
-;
+};

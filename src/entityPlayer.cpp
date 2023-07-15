@@ -130,7 +130,7 @@ void EntityPlayer::update(float dt)
 	velocity.z = velocity.z - (velocity.z * 10.0f * dt);
 
 	model.setTranslation(position.x, position.y, position.z);
-	if (Input::isKeyPressed(SDL_SCANCODE_R))
+	/*if (Input::isKeyPressed(SDL_SCANCODE_R))
 	{
 		health -= 1.0f;
 		statChange = true;
@@ -148,13 +148,12 @@ void EntityPlayer::update(float dt)
 	if (Input::isKeyPressed(SDL_SCANCODE_U))
 	{
 		world->setRoomClearStatus(currentRoom->roomID);
-	}
+	}*/
 
 	// update timers
 	on_ground = clamp(on_ground - dt, 0.0f, 999.0f);
 	jump_cooldown = clamp(jump_cooldown - dt, 0.0f, 999.0f);
 	shootingCD = clamp(shootingCD - dt, 0.0f, 999.0f);
-	immunity_remaining = clamp(immunity_remaining - dt, 0.0f, 999.0f);
 
 	// If player is coliding with an enemy, apply damage
 	StageGame *stageGame = (StageGame *)Game::instance->stages[(int)Game::instance->currentStage];

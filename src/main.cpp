@@ -175,6 +175,9 @@ void mainLoop()
 
 int main(int argc, char **argv)
 {
+	// Retting a random seed from the time in nano seconds
+	srand(time(NULL));
+
 	std::cout << "Initiating game..." << std::endl;
 
 	// prepare SDL

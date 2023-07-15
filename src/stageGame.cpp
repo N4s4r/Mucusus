@@ -136,7 +136,7 @@ void StageGame::render()
 	renderMinimap();
 
 	// render the FPS, Draw Calls, etc
-	drawText(2, 2, getGPUStats(), Vector3(1, 1, 1), 2);
+	// drawText(2, 2, getGPUStats(), Vector3(1, 1, 1), 2);
 
 	// swap between front buffer and back buffer
 
@@ -234,11 +234,11 @@ void StageGame::update(double seconds_elapsed)
 		Game::instance->setStage(STAGE_ID::WIN);
 	}
 	// If pressing C, go to the win stage
-	if (Input::wasKeyPressed(SDL_SCANCODE_C))
+	/*if (Input::wasKeyPressed(SDL_SCANCODE_C))
 	{
 		cout << "You 'win'!" << endl;
 		Game::instance->setStage(STAGE_ID::WIN);
-	}
+	}*/
 
 	// Check for losing condition
 	EntityPlayer *player = Game::instance->player;
@@ -248,11 +248,11 @@ void StageGame::update(double seconds_elapsed)
 		Game::instance->setStage(STAGE_ID::LOSE);
 	}
 	// If pressing L, go to the lose stage
-	if (Input::wasKeyPressed(SDL_SCANCODE_L))
+	/*if (Input::wasKeyPressed(SDL_SCANCODE_L))
 	{
 		cout << "You 'lose'!" << endl;
 		Game::instance->setStage(STAGE_ID::LOSE);
-	}
+	}*/
 }
 
 void StageGame::updateBattlePhase(double seconds_elapsed)

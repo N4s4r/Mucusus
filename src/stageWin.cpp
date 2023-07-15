@@ -37,6 +37,7 @@ void StageWin::update(float dt)
     // If q is pressed quit the game
     if (Input::wasKeyPressed(SDL_SCANCODE_Q) || Input::wasKeyPressed(SDL_SCANCODE_ESCAPE))
     {
+        cout << "EXIT" << endl;
         exit(0);
     }
 

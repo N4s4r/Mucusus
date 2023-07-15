@@ -36,13 +36,13 @@ void EnemyManager::update(float dt)
     }
 
     // If K is pressed, kill one enemy
-    if (Input::wasKeyPressed(SDL_SCANCODE_K))
+    /*if (Input::wasKeyPressed(SDL_SCANCODE_K))
     {
         if (enemies.size() > 0)
         {
             enemies[0]->die();
         }
-    }
+    }*/
 }
 
 void EnemyManager::addNormalEnemy(Vector3 pos)

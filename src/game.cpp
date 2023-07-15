@@ -14,6 +14,7 @@
 #include "stage.h"
 #include "stageGame.h"
 #include "stageIntro.h"
+#include "stageTuto.h"
 #include "stageWin.h"
 #include "audio.h"
 #include "world.h"
@@ -60,7 +61,7 @@ void initStages()
 	Game::instance->stages.push_back(new StageIntro());
 	Game::instance->stages.push_back(new StageGame());
 
-	Game::instance->stages.push_back(new StageWin(false));
+	Game::instance->stages.push_back(new StageTuto());
 	Game::instance->stages.push_back(new StageWin(true));
 	Game::instance->stages.push_back(new StageWin(false));
 }
