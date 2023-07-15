@@ -262,3 +262,30 @@ bool World::CheckLoseCondition()
 {
 	return Game::instance->player->health <= 0;
 }
+
+void World::reset()
+{
+	// Reset the world
+	mapGrid.clear();
+	placedRooms = 0;
+	totalRooms = 0;
+	// Load the world
+	loadRooms();
+	while (placedRooms < totalRooms)
+	{
+		mapGrid.clear();
+		placedRooms = 0;
+		randomLoad();
+	}
+	placeRoomsDoors();
+	// Reset the player
+	EntityPlayer *player = Game::instance->player;
+	int roomID = GRIDHEIGHT * GRIDHEIGHT / 2;
+	int i = roomID % GRIDHEIGHT;
+	int j = roomID / GRIDHEIGHT;
+	Vector3 playerPosition = Vector3(j * 16.0f + 8.0f, 0.5f, i * 16.0f + 8.0f);
+	player->model.setTranslation(playerPosition.x, playerPosition.y, playerPosition.z);
+	player->currentRoom = mapGrid[roomID];
+	player->health = 100;
+	// Reset the enemies
+}

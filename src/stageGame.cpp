@@ -225,6 +225,34 @@ void StageGame::update(double seconds_elapsed)
 	{
 		GUI->update();
 	}
+
+	// Check for winning condition
+	World *world = Game::instance->world;
+	if (world->CheckWinCondition())
+	{
+		cout << "You win!" << endl;
+		Game::instance->setStage(STAGE_ID::WIN);
+	}
+	// If pressing C, go to the win stage
+	if (Input::wasKeyPressed(SDL_SCANCODE_C))
+	{
+		cout << "You 'win'!" << endl;
+		Game::instance->setStage(STAGE_ID::WIN);
+	}
+
+	// Check for losing condition
+	EntityPlayer *player = Game::instance->player;
+	if (player->health <= 0)
+	{
+		cout << "You lose!" << endl;
+		Game::instance->setStage(STAGE_ID::LOSE);
+	}
+	// If pressing L, go to the lose stage
+	if (Input::wasKeyPressed(SDL_SCANCODE_L))
+	{
+		cout << "You 'lose'!" << endl;
+		Game::instance->setStage(STAGE_ID::LOSE);
+	}
 }
 
 void StageGame::updateBattlePhase(double seconds_elapsed)

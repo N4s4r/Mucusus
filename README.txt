@@ -18,6 +18,9 @@ Implementaciones:
 
 Shortcuts:
 	- Para poder setear una sala como cleared, hay que pulsar 'u'. Entonces se limpia y se abren las puertas.
+	- Para matar enemigos sin tener que disparar, pulsar 'k'. Un enemigo de la sala morira entonces.
+	- Para simular ganar el juego instantaniamente, pulsar 'c'
+	- Para simular perder el juego instantaniamente, pulsar 'l'
 
 
 
@@ -30,6 +33,7 @@ Entidades:
 	entityMeshRoom: Pol
 	entityPlayer: Pol
 Stages:
+	stageWin: Nasar
 	stageGame: Pol, Nasar
 	stageIntro: Pol
 	stageTuto: Pol
@@ -39,6 +43,7 @@ enemyManager: Nasar
 gameHUD: Pol
 world: Pol
 menuGUI: Pol
+Collisions: Pol i Nasar
 
 Blender: Pol
 Texturas: Pol | Nasar

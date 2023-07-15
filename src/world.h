@@ -81,4 +81,6 @@ public:
 	void stashBullet(EntityBullet *bullet);
 	bool CheckWinCondition();
 	bool CheckLoseCondition();
+
+	void reset();
 };

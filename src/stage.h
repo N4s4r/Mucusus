@@ -6,6 +6,8 @@ enum STAGE_ID
     INTRO = 0,
     GAME = 1,
     TUTO = 2,
+    WIN = 3,
+    LOSE = 4
 };
 
 class Stage

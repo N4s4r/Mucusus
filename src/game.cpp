@@ -14,6 +14,7 @@
 #include "stage.h"
 #include "stageGame.h"
 #include "stageIntro.h"
+#include "stageWin.h"
 #include "audio.h"
 #include "world.h"
 #include <cmath>
@@ -58,6 +59,10 @@ void initStages()
 	Game::instance->stages.reserve(1);
 	Game::instance->stages.push_back(new StageIntro());
 	Game::instance->stages.push_back(new StageGame());
+
+	Game::instance->stages.push_back(new StageWin(false));
+	Game::instance->stages.push_back(new StageWin(true));
+	Game::instance->stages.push_back(new StageWin(false));
 }
 
 Game::Game(int window_width, int window_height, SDL_Window *window)
